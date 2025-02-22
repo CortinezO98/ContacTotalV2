@@ -1,0 +1,327 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: linear-gradient(180deg, #333333 0%, #1a1a1a 100%);
+    color: white;
+    min-height: 100vh;
+}
+
+.header {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    margin-bottom: 0.5rem; /* Reducido de 1rem a 0.5rem */
+    padding: 0 20px;
+}
+
+.logo-container {
+    width: 100%;
+    max-width: 1200px; /* Ancho máximo para pantallas grandes */
+    align-items: center;
+    padding: 10px 0; /* Solo padding vertical */
+}
+
+.logo {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    max-height: 180px; /* Control de altura máxima */
+}
+
+.nav {
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+}
+
+.logo {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    margin: 1rem auto;
+    display: block;
+    padding: 0 20px;
+}
+
+.main-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem; /* Reducido de 2rem a 1rem */
+    display: grid;
+    grid-template-columns: 300px 1fr 300px;
+    gap: 2rem;
+    align-items: start;
+}
+
+/* Live Section */
+.live-section {
+    /* background: #1a1a1a; */
+    background: linear-gradient(145deg, #1c1c1c, #181818);
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* gap: 1rem; */
+    box-shadow: 8px 8px 16px #141414,
+               -8px -8px 16px #202020;
+              
+    animation: pulse-shadow 1.5s infinite;           
+}
+
+@keyframes pulse-shadow {
+    0%, 100% {
+        box-shadow: 1px 1px 16px #ff0000, 1px 1px 16px #ff0000;
+    }
+    50% {
+        box-shadow: 12px 12px 24px #141414, -12px -12px 24px #202020;
+    }
+}
+
+.station-name {
+    color: #ff0000;
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.live-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    padding: 1rem;
+}
+
+.live-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+    font-size: 30px;
+    font-weight: 600;
+    background-color: #ff0000;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    animation: pulse 1.5s infinite;
+}
+
+.controls {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.live-dot {
+    width: 10px;
+    height: 10px;
+    background: white;
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+}
+
+.equalizer {
+    width: 150px;
+    height: 100px;
+    border-radius: 10px;
+}
+
+.magazine-cover {
+    width: 100%;
+    border-radius: 8px;
+    margin-top: 1rem;
+    box-shadow: 8px 8px 16px #141414,
+               -8px -8px 16px #202020;
+}
+
+/* Main Player */
+.main-player {
+    background: linear-gradient(145deg, #1c1c1c, #181818);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 8px 8px 16px #141414,
+               -8px -8px 16px #202020;
+}
+
+.video-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* Aspect ratio 16:9 */
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.player-image {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+}
+
+.player-controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,0.7);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.play-button {
+    width: 50px;
+    height: 50px;
+    background: #ff0000;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.progress-bar {
+    flex: 1;
+    height: 4px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 2px;
+}
+
+/* Podcast Player */
+.podcast-player {
+    background: linear-gradient(145deg, #1c1c1c, #181818);
+    border-radius: 10px;
+    align-items: center;
+    padding: 1rem;
+    position: relative;
+    box-shadow: 8px 8px 16px #141414,
+               -8px -8px 16px #202020;
+}
+
+.podcast-cover {
+    width: 100%;
+    height: 250px;
+    object-fit: contain;
+    aspect-ratio: 1;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.podcast-title {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #ff0000;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.podcast-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+/* Weather Widget */
+.weather-widget {
+    /* background: #2b62c9; */
+    background: linear-gradient(145deg, #2b62c9, #2456b5);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-top: 1rem;
+    color: white;
+    box-shadow: 8px 8px 16px #141414,
+               -8px -8px 16px #202020;
+    height: 100% !important;
+
+}
+
+/* Social Links */
+.social-section {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.social-text {
+    color: white;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 2.8rem;
+    margin-top: 0rem;
+    padding: 1rem;
+}
+
+.social-icon {
+    width: 40px;
+    height: 40px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.social-icon:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.icon-social {
+    width: 50px;
+    height: 50px;
+    transition: all 0.3s ease;
+}
+
+.social-icon:hover .icon-social {
+    transform: scale(1.1);
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+@media (max-width: 1200px) {
+    .main-content {
+        grid-template-columns: 1fr;
+    }
+}
