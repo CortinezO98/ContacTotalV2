@@ -198,9 +198,32 @@ footer {
 }
 
 .eq-img {
-  max-width: 80px;
+  max-width: 100% !important;
+  height: 100px !important;
+  border-radius: 10px !important;
 }
 
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* Diseño responsivo */
+@media (max-width: 1200px) {
+  .main-content {
+      grid-template-columns: 1fr;
+  }
+}
+
+@keyframes pulse-shadow {
+  0%, 100% {
+      box-shadow: 1px 1px 16px #ff0000, 1px 1px 16px #ff0000;
+  }
+  50% {
+      box-shadow: 12px 12px 24px #141414, -12px -12px 24px #202020;
+  }
+}
 
 .player-icons span {
   font-size: 20px;
@@ -209,7 +232,16 @@ footer {
 
 
 .magazine-img {
-  max-width: 150px;
+  max-width: 100%;
+  border-radius: 10px;
+  margin-top: 1rem;
+  box-shadow: 8px 8px 16px #141414, -8px -8px 16px #202020;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.img-fluid.rounded:hover {
+  transform: scale(1.01) translateY(-5px);
+  box-shadow: 3px 3px 10px #d5d0d0, -3px -3px 10px #d5d0d0;
 }
 
 
