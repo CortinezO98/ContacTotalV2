@@ -15,10 +15,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 from stationRadio.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', IndexView, name="index"),
+    path('revista/', revista, name="revista"),
+    path('programas/', programas, name="programas"),
 ]

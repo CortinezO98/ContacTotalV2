@@ -368,3 +368,29 @@ footer {
     display: none;
   }
 }
+
+.card-img-top {
+  height: 200px; 
+  object-fit: cover;
+  width: 100%;
+}
+
+.always-show {
+  display: block !important;
+}
+
+
+
+.search-group {
+  max-width: 300px;
+}
+
+.bi-star-fill, .bi-star-half, .bi-star {
+  font-size: 1.2rem;
+}
+
+
+.table-hover tbody tr:hover {
+  background-color: #333;
+}
+

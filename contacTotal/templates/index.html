@@ -2,196 +2,229 @@
 {% load static %}
 {% block main %}
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-2 ad-bar d-none d-md-flex flex-column justify-content-start align-items-center">
-                <div class="mb-4">
-                    <h5>LOGO HERE</h5>
-                    <img src="https://via.placeholder.com/120x60" alt="Logo" class="img-fluid">
-                </div>
-                <div class="mb-4">
-                    <p class="mb-0">Sale Black Friday</p>
-                    <img src="https://via.placeholder.com/120x200" alt="Ad Banner" class="img-fluid">
-                </div>
-                <div>
-                    <p>25% OFF</p>
-                    <img src="https://via.placeholder.com/120x200" alt="Ad Banner" class="img-fluid">
-                </div>
-            </div>
+    <div class="row">
+        <div class="col-2 ad-bar d-none d-md-flex flex-column justify-content-start align-items-center">
+        <div class="mb-4">
+            <h5>LOGO HERE</h5>
+            <img src="https://via.placeholder.com/120x60" alt="Logo" class="img-fluid">
+        </div>
+        <div class="mb-4">
+            <p class="mb-0">Sale Black Friday</p>
+            <img src="https://via.placeholder.com/120x200" alt="Ad Banner" class="img-fluid">
+        </div>
+        <div>
+            <p>25% OFF</p>
+            <img src="https://via.placeholder.com/120x200" alt="Ad Banner" class="img-fluid">
+        </div>
+        </div>
 
-            <div class="col-12 col-lg-8 main-content">
-            <h2 class="text-center mb-4">¡Lo que está pasando!</h2>
-            <div id="noticiasCarousel" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="card">
-                                    <img src="{% static 'img/noticia 1.jpg' %}" class="card-img-top" alt="Noticia 1">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Noticia 1</h5>
-                                        <p class="card-text">Breve descripción de la noticia 1.</p>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="col-md-4">
-                                <div class="card">
-                                    <img src="{% static 'img/noticia2.avif' %}" class="card-img-top" alt="Noticia 2">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Noticia 2</h5>
-                                        <p class="card-text">Breve descripción de la noticia 2.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card">
-                                    <img src="{% static 'img/noticia3.jpg' %}" class="card-img-top" alt="Noticia 3">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Noticia 3</h5>
-                                        <p class="card-text">Breve descripción de la noticia 3.</p>
-                                    </div>
-                                </div>
-                            </div> 
-                        </div>
-                    </div>
-                </div>
-                
-
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#noticiasCarousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Anterior</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#noticiasCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Siguiente</span>
-                </button>
-            </div>
-
-            <div class="main-article mt-4">
+        <div class="col-12 col-lg-8 main-content">
+        <h2 class="text-center mb-4">¡Lo que está pasando!</h2>
+        
+        <div id="noticiasCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+            <div class="carousel-item active">
                 <div class="row">
-                    <div class="col-md-8">
-                        <img src="https://via.placeholder.com/800x400" alt="Imagen de Noticia Principal" class="img-fluid">
-                        <h3 class="mt-3">Título de la Noticia Principal</h3>
-                        <p>
-                        Aquí va el contenido principal de la noticia. Puedes describir los hechos más relevantes y agregar los detalles que quieras mostrar al usuario.
-                        </p>
+                <div class="col-md-4">
+                    <div class="card">
+                    <img src="{% static 'img/noticia 1.jpg' %}" class="card-img-top" alt="Noticia 1">
+                    <div class="card-body">
+                        <h5 class="card-title">Noticia 1</h5>
+                        <p class="card-text">Breve descripción de la noticia 1.</p>
                     </div>
-                    <div class="col-md-4 mt-4 mt-md-0">
-                        <h4>Noticias Título</h4>
-                        <div class="side-news-item mb-3">
-                            <img src="https://via.placeholder.com/300x200" alt="Noticia Secundaria 1" class="img-fluid">
-                            <h5 class="mt-2">Nombre del autor</h5>
-                            <p>Breve descripción de la noticia o autor.</p>
-                        </div>
-                        <div class="side-news-item mb-3">
-                            <img src="https://via.placeholder.com/300x200" alt="Noticia Secundaria 2" class="img-fluid">
-                            <h5 class="mt-2">Otra Noticia</h5>
-                            <p>Pequeña descripción de otra noticia secundaria.</p>
-                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="row mt-4">
-                <div class="col-12">
-                    <div class="podcast-section">
-                        <h4>Podcast</h4>
-                        <img src="https://via.placeholder.com/600x200?text=Podcast+Banner" alt="Podcast Banner" class="img-fluid">
-                        <p class="mt-2">
-                        Disfruta de nuestro podcast con las últimas noticias, entrevistas y análisis.
-                        </p>
+                <div class="col-md-4">
+                    <div class="card">
+                    <img src="{% static 'img/noticia2.avif' %}" class="card-img-top" alt="Noticia 2">
+                    <div class="card-body">
+                        <h5 class="card-title">Noticia 2</h5>
+                        <p class="card-text">Breve descripción de la noticia 2.</p>
+                    </div>
                     </div>
                 </div>
+                <div class="col-md-4">
+                    <div class="card">
+                    <img src="{% static 'img/noticia3.jpg' %}" class="card-img-top" alt="Noticia 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Noticia 3</h5>
+                        <p class="card-text">Breve descripción de la noticia 3.</p>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            
+            
+                <div class="carousel-item">
+                    <div class="row">
+                    <div class="col-md-4">
+                        <div class="card">
+                        <img src="{% static 'img/ucrania.avif' %}" class="card-img-top" alt="Noticia 4">
+                        <div class="card-body">
+                            <h5 class="card-title">Noticia 4</h5>
+                            <p class="card-text">Breve descripción de la noticia 4.</p>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                        <img src="{% static 'img/james.jpeg' %}" class="card-img-top" alt="Noticia 5">
+                        <div class="card-body">
+                            <h5 class="card-title">Noticia 5</h5>
+                            <p class="card-text">Breve descripción de la noticia 5.</p>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                        <img src="{% static 'img/petro.jpeg' %}" class="card-img-top" alt="Noticia 6">
+                        <div class="card-body">
+                            <h5 class="card-title">Noticia 6</h5>
+                            <p class="card-text">Breve descripción de la noticia 6.</p>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
             </div>
 
+            <button class="carousel-control-prev" type="button" data-bs-target="#noticiasCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#noticiasCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Siguiente</span>
+            </button>
+        </div>
+
+        <div class="main-article mt-4">
             <div class="row">
-                <div class="col-12">
-                    <div class="big-banner">
-                        <img src="https://via.placeholder.com/800x200/FF0000/FFFFFF?text=SHOES" alt="SHOES Banner" class="img-fluid">
-                    </div>
+            <div class="col-md-8">
+                <img src="https://via.placeholder.com/800x400" alt="Imagen de Noticia Principal" class="img-fluid">
+                <h3 class="mt-3">Título de la Noticia Principal</h3>
+                <p>
+                Aquí va el contenido principal de la noticia. Puedes describir los hechos más relevantes y agregar los detalles que quieras mostrar al usuario.
+                </p>
+            </div>
+            <div class="col-md-4 mt-4 mt-md-0">
+                <h4>Noticias Título</h4>
+                <div class="side-news-item mb-3">
+                <img src="https://via.placeholder.com/300x200" alt="Noticia Secundaria 1" class="img-fluid">
+                <h5 class="mt-2">Nombre del autor</h5>
+                <p>Breve descripción de la noticia o autor.</p>
+                </div>
+                <div class="side-news-item mb-3">
+                <img src="https://via.placeholder.com/300x200" alt="Noticia Secundaria 2" class="img-fluid">
+                <h5 class="mt-2">Otra Noticia</h5>
+                <p>Pequeña descripción de otra noticia secundaria.</p>
                 </div>
             </div>
-
-            <div class="team-section mt-4">
-                <h4>Conoce a nuestro equipo</h4>
-                <div class="row">
-                    <div class="col-6 col-md-3">
-                        <div class="team-member text-center">
-                            <img src="https://via.placeholder.com/100?text=Person1" alt="Persona 1" class="img-fluid rounded-circle">
-                            <h6>Persona 1</h6>
-                            <p>Rol / Descripción</p>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <div class="team-member text-center">
-                            <img src="https://via.placeholder.com/100?text=Person2" alt="Persona 2" class="img-fluid rounded-circle">
-                            <h6>Persona 2</h6>
-                            <p>Rol / Descripción</p>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <div class="team-member text-center">
-                            <img src="https://via.placeholder.com/100?text=Person3" alt="Persona 3" class="img-fluid rounded-circle">
-                            <h6>Persona 3</h6>
-                            <p>Rol / Descripción</p>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <div class="team-member text-center">
-                            <img src="https://via.placeholder.com/100?text=Person4" alt="Persona 4" class="img-fluid rounded-circle">
-                            <h6>Persona 4</h6>
-                            <p>Rol / Descripción</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="magazine-section mt-4">
-                <h4>Contacto Total Magazine</h4>
-                <div class="row">
-                    <div class="col-6 col-md-3">
-                        <div class="magazine-cover text-center">
-                            <img src="https://via.placeholder.com/180x250?text=Magazine+1" alt="Magazine 1" class="img-fluid">
-                            <h6>NOMBRE 1</h6>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <div class="magazine-cover text-center">
-                            <img src="https://via.placeholder.com/180x250?text=Magazine+2" alt="Magazine 2" class="img-fluid">
-                            <h6>NOMBRE 2</h6>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <div class="magazine-cover text-center">
-                            <img src="https://via.placeholder.com/180x250?text=Magazine+3" alt="Magazine 3" class="img-fluid">
-                            <h6>NOMBRE 3</h6>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <div class="magazine-cover text-center">
-                            <img src="https://via.placeholder.com/180x250?text=Magazine+4" alt="Magazine 4" class="img-fluid">
-                            <h6>NOMBRE 4</h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div>
-
-            <div class="col-2 ad-bar d-none d-md-flex flex-column justify-content-start align-items-center">
-                <div class="mb-4">
-                    <h5>Ordena Ahora</h5>
-                    <img src="https://via.placeholder.com/120x60" alt="Ad Banner" class="img-fluid">
-                </div>
-                <div class="mb-4">
-                    <p>Más Publicidad</p>
-                    <img src="https://via.placeholder.com/120x200" alt="Ad Banner" class="img-fluid">
-                </div>
-                <div>
-                    <p>25% OFF</p>
-                    <img src="https://via.placeholder.com/120x200" alt="Ad Banner" class="img-fluid">
-                </div>
             </div>
         </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+            <div class="podcast-section">
+                <h4>Podcast</h4>
+                <img src="https://via.placeholder.com/600x200?text=Podcast+Banner" alt="Podcast Banner" class="img-fluid">
+                <p class="mt-2">
+                Disfruta de nuestro podcast con las últimas noticias, entrevistas y análisis.
+                </p>
+            </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+            <div class="big-banner">
+                <img src="https://via.placeholder.com/800x200/FF0000/FFFFFF?text=SHOES" alt="SHOES Banner" class="img-fluid">
+            </div>
+            </div>
+        </div>
+
+        <div class="team-section mt-4">
+            <h4>Conoce a nuestro equipo</h4>
+            <div class="row">
+            <div class="col-6 col-md-3">
+                <div class="team-member text-center">
+                <img src="https://via.placeholder.com/100?text=Person1" alt="Persona 1" class="img-fluid rounded-circle">
+                <h6>Persona 1</h6>
+                <p>Rol / Descripción</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="team-member text-center">
+                <img src="https://via.placeholder.com/100?text=Person2" alt="Persona 2" class="img-fluid rounded-circle">
+                <h6>Persona 2</h6>
+                <p>Rol / Descripción</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="team-member text-center">
+                <img src="https://via.placeholder.com/100?text=Person3" alt="Persona 3" class="img-fluid rounded-circle">
+                <h6>Persona 3</h6>
+                <p>Rol / Descripción</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="team-member text-center">
+                <img src="https://via.placeholder.com/100?text=Person4" alt="Persona 4" class="img-fluid rounded-circle">
+                <h6>Persona 4</h6>
+                <p>Rol / Descripción</p>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="magazine-section mt-4">
+            <h4>Contacto Total Magazine</h4>
+            <div class="row">
+            <div class="col-6 col-md-3">
+                <div class="magazine-cover text-center">
+                <img src="https://via.placeholder.com/180x250?text=Magazine+1" alt="Magazine 1" class="img-fluid">
+                <h6>NOMBRE 1</h6>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="magazine-cover text-center">
+                <img src="https://via.placeholder.com/180x250?text=Magazine+2" alt="Magazine 2" class="img-fluid">
+                <h6>NOMBRE 2</h6>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="magazine-cover text-center">
+                <img src="https://via.placeholder.com/180x250?text=Magazine+3" alt="Magazine 3" class="img-fluid">
+                <h6>NOMBRE 3</h6>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="magazine-cover text-center">
+                <img src="https://via.placeholder.com/180x250?text=Magazine+4" alt="Magazine 4" class="img-fluid">
+                <h6>NOMBRE 4</h6>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+
+        <div class="col-2 ad-bar d-none d-md-flex flex-column justify-content-start align-items-center">
+        <div class="mb-4">
+            <h5>Ordena Ahora</h5>
+            <img src="https://via.placeholder.com/120x60" alt="Ad Banner" class="img-fluid">
+        </div>
+        <div class="mb-4">
+            <p>Más Publicidad</p>
+            <img src="https://via.placeholder.com/120x200" alt="Ad Banner" class="img-fluid">
+        </div>
+        <div>
+            <p>25% OFF</p>
+            <img src="https://via.placeholder.com/120x200" alt="Ad Banner" class="img-fluid">
+        </div>
+        </div>
+    </div>
     </div>
 {% endblock %}
