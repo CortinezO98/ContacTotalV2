@@ -350,6 +350,16 @@ footer {
   transition: all 0.3s ease;
 }
 
+/* Main Player */
+.main-player {
+  border-radius: 10px !important;
+  position: relative;
+  display: flex;
+  margin-top: 2.5rem;
+  box-shadow: 8px 8px 16px #141414,
+             -8px -8px 16px #202020 !important;
+}
+
 .ad-bar {
   background-color: #1a1a1a;
   min-height: 100vh;
