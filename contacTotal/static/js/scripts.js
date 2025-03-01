@@ -15,5 +15,6 @@ window.onscroll = function() {
 
     compactHeader.classList.remove('slow', 'show');
     compactHeader.classList.add('fast');
+    
   }
 };
