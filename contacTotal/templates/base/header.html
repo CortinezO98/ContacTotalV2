@@ -1,6 +1,5 @@
 {% load static %}
 <header id="fullscreen-header" class="fullscreen-header bg-black text-white">
-<!--   <link rel="stylesheet" href="{% static 'css/styles.css'%}"> -->
   <nav class="navbar navbar-expand-lg navbar-dark py-2">
     <div class="container">
       <a class="navbar-brand d-lg-none" href="#">
@@ -29,7 +28,7 @@
   <div class="header py-3 d-none d-lg-block">
     <div class="container text-center">
       <div class="logo-container">
-        <img src="{% static 'img/Logo CT2.png' %}" alt="Contacto Total Media" class="logo" style="max-width: 180px;">
+        <img src="{% static 'img/Logo CT2.png' %}" alt="Contacto Total Media" class="logo">
       </div>
     </div>
   </div>
@@ -39,14 +38,14 @@
       <div class="col-lg-3 d-flex flex-column justify-content-between">
         <div>
           <div class="live-section p-2 rounded bg-dark text-center">
-            <p class="station-name fw-bold text-danger mb-2" style="font-size: 0.9rem;">Contacto Total Radio</p>
+            <p class="station-name fw-bold text-danger mb-2">Contacto Total Radio</p>
             <div class="live-container">
               <div class="live-indicator d-inline-flex align-items-center bg-danger rounded-pill px-2 py-1 mb-2">
-                <div class="live-dot bg-white rounded-circle me-2" style="width:8px; height:8px;"></div>
-                <span class="fw-bold" style="font-size: 0.8rem;">LIVE</span>
+                <div class="live-dot bg-white rounded-circle me-2"></div>
+                <span class="fw-bold">LIVE</span>
               </div>
-              <img src="{% static 'img/ecualizador.gif' %}" alt="Equalizer" class="img-fluid mb-2" style="max-width: 80px;">
-              <div class="d-flex justify-content-center" style="font-size: 20px;">
+              <img src="{% static 'img/ecualizador.gif' %}" alt="Equalizer" class="img-fluid mb-2 eq-img">
+              <div class="d-flex justify-content-center player-icons">
                 <span class="mx-1">⏮</span>
                 <span class="mx-1">▶</span>
                 <span class="mx-1">⏭</span>
@@ -55,9 +54,9 @@
           </div>
         </div>
         <div>
-            <img src="{% static 'img/revista.jpeg' %}" alt="Magazine Cover" class="img-fluid rounded" style="max-width: 150px;">
+          <img src="{% static 'img/revista.jpeg' %}" alt="Magazine Cover" class="img-fluid rounded magazine-img">
         </div>
-    </div>
+      </div>
       
       <div class="col-lg-6">
         <div class="main-player rounded overflow-hidden shadow">
@@ -72,12 +71,12 @@
       <div class="col-lg-3 d-flex flex-column justify-content-between">
         <div>
           <div class="podcast-player bg-dark rounded p-2 text-center mb-2">
-            <img src="{% static 'img/podcast3.png' %}" alt="Podcast Cover" class="img-fluid rounded mb-2" style="max-width: 120px;">
-            <h3 class="podcast-title text-danger fw-bold" style="font-size: 1rem;">PODCAST</h3>
-            <p style="font-size: 0.8rem;">Contacto Total</p>
-            <div class="podcast-controls d-flex justify-content-between align-items-center" style="font-size: 0.8rem;">
+            <img src="{% static 'img/podcast3.png' %}" alt="Podcast Cover" class="img-fluid rounded podcast-img">
+            <h3 class="podcast-title text-danger fw-bold">PODCAST</h3>
+            <p>Contacto Total</p>
+            <div class="podcast-controls d-flex justify-content-between align-items-center">
               <span>00:00</span>
-              <div class="d-flex" style="gap: 0.5rem;">
+              <div class="d-flex gap-1">
                 <span>⏮</span>
                 <span>▶</span>
                 <span>⏭</span>
@@ -88,13 +87,13 @@
         </div>
 
         <div>
-          <div class="weather-widget bg-primary rounded p-2 text-white text-center" style="font-size: 0.8rem;">
+          <div class="weather-widget bg-primary rounded p-2 text-white text-center">
             <div class="d-flex justify-content-between align-items-center mb-1">
               <div>
                 <p class="mb-0">Jueves, 13 Feb 2024</p>
                 <p class="mb-0">Bogotá</p>
               </div>
-              <h2 class="mb-0" style="font-size: 1.5rem;">24°</h2>
+              <h2 class="mb-0 weather-temp">24°</h2>
             </div>
             <p>Se esperan chubascos el próximo lunes</p>
             <button class="btn btn-light btn-sm w-100">Ver pronóstico completo</button>
@@ -102,28 +101,27 @@
         </div>
       </div>
     </div>
-    <div class="social-section py-2" style="margin-top: -10px;">
-        <div class="container text-center">
-          <p class="social-text mb-2" style="font-size: 0.9rem;">Escúchenos en vivo en nuestras redes sociales</p>
-          <div class="social-links d-flex justify-content-center" style="gap: 0.5rem;">
-            <a href="#"><img src="{% static 'img/Fb.png' %}" alt="Facebook" class="icon-social" style="width:30px;"></a>
-            <a href="#"><img src="{% static 'img/Instagram.png' %}" alt="Instagram" class="icon-social" style="width:30px;"></a>
-            <a href="#"><img src="{% static 'img/X.png' %}" alt="Twitter" class="icon-social" style="width:30px;"></a>
-            <a href="#"><img src="{% static 'img/Youtube.png' %}" alt="Youtube" class="icon-social" style="width:30px;"></a>
-            <a href="#"><img src="{% static 'img/Linkedin.png' %}" alt="LinkedIn" class="icon-social" style="width:30px;"></a>
-            <a href="#"><img src="{% static 'img/Tiktok.png' %}" alt="Tiktok" class="icon-social" style="width:30px;"></a>
-          </div>
+    <div class="social-section py-2">
+      <div class="container text-center">
+        <p class="social-text mb-2">Escúchenos en vivo en nuestras redes sociales</p>
+        <div class="social-links d-flex justify-content-center gap-1">
+          <a href="#"><img src="{% static 'img/Fb.png' %}" alt="Facebook" class="icon-social"></a>
+          <a href="#"><img src="{% static 'img/Instagram.png' %}" alt="Instagram" class="icon-social"></a>
+          <a href="#"><img src="{% static 'img/X.png' %}" alt="Twitter" class="icon-social"></a>
+          <a href="#"><img src="{% static 'img/Youtube.png' %}" alt="Youtube" class="icon-social"></a>
+          <a href="#"><img src="{% static 'img/Linkedin.png' %}" alt="LinkedIn" class="icon-social"></a>
+          <a href="#"><img src="{% static 'img/Tiktok.png' %}" alt="Tiktok" class="icon-social"></a>
         </div>
       </div>
+    </div>
   </div>
-  
 </header>
 
 <header id="compact-header" class="compact-header bg-black text-white fixed-top">
   <nav class="navbar navbar-expand-lg navbar-dark py-2">
     <div class="container">
       <a class="navbar-brand" href="#">
-        <img src="{% static 'img/Logo CT2.png' %}" alt="Logo Contacto Total" width="150">
+        <img src="{% static 'img/logomedia.png' %}" alt="Logo Contacto Total" width="150">
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavCompact"
         aria-controls="navbarNavCompact" aria-expanded="false" aria-label="Toggle navigation">
