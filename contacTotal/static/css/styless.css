@@ -338,7 +338,7 @@ footer {
   position: relative;
 }
 
-.social-icon:hover {
+.social-links:hover {
   transform: scale(1.2);
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
 }
@@ -349,7 +349,7 @@ footer {
   transition: all 0.3s ease;
 }
 
-.social-icon:hover .icon-social {
+.social-links:hover .icon-social {
   transform: scale(1.1);
 }
 
