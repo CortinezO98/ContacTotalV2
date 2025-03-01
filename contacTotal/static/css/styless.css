@@ -338,7 +338,7 @@ footer {
   position: relative;
 }
 
-.social-links:hover {
+.icon-social:hover {
   transform: scale(1.2);
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
 }
@@ -347,10 +347,6 @@ footer {
   width: 50px;
   height: 50px;
   transition: all 0.3s ease;
-}
-
-.social-links:hover .icon-social {
-  transform: scale(1.1);
 }
 
 .ad-bar {
