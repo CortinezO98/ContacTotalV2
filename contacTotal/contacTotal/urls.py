@@ -25,4 +25,5 @@ urlpatterns = [
     path('', IndexView, name="index"),
     path('revista/', revista, name="revista"),
     path('programas/', programas, name="programas"),
+    path('podcast/', podcast, name="podcast"),
 ]
