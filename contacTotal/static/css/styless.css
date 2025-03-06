@@ -29,11 +29,11 @@ body {
   transition: transform 2s ease-in-out, opacity 2s ease-in-out;
 }
 
-.fullscreen-header.hide {
+/* .fullscreen-header.hide {
   opacity: 0;
   transform: translateY(-100%);
   pointer-events: none;
-}
+} */
 
 
 .compact-header {
