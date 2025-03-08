@@ -381,17 +381,14 @@ footer {
 }
 
 
-.main-article,
-.news-card {
-  background-color: #1f1f1f;
-  border: 1px solid #333;
-  border-radius: 5px;
+.main-article {
+  background-color: white;
+  color: black;
   padding: 1rem;
   margin-bottom: 1rem;
 }
 
-.main-article img,
-.news-card img {
+.main-article img {
   width: 100%;
   height: auto;
   border-radius: 5px;
@@ -400,15 +397,14 @@ footer {
 .main-article h3 {
   margin-top: 1rem;
   font-size: 1.3rem;
-  color: #ffcccc;
+  color: black;
 }
 
-.main-article p,
-.news-card p {
+.main-article p {
   font-size: 0.9rem;
   line-height: 1.4;
+  color: #545454;
 }
-
 
 .read-more-btn {
   background-color: #ff0000;
@@ -459,8 +455,7 @@ footer {
 
 
 .podcast-section {
-  background-color: #1f1f1f;
-  border: 1px solid #333;
+  background-color: white;
   border-radius: 5px;
   padding: 1rem;
   margin-bottom: 1rem;
