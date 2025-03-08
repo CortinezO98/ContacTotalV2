@@ -518,8 +518,7 @@ footer {
 
 .main-article,
 .news-card {
-  background-color: #1f1f1f;
-  border: 1px solid #333;
+   border: 1px solid #d9d2d2;
   border-radius: 5px;
   padding: 1rem;
   margin-bottom: 1rem;
@@ -535,7 +534,8 @@ footer {
 .main-article h3 {
   margin-top: 1rem;
   font-size: 1.3rem;
-  color: #ffcccc;
+  color: #1f1f1f;
+  font-weight: bold;
 }
 
 .main-article p,
