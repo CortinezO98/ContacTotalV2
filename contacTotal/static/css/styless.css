@@ -289,12 +289,7 @@ footer {
 }
 
 .weather-widget-container {
-  /* background: #2b62c9; */
-  background: linear-gradient(45deg, #000000, transparent);
   border-radius: 10px !important;
-  padding: 1rem !important;
-  margin-top: 1rem;
-  color: white;
   box-shadow: 8px 8px 16px #141414,
              -8px -8px 16px #202020;
   height: 100% !important;
