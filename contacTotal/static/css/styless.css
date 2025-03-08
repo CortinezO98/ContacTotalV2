@@ -153,6 +153,7 @@ footer {
   display: flex !important;
   flex-direction: column !important; 
   align-items: center !important;
+  min-height: 112% !important;
   box-shadow: 8px 8px 16px #141414,
              -8px -8px 16px #202020;
             
