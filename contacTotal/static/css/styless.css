@@ -249,6 +249,8 @@ footer {
   box-shadow: 3px 3px 10px #d5d0d0, -3px -3px 10px #d5d0d0;
 }
 
+
+
 /* SECCIÓN PRINCIPAL PODCAST (versión 2) */
 .podcast2-section {
   background-color: #fff;
@@ -352,9 +354,6 @@ footer {
   }
 }
 
-
-
-
 .weather-widget-container {
   border-radius: 10px !important;
   box-shadow: 8px 8px 16px #141414,
@@ -374,7 +373,76 @@ footer {
 
 .social-section {
   text-align: center;
-  margin-top: 5.5rem;
+  margin-top: 1.9rem;
+}
+
+.transparent-button {
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.transparent-button:hover {
+  background-color: #D32F2F;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(211, 47, 47, 0.3);
+  border-color: transparent;
+}
+
+/* Efecto de brillo */
+.transparent-button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: 0.5s;
+}
+
+.transparent-button:hover::after {
+  left: 100%;
+}
+
+/* Cambio de color del texto */
+.transparent-button .text-danger {
+  transition: color 0.3s ease;
+}
+
+.transparent-button:hover .text-danger {
+  color: #fff !important;
+}
+
+.transparent-button:hover .text-muted {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Cambio de color del SVG a BLANCO en hover */
+.transparent-button .twitch-icon {
+  transition: all 0.3s ease;
+}
+
+.transparent-button:hover .twitch-icon {
+  filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(200%) contrast(100%) !important;
+}
+
+/* Ajuste responsivo */
+@media (max-width: 576px) {
+  .transparent-button {
+    font-size: 0.9rem;
+  }
+  
+  .transparent-button img {
+    width: 25px;
+    height: 25px;
+  }
 }
 
 .social-text {
