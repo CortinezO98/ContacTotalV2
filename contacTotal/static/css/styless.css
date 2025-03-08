@@ -288,7 +288,7 @@ footer {
   gap: 1rem !important;
 }
 
-.weather-widget {
+.weather-widget-container {
   /* background: #2b62c9; */
   background: linear-gradient(45deg, #000000, transparent);
   border-radius: 10px !important;
@@ -301,7 +301,7 @@ footer {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.weather-widget:hover {
+.weather-widget-container:hover {
   transform: scale(1.01) translateY(-5px);
   box-shadow: 3px 3px 10px #d5d0d0, -3px -3px 10px #d5d0d0;
 }
