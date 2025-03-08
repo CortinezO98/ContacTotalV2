@@ -542,6 +542,7 @@ footer {
 .news-card p {
   font-size: 0.9rem;
   line-height: 1.4;
+  margin-top: 0.5rem;
 }
 
 
@@ -667,7 +668,7 @@ gap: 1rem !important;
 .team-section h4 {
   text-align: center;
   margin-bottom: 1rem;
-  color: #ffcccc;
+  color: #1f1f1f;
 }
 
 .team-member {
@@ -697,7 +698,7 @@ gap: 1rem !important;
 .magazine-section h4 {
   text-align: center;
   margin-bottom: 1rem;
-  color: #ffcccc;
+  color: #1f1f1f;
 }
 
 .magazine-cover {
