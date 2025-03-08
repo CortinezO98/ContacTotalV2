@@ -249,44 +249,111 @@ footer {
   box-shadow: 3px 3px 10px #d5d0d0, -3px -3px 10px #d5d0d0;
 }
 
-/*podcast-section*/
-.podcast-player {
-  background: linear-gradient(145deg, #1c1c1c, #181818);
-  border-radius: 10px;
-  align-items: center;
-  padding: 1rem;
-  position: relative;
-  box-shadow: 8px 8px 16px #141414,
-             -8px -8px 16px #202020;
+/* SECCIÓN PRINCIPAL PODCAST (versión 2) */
+.podcast2-section {
+  background-color: #fff;
+  color: #000;
+  padding: 2rem 0;
 }
 
-.podcast-img {
-    width: 100%;
-    height: 250px;
-    object-fit: contain;
-    aspect-ratio: 1;
-    border-radius: 10px;
-    margin-bottom: 1rem;
-    box-shadow: 0 4px 8px rgba(255 255 255 / 30%);
+
+.podcast2-logo {
+  max-width: 300px;
 }
 
-.podcast-title {
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
-  color: #ff0000;
-  text-shadow: 1px 1px 2px rgba(255 232 232 / 50%);
+.badge-new {
+  display: inline-block;
+  background-color: #e20c1a;
+  color: #fff;
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
 }
 
-.d-flex.gap-1 {
+
+.main-podcast2-container {
   display: flex;
-  gap: 1rem !important;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
-/* Weather Widget */
-.podcast-weather-column {
-  justify-content: unset !important;
-  gap: 1rem !important;
+
+.podcast2-mic {
+  max-width: 150px;
 }
+
+
+.audio-player {
+  width: 300px;
+  max-width: 100%;
+}
+
+
+.podcast-description {
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.5;
+  font-size: 1rem;
+}
+
+
+.podcast2-carousel {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto; 
+  gap: 1.5rem;
+  padding-bottom: 1rem;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+
+.podcast2-item {
+  flex: 0 0 auto;
+  width: 120px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.podcast2-item img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.podcast2-item p {
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+
+.podcast2-item:hover img {
+  box-shadow: 0 0 8px rgba(226, 12, 26, 0.5);
+  transform: scale(1.03);
+  transition: all 0.3s ease;
+}
+
+/* Responsividad básica */
+@media (max-width: 768px) {
+  .main-podcast2-container {
+    margin-bottom: 1rem;
+  }
+  .podcast2-mic {
+    max-width: 100px;
+  }
+  .audio-player {
+    width: 90%;
+  }
+  .podcast-description {
+    font-size: 0.95rem;
+  }
+}
+
+
+
 
 .weather-widget-container {
   border-radius: 10px !important;
