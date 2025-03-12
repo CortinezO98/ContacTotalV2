@@ -25,3 +25,20 @@ def podcast(request):
         'podcasts': podcasts
     }
     return render(request, 'podcast.html', context)
+
+
+def radio(request):
+    return render(request, 'radio.html')
+
+
+def quienesSomos(request):
+    return render(request, 'quienesSomos.html')
+
+def programacion(request):
+    return render(request, 'programacion.html')
+
+def tienda(request):
+    return render(request, 'tienda.html')
+
+def contacto(request):
+    return render(request, 'contacto.html')
