@@ -35,7 +35,17 @@ def quienesSomos(request):
     return render(request, 'quienesSomos.html')
 
 def programacion(request):
-    return render(request, 'programacion.html')
+    programacion = [
+        ("Lunes", "Noticias de la Mañana", "/static/img/lunes.png", "11:00 AM"),
+        ("Martes", "Cine Clásico", "/static/img/martes.png", "11:00 AM"),
+        ("Miércoles", "Música en Vivo", "/static/img/miercoles.png", "11:00 AM"),
+        ("Jueves", "Charlas y Entrevistas", "/static/img/jueves.png", "11:00 AM"),
+        ("Viernes", "Humor Nocturno", "/static/img/viernes.png", "11:00 AM"),
+        ("Sábado", "Documentales", "/static/img/sabado.png", "11:00 AM"),
+        ("Domingo", "Películas de Estreno", "/static/img/domingo.png", "11:00 AM"),
+    ]
+    return render(request, "programacion.html", {"programacion": programacion})
+
 
 def tienda(request):
     return render(request, 'tienda.html')
