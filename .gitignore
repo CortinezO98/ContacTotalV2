@@ -1,9 +1,11 @@
-.env
+__pycache__/
+*.pyc
+*.py[cod]
+*$py.class
 
+.vscode
 
 venv/
-_pycache_
-
-
 *.log
 *.sqlite3
+.env
