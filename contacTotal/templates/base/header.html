@@ -33,31 +33,29 @@
     </div>
   </div>
 
-  <div class="main-content container my-4">
-    <div class="row g-3 align-items-stretch">
-      <div class="col-lg-3 d-flex flex-column justify-content-between">
-        <div>
-          <div class="live-section p-2 rounded bg-dark text-center">
-            <p class="station-name fw-bold text-danger mb-2">Contacto Total Radio</p>
-            <div class="live-container">
-              <div class="live-indicator d-inline-flex align-items-center bg-danger rounded-pill px-2 py-1 mb-2">
-                <div class="live-dot bg-white rounded-circle me-2"></div>
-                <span class="fw-bold">LIVE</span>
-              </div>
-              <img src="{% static 'img/ecualizador.gif' %}" alt="Equalizer" class="img-fluid mb-2 eq-img">
-              <div class="d-flex justify-content-center player-icons">
-                <span class="mx-1">⏮</span>
-                <span class="mx-1">▶</span>
-                <span class="mx-1">⏭</span>
-              </div>
-            </div>
+  <main>
+      <div class="left-column">
+          <div class="left-content">
+              <section class="live-radio">
+                  <h2>Contacto Total Radio</h2>
+                  <div class="live-indicator">● LIVE</div>
+                  <div class="audio-bars">
+                      <div class="bar"></div>
+                      <div class="bar"></div>
+                      <div class="bar"></div>
+                      <div class="bar"></div>
+                      <div class="bar"></div>
+                      <div class="bar"></div>
+                  </div>
+              </section>
+              
+              <section class="revista">
+                  <img src="{% static 'img/revista.jpeg' %}" alt="Revista Contacto Total">
+              </section>
           </div>
-        </div>
-        <div>
-          <img src="{% static 'img/revista.jpeg' %}" alt="Magazine Cover" class="img-fluid rounded magazine-img">
-        </div>
       </div>
       
+<<<<<<< HEAD
       <div class="col-lg-6">
         <div class="main-player rounded overflow-hidden shadow">
           <div class="video-container ratio ratio-16x9">
@@ -79,38 +77,59 @@
             </div>
           </div>
         </div>
+=======
+      <div class="center-column">
+          <section class="main-video">
+              <div class="video-container">
+                  <iframe src="https://www.youtube.com/embed/RyewX_e5Blg?si=ppBcPOv8WzVBd_yB"
+                      title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowfullscreen>
+                  </iframe>
+              </div>
+          </section>
+          
+          <section class="social-section">
+              <h3>¡Conéctate y disfruta en vivo desde nuestras redes sociales!</h3>
+              <div class="social-media-icons">
+                  <a href="#" class="social-icon"><img src="{% static 'img/facebook.svg' %}" alt="live-facebook"></a>
+                  <a href="#" class="social-icon"><img src="{% static 'img/instagram.svg' %}" alt="live-instagram"></a>
+                  <a href="#" class="social-icon"><img src="{% static 'img/twitter.svg' %}" alt="live-x"></a>
+                  <a href="#" class="social-icon"><img src="{% static 'img/youtube.svg' %}" alt="live-youtube"></a>
+                  <a href="#" class="social-icon"><img src="{% static 'img/twitch.svg' %}" alt="live-twitch"></a>
+                  <a href="#" class="social-icon"><img src="{% static 'img/tik-tok.svg' %}" alt="live-tiktok"></a>
+              </div>
+          </section>
+>>>>>>> devL
       </div>
       
-      <div class="col-lg-3 d-flex flex-column justify-content-between podcast-weather-column">
-        <div>
-          <div class="podcast-player bg-dark rounded p-2 text-center mb-2">
-            <img src="{% static 'img/podcast3.png' %}" alt="Podcast Cover" class="img-fluid rounded podcast-img">
-            <h3 class="podcast-title text-danger fw-bold">PODCAST</h3>
-            <p>Contacto Total</p>
-            <div class="podcast-controls d-flex justify-content-between align-items-center">
-              <span>00:00</span>
-              <div class="d-flex gap-1">
-                <span>⏮</span>
-                <span>▶</span>
-                <span>⏭</span>
-              </div>
-              <span>00:00</span>
-            </div>
+      <div class="right-column">
+          <div class="right-content">
+              <section class="podcast">
+                  <img src="{% static 'img/Copia de Podcast 1.png' %}" alt="Podcast">
+                  <div class="podcast-info">
+                      <h3>Podcast</h3>
+                      <p>Contacto Total</p>
+                  </div>
+                  <div class="podcast-controls">
+                      <button>↺</button>
+                      <button>◀◀</button>
+                      <button>▶</button>
+                      <button>▶▶</button>
+                      <button>↻</button>
+                  </div>
+                  <div class="podcast-time">
+                      <span>02:10</span>
+                      <div class="time-bar"><div class="time-progress"></div></div>
+                      <span>03:45</span>
+                  </div>
+              </section>
+              
+              <section class="weather">
+                  <a class="weatherwidget-io" href="https://forecast7.com/es/33d45n112d07/phoenix/" data-label_1="PHOENIX" data-label_2="WEATHER" data-font="Verdana" data-icons="Climacons Animated" data-days="5" data-theme="weather_one">PHOENIX WEATHER</a>
+              </section>
           </div>
-        </div>
-
-        <div>
-          <!-- Nuevo widget del clima -->
-          <div class="weather-widget-container rounded overflow-hidden">
-            <a class="weatherwidget-io" href="https://forecast7.com/es/33d45n112d07/phoenix/" data-label_1="PHOENIX" data-label_2="WEATHER" data-font="Trebuchet MS" data-icons="Climacons" data-days="5" data-theme="weather_one">PHOENIX WEATHER</a>
-            <script>
-              !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
-            </script>
-          </div>
-        </div>
       </div>
-    </div>
-  </div>
+  </main>
 </header>
 
 <header id="compact-header" class="compact-header bg-black text-white fixed-top">
@@ -138,4 +157,7 @@
       </div>
     </div>
   </nav>
+  <script>
+      !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
+  </script>
 </header>
