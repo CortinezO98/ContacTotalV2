@@ -31,4 +31,4 @@ urlpatterns = [
     path('programacion/', programacion, name="programacion"),
     path('tienda/', tienda, name="tienda"),
     path('contacto/', contacto, name="contacto"),
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

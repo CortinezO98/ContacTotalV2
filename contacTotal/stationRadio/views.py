@@ -1,15 +1,24 @@
 from django.shortcuts import render
 from .models import *
 from .views import *
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def IndexView(request):
     return render(request, "index.html")
 
 def revista(request):
-    return render(request, 'revista.html')
+    ediciones = EdicionRevista.objects.all().order_by('-fecha_publicacion') 
+    return render(request, 'revista.html', {'ediciones': ediciones})
+
 
 def programas(request):
-    return render(request, 'programas.html')
+    programas_list = Programa.objects.all()  
+    paginator = Paginator(programas_list, 10) 
+
+    page_number = request.GET.get('page')  
+    page_obj = paginator.get_page(page_number)  
+
+    return render(request, 'programas.html', {'page_obj': page_obj})
 
 def podcast(request):
     featured_podcast = Podcast.objects.filter(featured=True).first()
@@ -35,16 +44,18 @@ def quienesSomos(request):
     return render(request, 'quienesSomos.html')
 
 def programacion(request):
-    programacion = [
-        ("Lunes", "Noticias de la Mañana", "/static/img/lunes.png", "11:00 AM"),
-        ("Martes", "Cine Clásico", "/static/img/martes.png", "11:00 AM"),
-        ("Miércoles", "Música en Vivo", "/static/img/miercoles.png", "11:00 AM"),
-        ("Jueves", "Charlas y Entrevistas", "/static/img/jueves.png", "11:00 AM"),
-        ("Viernes", "Humor Nocturno", "/static/img/viernes.png", "11:00 AM"),
-        ("Sábado", "Documentales", "/static/img/sabado.png", "11:00 AM"),
-        ("Domingo", "Películas de Estreno", "/static/img/domingo.png", "11:00 AM"),
-    ]
-    return render(request, "programacion.html", {"programacion": programacion})
+    programacion_list = Programacion.objects.all()
+
+    for item in programacion_list:
+        item.hora_bogota = item.get_otra_zona_horaria('America/Bogota')  
+        item.hora_mexico = item.get_otra_zona_horaria('America/Mexico_City')  
+        item.hora_argentina = item.get_otra_zona_horaria('America/Argentina/Buenos_Aires')  
+        item.hora_eeuu = item.get_otra_zona_horaria('America/New_York') 
+
+    context = {
+        'programacion': programacion_list,
+    }
+    return render(request, 'programacion.html', context)
 
 
 def tienda(request):
