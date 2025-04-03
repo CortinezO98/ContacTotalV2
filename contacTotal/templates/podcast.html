@@ -6,101 +6,113 @@
 {% endblock %}
 
 {% block main %}
-    <section class="podcast2-section mt-4">
+    <section class="podcast-section mt-4">
         <div class="container text-center">    
-            <h1 id="mainTitle">Podcast</h1>
-            <div class="badge-new">Nuevo episodio</div>
+        <h1 id="mainTitle">Podcast</h1>
+        <div class="badge-new">Nuevo episodio</div>
 
-            <div class="main-podcast2-container">
-                <img id="mainCoverImage" 
-                    src="{% static 'img/default-podcast.png' %}" 
-                    alt="Portada Principal" 
-                    class="podcast2-mic">
-        
-                <audio id="mainAudio" class="audio-player" controls>
-                    <source id="mainAudioSource" 
-                            src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" 
-                            type="audio/mpeg">
-                    Tu navegador no soporta la reproducción de audio.
-                </audio>
+        <div class="main-podcast-container">
+            <img id="mainCoverImage" 
+                src="" 
+                alt="Micrófono Principal" 
+                class="podcast-mic" >
+    
+            <audio id="mainAudio" class="audio-player" controls>
+            <source id="mainAudioSource" 
+                    src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" 
+                    type="audio/mpeg">
+            Tu navegador no soporta la reproducción de audio.
+            </audio>
+        </div>
+    
+    
+        <div class="podcast-carousel">
+            <div class="podcast-item"
+                data-title="Podcast 1"
+                data-description="Descripción del Podcast 1"
+                data-audio="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+                data-image="https://via.placeholder.com/120?text=Podcast+1">
+            <img src="{% static 'img/podcast 2.png' %}" alt="Podcast 1">
+            <p>Podcast 1</p>
             </div>
-        
-            <div class="podcast2-carousel">
-                <div class="podcast2-item"
-                    data-title="Podcast 1"
-                    data-description="Descripción del Podcast 1"
-                    data-audio="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
-                    data-image="https://via.placeholder.com/120?text=Podcast+1">
-                    <img src="{% static 'img/podcast 2.png' %}" alt="Podcast 1">
-                    <p>Podcast 1</p>
-                </div>
-        
-                <div class="podcast2-item"
-                    data-title="Podcast 2"
-                    data-description="Descripción del Podcast 2"
-                    data-audio="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
-                    data-image="https://via.placeholder.com/120?text=Podcast+2">
-                    <img src="{% static 'img/podcast1.png' %}" alt="Podcast 2">
-                    <p>Podcast 2</p>
-                </div>
-        
-                <div class="podcast2-item"
-                    data-title="Podcast 3"
-                    data-description="Descripción del Podcast 3"
-                    data-audio="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
-                    data-image="https://via.placeholder.com/120?text=Podcast+3">
-                    <img src="{% static 'img/podcast5.png' %}" alt="Podcast 3">
-                    <p>Podcast 3</p>
-                </div>
-        
-                <div class="podcast2-item"
-                    data-title="Podcast 4"
-                    data-description="Descripción del Podcast 4"
-                    data-audio="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
-                    data-image="https://via.placeholder.com/120?text=Podcast+4">
-                    <img src="{% static 'img/podcast4.png' %}" alt="Podcast 4">
-                    <p>Podcast 4</p>
-                </div>
+    
+            <div class="podcast-item"
+                data-title="Podcast 2"
+                data-description="Descripción del Podcast 2"
+                data-audio="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
+                data-image="https://via.placeholder.com/120?text=Podcast+2">
+            <img src="{% static 'img/podcast1.png' %}" alt="Podcast 2">
+            <p>Podcast 2</p>
             </div>
+
+            <div class="podcast-item"
+                data-title="Podcast 3"
+                data-description="Descripción del Podcast 2"
+                data-audio="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
+                data-image="https://via.placeholder.com/120?text=Podcast+3">
+            <img src="{% static 'img/podcast5.png' %}" alt="Podcast 2">
+            <p>Podcast 3</p>
+            </div>
+
+            <div class="podcast-item"
+                data-title="Podcast 4"
+                data-description="Descripción del Podcast 2"
+                data-audio="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
+                data-image="https://via.placeholder.com/120?text=Podcast+4">
+            <img src="{% static 'img/podcast4.png' %}" alt="Podcast 2">
+            <p>Podcast 4</p>
+            </div>
+        </div>
         </div>
     </section>
     
+
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    const mainCoverImage = document.getElementById('mainCoverImage');
-    const mainTitle = document.getElementById('mainTitle');
-    const mainDescription = document.getElementById('mainDescription'); 
-    const mainAudio = document.getElementById('mainAudio');
-    const mainAudioSource = document.getElementById('mainAudioSource');
-
-    const podcastItems = document.querySelectorAll('.podcast2-item');
-
-    podcastItems.forEach(item => {
+        const mainCoverImage = document.getElementById('mainCoverImage');
+        const mainTitle = document.getElementById('mainTitle');
+        const mainDescription = document.getElementById('mainDescription');
+        const mainAudio = document.getElementById('mainAudio');
+        const mainAudioSource = document.getElementById('mainAudioSource');
+    
+        let mainPodcastData = {
+        title: mainTitle ? mainTitle.textContent : '',
+        description: mainDescription ? mainDescription.textContent : '',
+        audio: mainAudioSource ? mainAudioSource.src : '',
+        image: mainCoverImage ? mainCoverImage.src : ''
+        };
+    
+        const podcastItems = document.querySelectorAll('.podcast-item');
+    
+        podcastItems.forEach(item => {
         item.addEventListener('click', function() {
-        const newTitle = this.getAttribute('data-title');
-        const newDescription = this.getAttribute('data-description');
-        const newAudio = this.getAttribute('data-audio');
-        const newImage = this.getAttribute('data-image');
-
-        console.log("Cambiando a imagen:", newImage); 
-
-        mainCoverImage.style.opacity = 0;
-        setTimeout(() => {
+            let oldMain = { ...mainPodcastData };
+            const newTitle = this.getAttribute('data-title');
+            const newDescription = this.getAttribute('data-description');
+            const newAudio = this.getAttribute('data-audio');
+            const newImage = this.getAttribute('data-image');
+    
+            mainPodcastData = {
+            title: newTitle,
+            description: newDescription,
+            audio: newAudio,
+            image: newImage
+            };
+    
             mainCoverImage.src = newImage;
-            mainCoverImage.style.opacity = 1;
-        }, 300); 
-
-        mainTitle.textContent = newTitle;
-        if (mainDescription) {
+            mainTitle.textContent = newTitle;
             mainDescription.textContent = newDescription;
-        }
-        mainAudioSource.src = newAudio;
-        mainAudio.load();
-        mainAudio.play();
+            mainAudioSource.src = newAudio;
+            mainAudio.load();
+            mainAudio.play();
+            this.setAttribute('data-title', oldMain.title);
+            this.setAttribute('data-description', oldMain.description);
+            this.setAttribute('data-audio', oldMain.audio);
+            this.setAttribute('data-image', oldMain.image);
+    
+            const itemP = this.querySelector('p');
+            if(itemImg) itemImg.src = oldMain.image;
+            if(itemP) itemP.textContent = oldMain.title;
         });
-    });
-    });
-
-
+        });
     </script>
 {% endblock %}
