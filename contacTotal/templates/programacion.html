@@ -2,42 +2,43 @@
 {% load static %}
 
 {% block header %}
-  {% include 'base/headerCompact.html' %}
+    {% include 'base/headerCompact.html' %}
 {% endblock %}
 
 {% block main %}
-<div class="container text-center mt-4">
-  <h1 class="fw-bold">Programación</h1>
-  <div class="program-box border border-danger p-4 mt-3 rounded">
-      <ul class="nav nav-pills justify-content-center mt-3">
-          {% for dia, programa, imagen, hora in programacion %}
-              {% with dia|lower|slugify as dia_id %}
-                  <li class="nav-item">
-                      <a class="nav-link {% if forloop.first %}active{% endif %}" data-bs-toggle="pill" href="#{{ dia_id }}">{{ dia }}</a>
-                  </li>
-              {% endwith %}
-          {% endfor %}
-      </ul>
-
-      <div class="tab-content mt-4">
-          {% for dia, programa, imagen, hora in programacion %}
-              {% with dia|lower|slugify as dia_id %}
-                  <div id="{{ dia_id }}" class="tab-pane fade {% if forloop.first %}show active{% endif %}">
-                      <div class="row justify-content-center">
-                          <div class="col-md-6">
-                              <div class="program-card shadow-sm border rounded-3 p-3">
-                                  <img src="{{ imagen }}" alt="{{ programa }}" class="img-fluid rounded-top">
-                                  <div class="program-info bg-light p-3 rounded-bottom">
-                                      <h5 class="fw-bold">{{ programa }}</h5>
-                                      <p class="text-muted"><strong>Hora:</strong> {{ hora }}</p>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              {% endwith %}
-          {% endfor %}
-      </div>
-  </div>
-</div>
+    <div class="container text-center mt-4">
+        <h1 class="fw-bold">Programación</h1>
+        <div class="program-box border border-danger p-4 mt-3 rounded">
+            <ul class="nav nav-pills justify-content-center mt-3">
+                {% for programacion_item in programacion %}
+                    {% with programacion_item.dia|lower|slugify as dia_id %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if forloop.first %}active{% endif %}" data-bs-toggle="pill" href="#{{ dia_id }}">{{ programacion_item.dia }}</a>
+                        </li>
+                    {% endwith %}
+                {% endfor %}
+            </ul>
+            <div class="tab-content mt-4">
+                {% for programacion_item in programacion %}
+                    {% with programacion_item.dia|lower|slugify as dia_id %}
+                        <div id="{{ dia_id }}" class="tab-pane fade {% if forloop.first %}show active{% endif %}">
+                            <div class="row justify-content-center">
+                                <div class="col-md-6">
+                                    <div class="program-card shadow-sm border rounded-3 p-3">
+                                        <img src="{{ programacion_item.imagen.url }}" alt="{{ programacion_item.programa }}" class="img-fluid rounded-top">
+                                        <div class="program-info bg-light p-3 rounded-bottom">
+                                            <h5 class="fw-bold">{{ programacion_item.programa }}</h5>
+                                            <p class="text-muted"><strong>Hora (México):</strong> {{ programacion_item.hora_mexico }}</p>
+                                            <p class="text-muted"><strong>Hora (Argentina):</strong> {{ programacion_item.hora_argentina }}</p>
+                                            <p class="text-muted"><strong>Hora (EEUU):</strong> {{ programacion_item.hora_eeuu }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endwith %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 {% endblock %}
