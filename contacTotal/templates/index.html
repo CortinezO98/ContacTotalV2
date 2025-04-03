@@ -4,126 +4,262 @@
     <div class="container-fluid">
     <div class="row">
         <div class="col-2 ad-bar d-none d-md-flex flex-column justify-content-start align-items-center">
-        <div class="mb-4">
-            <h5>LOGO HERE</h5>
-            <img src="https://via.placeholder.com/120x60" alt="Logo" class="img-fluid">
+        <!-- Banner Publicitario -->
+            <div style="width: 160px; height: 600px; background: linear-gradient(135deg, rgb(245, 248, 250), rgb(31, 38, 229)); border-radius: 5px; overflow: hidden; position: relative; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); font-family: Arial, sans-serif; cursor: pointer; transition: transform 0.3s ease; display: flex; flex-direction: column;">
+            
+                <div style="width: 100%; height: 200px; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 15px;">
+                <img src="https://i.ibb.co/Z6pD15Bs/df424f8d98bf7fe8f2aa3d54af339361.jpg" alt="Imagen destacada">
+                </div>
+            <div style="padding: 15px; display: flex; flex-direction: column; align-items: center; height: auto; box-sizing: border-box; flex-grow: 1; text-align: center;">
+                <div style="width: 40px; height: 40px; background-color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 0px; margin-bottom: 10px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#451ae0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;">
+                        
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        
+                        </svg>
+                </div>
+                <div style="color: white; flex-grow: 1; text-align: center; margin-bottom: 10px;">
+                <h2 style="font-size: 14px; font-weight: bold; margin: 0 0 5px 0;">SEGURO DE VIDA FLEXIBLE</h2>
+                <p style="font-size: 12px; margin: 0 0 4px 0;">American Family Life Insurance Company ofrece el seguro de vida flexible DreamSecure, con una cobertura que puede cambiar a medida que su vida cambia. Esta es una forma única y personalizable de proteger a su familia.</p>
+                <p style="font-size: 12px; margin: 0; opacity: 0.9; font-style: italic; display: block;">|Jhon Herrera, Agent | (602) 795-4825 | jherrer1@amfam.com | Certified Agency in Customer Excellence</p>
+                </div>
+                <a href="#" style="background-color: #fff; color: #451ae0; padding: 6px 10px; border-radius: 20px; font-weight: bold; font-size: 12px; text-decoration: none; text-align: center; white-space: nowrap;">Contáctenos </a>
+            </div>
         </div>
-        <div class="mb-4">
-            <p class="mb-0">Sale Black Friday</p>
-            <img src="https://via.placeholder.com/120x200" alt="Ad Banner" class="img-fluid">
-        </div>
-        <div>
-            <p>25% OFF</p>
-            <img src="https://via.placeholder.com/120x200" alt="Ad Banner" class="img-fluid">
-        </div>
+        <!-- Fin del Banner -->
         </div>
 
 
         <div class="col-12 col-lg-8 main-content">
         <h2 id="ColorTitulo1" class="text-center mb-4" >¡Lo que está pasando!</h2>
         
-        <div id="noticiasCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div id="noticiasCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
             <div class="carousel-inner">
-            <div class="carousel-item active">
+              <div class="carousel-item active">
                 <div class="row">
-                <div class="col-md-4">
-                    <div class="card">
-                    <img src="{% static 'img/noticia 1.jpg' %}" class="card-img-top" alt="Noticia 1">
-                    <div class="card-body">
-                        <h5 class="card-title">Noticia 1</h5>
-                        <p class="card-text">Breve descripción de la noticia 1.</p>
+                  <div class="col-md-4">
+                    <div class="card" id="card-1">
+                      <img src="{% static 'img/noticia 1.jpg' %}" class="card-img-top" alt="Noticia 1">
+                      <div class="card-body">
+                        <h5 class="card-title">La crisis migratoria continua</h5>
+                        <p class="card-text">Las medidas de Trump generan incertidumbre a ciudadanos venezolanos.</p>
+                      </div>
                     </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="card" id="card-2">
+                      <img src="{% static 'img/noticia2.avif' %}" class="card-img-top" alt="Noticia 2">
+                      <div class="card-body">
+                        <h5 class="card-title">Reunión entre Trump y Zelenski</h5>
+                        <p class="card-text">El gobernante ucraniano destacó además la reunión "altamente productiva".</p>
+                      </div>
                     </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="card" id="card-3">
+                      <img src="{% static 'img/noticia3.jpg' %}" class="card-img-top" alt="Noticia 3">
+                      <div class="card-body">
+                        <h5 class="card-title">Nuevo accidente en transmilenio</h5>
+                        <p class="card-text">Se repite, un accidente entre articulados deja un balance de 7 heridos.</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card">
-                    <img src="{% static 'img/noticia2.avif' %}" class="card-img-top" alt="Noticia 2">
-                    <div class="card-body">
-                        <h5 class="card-title">Noticia 2</h5>
-                        <p class="card-text">Breve descripción de la noticia 2.</p>
+              </div>
+              <div class="carousel-item">
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="card" id="card-2">
+                      <img src="{% static 'img/noticia2.avif' %}" class="card-img-top" alt="Noticia 2">
+                      <div class="card-body">
+                        <h5 class="card-title">Reunión entre Trump y Zelenski</h5>
+                        <p class="card-text">El gobernante ucraniano destacó además la reunión "altamente productiva".</p>
+                      </div>
                     </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="card" id="card-3">
+                      <img src="{% static 'img/noticia3.jpg' %}" class="card-img-top" alt="Noticia 3">
+                      <div class="card-body">
+                        <h5 class="card-title">Nuevo accidente en transmilenio</h5>
+                        <p class="card-text">Se repite, un accidente entre articulados deja un balance de 7 heridos.</p>
+                      </div>
                     </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="card" id="card-4">
+                      <img src="{% static 'img/ucrania.avif' %}" class="card-img-top" alt="Noticia 4">
+                      <div class="card-body">
+                        <h5 class="card-title">Zelenski espera "llegar a acuerdos" con EEUU</h5>
+                        <p class="card-text">El presidente de Ucrania, afirmó este sábado que espera que puedan "llegar a acuerdos" en la reunión prevista con representantes de Estados Unidos.</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card">
-                    <img src="{% static 'img/noticia3.jpg' %}" class="card-img-top" alt="Noticia 3">
-                    <div class="card-body">
-                        <h5 class="card-title">Noticia 3</h5>
-                        <p class="card-text">Breve descripción de la noticia 3.</p>
+              </div>
+              <div class="carousel-item">
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="card" id="card-3">
+                      <img src="{% static 'img/noticia3.jpg' %}" class="card-img-top" alt="Noticia 3">
+                      <div class="card-body">
+                        <h5 class="card-title">Nuevo accidente en transmilenio</h5>
+                        <p class="card-text">Se repite, un accidente entre articulados deja un balance de 7 heridos.</p>
+                      </div>
                     </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="card" id="card-4">
+                      <img src="{% static 'img/ucrania.avif' %}" class="card-img-top" alt="Noticia 4">
+                      <div class="card-body">
+                        <h5 class="card-title">Zelenski espera "llegar a acuerdos" con EEUU</h5>
+                        <p class="card-text">El presidente de Ucrania, afirmó este sábado que espera que puedan "llegar a acuerdos" en la reunión prevista con representantes de Estados Unidos.</p>
+                      </div>
                     </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="card" id="card-5">
+                      <img src="{% static 'img/james.jpeg' %}" class="card-img-top" alt="Noticia 5">
+                      <div class="card-body">
+                        <h5 class="card-title">James se reencuentra en León</h5>
+                        <p class="card-text">El colombiano es figura en su equipo apareciendo en los momentos importantes.</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              </div>
+              <div class="carousel-item">
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="card" id="card-4">
+                      <img src="{% static 'img/ucrania.avif' %}" class="card-img-top" alt="Noticia 4">
+                      <div class="card-body">
+                        <h5 class="card-title">Zelenski espera "llegar a acuerdos" con EEUU</h5>
+                        <p class="card-text">El presidente de Ucrania, afirmó este sábado que espera que puedan "llegar a acuerdos" en la reunión prevista con representantes de Estados Unidos.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="card" id="card-5">
+                      <img src="{% static 'img/james.jpeg' %}" class="card-img-top" alt="Noticia 5">
+                      <div class="card-body">
+                        <h5 class="card-title">James se reencuentra en León</h5>
+                        <p class="card-text">El colombiano es figura en su equipo apareciendo en los momentos importantes.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="card" id="card-6">
+                      <img src="{% static 'img/petro.jpeg' %}" class="card-img-top" alt="Noticia 6">
+                      <div class="card-body">
+                        <h5 class="card-title">¿Desaparece el ministerio de la igualdad?</h5>
+                        <p class="card-text">Después de ser despedida Francia Márquez del Ministerio, el presidente Gustavo Petro dio declaraciones donde deja ver su preocupación...</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              </div>
+              <div class="carousel-item">
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="card" id="card-5">
+                      <img src="{% static 'img/james.jpeg' %}" class="card-img-top" alt="Noticia 5">
+                      <div class="card-body">
+                        <h5 class="card-title">James se reencuentra en León</h5>
+                        <p class="card-text">El colombiano es figura en su equipo apareciendo en los momentos importantes.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="card" id="card-6">
+                      <img src="{% static 'img/petro.jpeg' %}" class="card-img-top" alt="Noticia 6">
+                      <div class="card-body">
+                        <h5 class="card-title">¿Desaparece el ministerio de la igualdad?</h5>
+                        <p class="card-text">Después de ser despedida Francia Márquez del Ministerio, el presidente Gustavo Petro dio declaraciones donde deja ver su preocupación...</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="card" id="card-1">
+                      <img src="{% static 'img/noticia 1.jpg' %}" class="card-img-top" alt="Noticia 1">
+                      <div class="card-body">
+                        <h5 class="card-title">La crisis migratoria continua</h5>
+                        <p class="card-text">Las medidas de Trump generan incertidumbre a ciudadanos venezolanos.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="card" id="card-6">
+                      <img src="{% static 'img/petro.jpeg' %}" class="card-img-top" alt="Noticia 6">
+                      <div class="card-body">
+                        <h5 class="card-title">¿Desaparece el ministerio de la igualdad?</h5>
+                        <p class="card-text">Después de ser despedida Francia Márquez del Ministerio, el presidente Gustavo Petro dio declaraciones donde deja ver su preocupación...</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="card" id="card-1">
+                      <img src="{% static 'img/noticia 1.jpg' %}" class="card-img-top" alt="Noticia 1">
+                      <div class="card-body">
+                        <h5 class="card-title">La crisis migratoria continua</h5>
+                        <p class="card-text">Las medidas de Trump generan incertidumbre a ciudadanos venezolanos.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="card" id="card-2">
+                      <img src="{% static 'img/noticia2.avif' %}" class="card-img-top" alt="Noticia 2">
+                      <div class="card-body">
+                        <h5 class="card-title">Reunión entre Trump y Zelenski</h5>
+                        <p class="card-text">El gobernante ucraniano destacó además la reunión "altamente productiva".</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            
-            
-                <div class="carousel-item">
-                    <div class="row">
-                    <div class="col-md-4">
-                        <div class="card">
-                        <img src="{% static 'img/ucrania.avif' %}" class="card-img-top" alt="Noticia 4">
-                        <div class="card-body">
-                            <h5 class="card-title">Noticia 4</h5>
-                            <p class="card-text">Breve descripción de la noticia 4.</p>
-                        </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card">
-                        <img src="{% static 'img/james.jpeg' %}" class="card-img-top" alt="Noticia 5">
-                        <div class="card-body">
-                            <h5 class="card-title">Noticia 5</h5>
-                            <p class="card-text">Breve descripción de la noticia 5.</p>
-                        </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card">
-                        <img src="{% static 'img/petro.jpeg' %}" class="card-img-top" alt="Noticia 6">
-                        <div class="card-body">
-                            <h5 class="card-title">Noticia 6</h5>
-                            <p class="card-text">Breve descripción de la noticia 6.</p>
-                        </div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-
-            </div>
-
+          
             <button class="carousel-control-prev" type="button" data-bs-target="#noticiasCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Anterior</span>
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Anterior</span>
             </button>
             <button class="carousel-control-next" type="button" data-bs-target="#noticiasCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Siguiente</span>
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Siguiente</span>
             </button>
         </div>
 
         <div class="main-article mt-4">
             <div class="row">
-            <div class="col-md-8">
-                
-                <h3 class="mt-3">She Midst Kind Created Face<br> Was Bring Creature Very</h3>
-                <img src="{% static 'img/Trump.jpeg' %}" alt="Imagen de Noticia Principal" class="img-fluid">
-                <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum, ducimus. Nobis ducimus eaque tenetur quis et inventore dolores, quo id dignissimos soluta velit quibusdam ab accusantium totam! Assumenda, tempore incidunt.
-                </p>
-            </div>
-            <div class="col-md-4 mt-4 mt-md-0">
-                <h4>Noticias Título</h4>
-                <div class="side-news-item mb-3">
-                <img src="https://via.placeholder.com/300x200" alt="Noticia Secundaria 1" class="img-fluid">
-                <h5 class="mt-2">Nombre del autor</h5>
-                <p>Breve descripción de la noticia o autor.</p>
+                <div class="col-md-8">
+                    <h3 class="mt-3">EE.UU. despliega otros 3.000 soldados en servicio activo en la frontera con México</h3>
+                    <img src="{%static 'img/frontera-mex-eeuu.jpg' %}" alt="Imagen de Noticia Principal" class="img-fluid">
+                    <p>
+                        La administración Trump está desplegando más soldados en servicio activo en la frontera sur de Estados Unidos, mientras el presidente continúa haciendo de la seguridad fronteriza y el freno a la inmigración indocumentada una prioridad.
+                    </p>
                 </div>
-                <div class="side-news-item mb-3">
-                <img src="https://via.placeholder.com/300x200" alt="Noticia Secundaria 2" class="img-fluid">
-                <h5 class="mt-2">Otra Noticia</h5>
-                <p>Pequeña descripción de otra noticia secundaria.</p>
+                <div class="col-md-4 mt-4 mt-md-0">
+                    <h4>Anuncios</h4>
+                    <div class="side-news-item mb-3">
+                    <img src="https://nebula.wsimg.com/1b625da8fba5e4e3965b91edfd1cd3a0?AccessKeyId=235D9179367ECC66BBC2&disposition=0&alloworigin=1" alt="Noticia Secundaria 1" class="img-fluid">
+                    <!-- <h5 class="mt-2">Nombre del autor</h5>
+                    <p>Breve descripción de la noticia o autor.</p> -->
+                    </div>
+                    <div class="side-news-item mb-3">
+                    <img src="https://nebula.wsimg.com/168cc167a8c56ee7ae9fbed289254989?AccessKeyId=235D9179367ECC66BBC2&disposition=0&alloworigin=1" alt="Noticia Secundaria 2" class="img-fluid">
+                    <!-- <h5 class="mt-2">Otra Noticia</h5>
+                    <p>Pequeña descripción de otra noticia secundaria.</p> -->
+                    </div>
+                    <div class="side-news-item mb-3">
+                    <img src="https://nebula.wsimg.com/2db7cd3d8cb6c8746d9e2ad8d7a415a7?AccessKeyId=235D9179367ECC66BBC2&disposition=0&alloworigin=1" alt="Noticia Secundaria 2" class="img-fluid">
+                    <!-- <h5 class="mt-2">Otra Noticia</h5>
+                    <p>Pequeña descripción de otra noticia secundaria.</p> -->
+                    </div>
                 </div>
-            </div>
             </div>
         </div>
 
@@ -131,7 +267,7 @@
             <div class="col-12">
             <div class="podcast-section">
                 <h4>Podcast</h4>
-                <img src="https://via.placeholder.com/600x200?text=Podcast+Banner" alt="Podcast Banner" class="img-fluid">
+                <img src="{%static 'img/podcast1.png' %}"  alt="Podcast Banner" class="img-fluid">
                 <p class="mt-2">
                 Disfruta de nuestro podcast con las últimas noticias, entrevistas y análisis.
                 </p>
@@ -140,91 +276,67 @@
         </div>
 
         <div class="row">
-            <div class="col-12">
-            <div class="big-banner">
-                <img src="https://via.placeholder.com/800x200/FF0000/FFFFFF?text=SHOES" alt="SHOES Banner" class="img-fluid">
-            </div>
+            <div class="col-12 d-flex justify-content-center">
+            <!-- Banner Publicitario -->
+                <div style="width: 728px; height: 120px; background: linear-gradient(135deg, rgb(42, 44, 45), rgb(31, 38, 229)); border-radius: 5px; overflow: hidden; position: relative; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); font-family: Arial, sans-serif; cursor: pointer; transition: transform 0.3s ease; ">
+                
+                <div style="padding: 15px; display: flex; flex-direction: row; align-items: center; height: 100%; box-sizing: border-box; ">
+                    <div style="width: 60px; height: 60px; background-color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 20px; margin-bottom: 0px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#451ae0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 30px; height: 30px;">
+                            
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                            
+                            </svg>
+                    </div>
+                    <div style="color: white; flex-grow: 1; text-align: left; margin-bottom: 0px;">
+                    <h2 style="font-size: 18px; font-weight: bold; margin: 0 0 5px 0;">¡YA NO MÁS CAR WASH!</h2>
+                    <p style="font-size: 14px; margin: 0 0 4px 0;">Usted debe estar preparado para la muerte de un ser querido. </p>
+                    <p style="font-size: 12px; margin: 0; opacity: 0.9; font-style: italic; display: block;">Funeral Advanteage le ofrece un plan muy completo para gastos finales.</p>
+                    </div>
+                    <a href="#" style="background-color: #fff; color: #451ae0; padding: 8px 15px; border-radius: 20px; font-weight: bold; font-size: 14px; text-decoration: none; text-align: center; white-space: nowrap;">LLAME YA MISMO 480-343-6604</a>
+                </div>
+                </div>
+            <!-- Fin del Banner -->
             </div>
         </div>
 
-        <div class="team-section mt-4">
-            <h4>Conoce a nuestro equipo</h4>
-            <div class="row">
-            <div class="col-6 col-md-3">
-                <div class="team-member text-center">
-                <img src="https://via.placeholder.com/100?text=Person1" alt="Persona 1" class="img-fluid rounded-circle">
-                <h6>Persona 1</h6>
-                <p>Rol / Descripción</p>
+            <div class="magazine-section mt-4">
+                <h4>Contacto Total Magazine</h4>
+                <div class="row magazine-fade">
+                    <div class="col-6 col-md-3">
+                        <div class="magazine-cover text-center">
+                            <img src="{% static 'img/revista.jpeg' %}" alt="Magazine 1" class="img-fluid">
+                            <h4>Ediciones Anteriores</h4>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-6 col-md-3">
-                <div class="team-member text-center">
-                <img src="https://via.placeholder.com/100?text=Person2" alt="Persona 2" class="img-fluid rounded-circle">
-                <h6>Persona 2</h6>
-                <p>Rol / Descripción</p>
-                </div>
-            </div>
-            <div class="col-6 col-md-3">
-                <div class="team-member text-center">
-                <img src="https://via.placeholder.com/100?text=Person3" alt="Persona 3" class="img-fluid rounded-circle">
-                <h6>Persona 3</h6>
-                <p>Rol / Descripción</p>
-                </div>
-            </div>
-            <div class="col-6 col-md-3">
-                <div class="team-member text-center">
-                <img src="https://via.placeholder.com/100?text=Person4" alt="Persona 4" class="img-fluid rounded-circle">
-                <h6>Persona 4</h6>
-                <p>Rol / Descripción</p>
-                </div>
-            </div>
-            </div>
-        </div>
-
-        <div class="magazine-section mt-4">
-            <h4>Contacto Total Magazine</h4>
-            <div class="row">
-            <div class="col-6 col-md-3">
-                <div class="magazine-cover text-center">
-                <img src="https://via.placeholder.com/180x250?text=Magazine+1" alt="Magazine 1" class="img-fluid">
-                <h6>NOMBRE 1</h6>
-                </div>
-            </div>
-            <div class="col-6 col-md-3">
-                <div class="magazine-cover text-center">
-                <img src="https://via.placeholder.com/180x250?text=Magazine+2" alt="Magazine 2" class="img-fluid">
-                <h6>NOMBRE 2</h6>
-                </div>
-            </div>
-            <div class="col-6 col-md-3">
-                <div class="magazine-cover text-center">
-                <img src="https://via.placeholder.com/180x250?text=Magazine+3" alt="Magazine 3" class="img-fluid">
-                <h6>NOMBRE 3</h6>
-                </div>
-            </div>
-            <div class="col-6 col-md-3">
-                <div class="magazine-cover text-center">
-                <img src="https://via.placeholder.com/180x250?text=Magazine+4" alt="Magazine 4" class="img-fluid">
-                <h6>NOMBRE 4</h6>
-                </div>
-            </div>
-            </div>
-        </div>
         </div>
 
         <div class="col-2 ad-bar d-none d-md-flex flex-column justify-content-start align-items-center">
-        <div class="mb-4">
-            <h5>Ordena Ahora</h5>
-            <img src="https://via.placeholder.com/120x60" alt="Ad Banner" class="img-fluid">
-        </div>
-        <div class="mb-4">
-            <p>Más Publicidad</p>
-            <img src="https://via.placeholder.com/120x200" alt="Ad Banner" class="img-fluid">
-        </div>
-        <div>
-            <p>25% OFF</p>
-            <img src="https://via.placeholder.com/120x200" alt="Ad Banner" class="img-fluid">
-        </div>
+        <!-- Banner Publicitario -->
+            <div style="width: 160px; height: 600px; background: linear-gradient(135deg, rgb(245, 248, 250), rgb(31, 38, 229)); border-radius: 5px; overflow: hidden; position: relative; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); font-family: Arial, sans-serif; cursor: pointer; transition: transform 0.3s ease; display: flex; flex-direction: column;">
+            
+                <div style="width: 100%; height: 200px; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 15px;">
+                <img src="https://i.ibb.co/Z6pD15Bs/df424f8d98bf7fe8f2aa3d54af339361.jpg" alt="Imagen destacada">
+                </div>
+            <div style="padding: 15px; display: flex; flex-direction: column; align-items: center; height: auto; box-sizing: border-box; flex-grow: 1; text-align: center;">
+                <div style="width: 40px; height: 40px; background-color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 0px; margin-bottom: 10px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#451ae0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;">
+                        
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        
+                        </svg>
+                </div>
+                <div style="color: white; flex-grow: 1; text-align: center; margin-bottom: 10px;">
+                <h2 style="font-size: 14px; font-weight: bold; margin: 0 0 5px 0;">SEGURO DE VIDA FLEXIBLE</h2>
+                <p style="font-size: 12px; margin: 0 0 4px 0;">American Family Life Insurance Company ofrece el seguro de vida flexible DreamSecure, con una cobertura que puede cambiar a medida que su vida cambia. Esta es una forma única y personalizable de proteger a su familia.</p>
+                <p style="font-size: 12px; margin: 0; opacity: 0.9; font-style: italic; display: block;">|Jhon Herrera, Agent | (602) 795-4825 | jherrer1@amfam.com | Certified Agency in Customer Excellence</p>
+                </div>
+                <a href="#" style="background-color: #fff; color: #451ae0; padding: 6px 10px; border-radius: 20px; font-weight: bold; font-size: 12px; text-decoration: none; text-align: center; white-space: nowrap;">Contáctenos </a>
+            </div>
+            </div>
+        <!-- Fin del Banner -->
         </div>
     </div>
     </div>

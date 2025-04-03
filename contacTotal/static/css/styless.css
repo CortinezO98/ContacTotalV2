@@ -174,6 +174,7 @@ main {
   max-width: 1500px;
   margin: 0 auto;
   padding: 0 20px;
+  margin-bottom: 5rem;
 }
 
 .left-column, .right-column {
@@ -552,12 +553,203 @@ main {
   border-radius: 2px;
 }
 
-.img-fluid.rounded:hover {
-  transform: scale(1.01) translateY(-5px);
-  box-shadow: 3px 3px 10px #d5d0d0, -3px -3px 10px #d5d0d0;
+.time-progress {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background-color: white;
+  width: 40%;
+  border-radius: 2px;
 }
 
+/* Estilos para la sección del clima */
+.weather {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 40px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
 
+.weatherwidget-io {
+  display: block;
+  width: 100%;
+  height: 200px;
+  border-radius: 10px;
+}
+
+/* Estilos para el pie de página */
+footer {
+  text-align: center;
+  padding: 20px;
+  margin-top: 40px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Estilos para el video principal con iframe */
+.video-container {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%; /* Proporción 16:9 para videos */
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Media queries para responsividad */
+@media (max-width: 1200px) {
+  .left-column, .right-column {
+      width: 25%;
+  }
+  
+  .center-column {
+      width: 44%;
+  }
+}
+
+@media (max-width: 992px) {
+  main {
+      flex-direction: column;
+  }
+  
+  .left-column, .center-column, .right-column {
+      width: 100%;
+      margin-bottom: 30px;
+  }
+  
+  .left-content, .right-content {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+  }
+  
+  .live-radio, .revista {
+      width: 48%;
+  }
+  
+  .podcast, .weather {
+      width: 48%;
+      margin: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  nav ul {
+      display: none;
+  }
+  
+  .left-content, .right-content {
+      flex-direction: column;
+  }
+  
+  .live-radio, .revista, .podcast, .weather {
+      width: 100%;
+      margin-bottom: 20px;
+  }
+  
+  .live-indicator {
+      max-width: 140px;
+      height: 50px;
+      font-size: 2em;
+      line-height: 50px;
+  }
+}
+#noticiasCarousel .card {
+  transition: opacity 0.3s ease;
+}
+
+/* #noticiasCarousel .carousel-control-prev,
+#noticiasCarousel .carousel-control-next {
+  width: 5%;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 0;
+}
+
+#noticiasCarousel .carousel-control-prev:hover,
+#noticiasCarousel .carousel-control-next:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+} */
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    filter: invert(100%);
+}
+
+  /* Estilos para las tarjetas de noticias */
+  #noticiasCarousel .card {
+    height: 400px; /* Altura fija para todas las tarjetas */
+    display: flex;
+    flex-direction: column;
+    transition: opacity 0.3s ease;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Mantener proporción consistente para las imágenes */
+  #noticiasCarousel .card-img-top {
+    height: 180px; /* Altura fija para todas las imágenes */
+    object-fit: cover; /* Mantiene la proporción y recorta si es necesario */
+  }
+
+  /* Estilos para el cuerpo de la tarjeta */
+  #noticiasCarousel .card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    overflow: hidden; /* Evita que el contenido desborde */
+  }
+
+  /* Estilo para los títulos */
+  #noticiasCarousel .card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    /* Limitar altura del título a 2 líneas */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 50px; /* Aproximadamente 2 líneas */
+  }
+
+  /* Estilo para el texto, limitado a 5 líneas */
+  #noticiasCarousel .card-text {
+    font-size: 14px;
+    /* Esto limita el texto a 5 líneas */
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex-grow: 1;
+    line-height: 1.5;
+  }
+
+  /* Mejora en los controles del carrusel */
+  #noticiasCarousel .carousel-control-prev,
+  #noticiasCarousel .carousel-control-next {
+    width: 5%;
+    /* background-color: rgba(0, 0, 0, 0.2); */
+    border-radius: 0;
+  }
+
+  #noticiasCarousel .carousel-control-prev:hover,
+  #noticiasCarousel .carousel-control-next:hover {
+    /* background-color: rgba(0, 0, 0, 0.4); */
+  }
 
 /* SECCIÓN PRINCIPAL PODCAST (versión 2) */
 .podcast2-section {
@@ -565,7 +757,6 @@ main {
   color: #000;
   padding: 2rem 0;
 }
-
 
 .podcast2-logo {
   max-width: 300px;
@@ -581,122 +772,79 @@ main {
   margin-bottom: 1rem;
 }
 
-
 .main-podcast2-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1rem;
-  position: relative;
-  box-shadow: 8px 8px 16px #141414,
-             -8px -8px 16px #202020;
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
-.podcast-img {
-    width: 100%;
-    height: 250px;
-    object-fit: contain;
-    aspect-ratio: 1;
-    border-radius: 10px;
-    margin-bottom: 1rem;
-    box-shadow: 0 4px 8px rgba(255 255 255 / 30%);
+.podcast2-mic {
+  max-width: 150px;
 }
 
-.podcast-title {
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
-  color: #ff0000;
-  text-shadow: 1px 1px 2px rgba(255 232 232 / 50%);
+.audio-player {
+  width: 300px;
+  max-width: 100%;
 }
 
-.d-flex.gap-1 {
+.podcast-description {
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.5;
+  font-size: 1rem;
+}
+
+.podcast2-carousel {
   display: flex;
-  gap: 1rem !important;
+  flex-wrap: nowrap;
+  overflow-x: auto; 
+  gap: 1.5rem;
+  padding-bottom: 1rem;
+  justify-content: center;
+  margin: 0 auto;
 }
 
-/* Weather Widget */
-.podcast-weather-column {
-  justify-content: unset !important;
-  gap: 1rem !important;
-}
-
-.weather-widget-container {
-  border-radius: 10px !important;
-  box-shadow: 8px 8px 16px #141414,
-             -8px -8px 16px #202020;
-  height: 100% !important;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.weather-widget-container:hover {
-  transform: scale(1.01) translateY(-5px);
-  box-shadow: 3px 3px 10px #d5d0d0, -3px -3px 10px #d5d0d0;
-}
-
-.weather-temp {
-  font-size: 1.5rem;
-}
-
-.social-section {
+.podcast2-item {
+  flex: 0 0 auto;
+  width: 120px;
   text-align: center;
-  margin-top: 1.9rem;
+  cursor: pointer;
 }
 
-.transparent-button {
-  background-color: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: all 0.3s ease;
-  text-decoration: none;
+.podcast2-item img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
 }
 
-.transparent-button:hover {
-  background-color: #D32F2F;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(211, 47, 47, 0.3);
-  border-color: transparent;
+.podcast2-item p {
+  font-size: 0.9rem;
+  margin: 0;
 }
 
-/* Efecto de brillo */
-.transparent-button::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.2),
-    transparent
-  );
-  transition: 0.5s;
-}
 
-.transparent-button:hover::after {
-  left: 100%;
-}
-
-/* Cambio de color del texto */
-.transparent-button .text-danger {
-  transition: color 0.3s ease;
-}
-
-.transparent-button:hover .text-danger {
-  color: #fff !important;
-}
-
-.transparent-button:hover .text-muted {
-  color: rgba(255, 255, 255, 0.8) !important;
-}
-
-/* Cambio de color del SVG a BLANCO en hover */
-.transparent-button .twitch-icon {
+.podcast2-item:hover img {
+  box-shadow: 0 0 8px rgba(226, 12, 26, 0.5);
+  transform: scale(1.03);
   transition: all 0.3s ease;
 }
 
-.transparent-button:hover .twitch-icon {
-  filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(200%) contrast(100%) !important;
+/* Responsividad básica */
+@media (max-width: 768px) {
+  .main-podcast2-container {
+    margin-bottom: 1rem;
+  }
+  .podcast2-mic {
+    max-width: 100px;
+  }
+  .audio-player {
+    width: 90%;
+  }
+  .podcast-description {
+    font-size: 0.95rem;
+  }
 }
 
 /* Ajuste responsivo */
@@ -711,61 +859,11 @@ main {
   }
 }
 
-.social-text {
-  color: white;
-  font-size: 1.4rem;
-  margin-bottom: 1.5rem !important;
-  font-weight: 500;
-  text-shadow: 1px 1px 2px rgba(4, 4, 4);
-}
-
-.social-links {
-  display: flex !important;
-  justify-content: center !important;
-  gap: 2.8rem !important;
-  margin-top: 0rem;
-  padding: 1rem;
-}
-
-.social-icon {
-  width: 40px;
-  height: 40px;
-  background: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  position: relative;
-}
-
-.icon-social:hover {
-  transform: scale(1.2);
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-}
-
-.icon-social {
-  width: 50px;
-  height: 50px;
-  transition: all 0.3s ease;
-}
-
-/* Main Player */
-.main-player {
-  border-radius: 10px !important;
-  position: relative;
-  display: flex;
-  margin-top: 0rem;
-  box-shadow: 8px 8px 16px #141414,
-             -8px -8px 16px #202020 !important;
-}
-
 .ad-bar {
   background-color: white;
   min-height: 100vh;
   text-align: center;
-  padding-top: 1rem;
+  padding-top: 4rem;
 }
 
 .ad-bar img {
@@ -782,14 +880,16 @@ main {
 }
 
 
-.main-article {
-  background-color: white;
-  color: black;
+.main-article,
+.news-card {
+   border: 1px solid #d9d2d2;
+  border-radius: 5px;
   padding: 1rem;
   margin-bottom: 1rem;
 }
 
-.main-article img {
+.main-article img,
+.news-card img {
   width: 100%;
   height: auto;
   border-radius: 5px;
@@ -798,14 +898,17 @@ main {
 .main-article h3 {
   margin-top: 1rem;
   font-size: 1.3rem;
-  color: black;
+  color: #1f1f1f;
+  font-weight: bold;
 }
 
-.main-article p {
+.main-article p,
+.news-card p {
   font-size: 0.9rem;
   line-height: 1.4;
-  color: #545454;
+  margin-top: 0.5rem;
 }
+
 
 .read-more-btn {
   background-color: #ff0000;
@@ -855,8 +958,6 @@ main {
 }
 
 .podcast-section {
-  background-color: white;
-  border-radius: 5px;
   padding: 1rem;
   margin-bottom: 1rem;
   text-align: center;
@@ -872,42 +973,6 @@ main {
   border-radius: 4px;
   margin-bottom: 0.5rem;
 }
-
-.podcast-player {
-  align-items: center;
-  padding: 1rem;
-  position: relative;
-  box-shadow: 8px 8px 16px #141414,
-             -8px -8px 16px #202020;
-}
-
-.podcast-img {
-  width: 100%;
-  height: 250px;
-  object-fit: contain;
-  aspect-ratio: 1;
-  border-radius: 10px;
-  margin-bottom: 1rem;
-  box-shadow: 0 4px 8px rgba(255 255 255 / 30%);
-}
-
-.podcast-title {
-font-size: 1.2rem;
-margin-bottom: 0.5rem;
-color: #ff0000;
-text-shadow: 1px 1px 2px rgba(255 232 232 / 50%);
-}
-
-.d-flex.gap-1 {
-display: flex;
-gap: 1rem !important;
-}
-
-/* Weather Widget */
-.podcast-weather-column {
-  justify-content: unset !important;
-  gap: 1rem !important;
-}  
 
 .big-banner {
   margin-bottom: 1.5rem;
@@ -927,7 +992,7 @@ gap: 1rem !important;
 .team-section h4 {
   text-align: center;
   margin-bottom: 1rem;
-  color: #ffcccc;
+  color: #1f1f1f;
 }
 
 .team-member {
@@ -953,11 +1018,14 @@ gap: 1rem !important;
   font-size: 0.75rem;
 }
 
+.magazine-fade {
+  justify-content: center !important;
+}
 
 .magazine-section h4 {
   text-align: center;
   margin-bottom: 1rem;
-  color: #ffcccc;
+  color: #1f1f1f;
 }
 
 .magazine-cover {
