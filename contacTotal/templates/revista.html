@@ -10,22 +10,18 @@
         <h2 class="text-center mb-4">Ediciones Anteriores</h2>
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-            {% for edicion in ediciones %}
+            {% for i in "123456789ABCD"|make_list %}
             <div class="col">
                 <div class="card bg-dark text-white h-100">
-                    <img src="{{ edicion.imagen.url }}" class="card-img-top" alt="Revista Edición">
+                    <img src="{% static 'img/revista.jpeg' %}" class="card-img-top" alt="Revista Edición">
                     <div class="card-body">
-                        <p class="text-muted mb-1">{{ edicion.fecha_publicacion|date:"d F Y" }} | {{ edicion.comentarios.count }} Comentarios</p>
-                        <p class="card-text">{{ edicion.descripcion }}</p>
-                        <a href="{{ edicion.url }}" class="btn btn-primary">Leer más</a>
+                        <p class="text-muted mb-1">DECEMBER 25 2024 | 3 COMMENTS</p>
+                        <p class="card-text">Won't own Forth thee dry</p>
                     </div>
                 </div>
             </div>
-            {% empty %}
-                <p>No hay ediciones disponibles.</p>
             {% endfor %}
         </div>
-        
 
         <div class="d-flex justify-content-center mt-4">
             <nav>
