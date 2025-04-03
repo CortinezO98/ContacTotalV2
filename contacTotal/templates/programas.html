@@ -38,20 +38,47 @@
                 </tr>
             </thead>
             <tbody>
-                {% for programa in page_obj %}
+                <!-- Datos de ejemplo -->
                 <tr>
-                    <td>{{ programa.titulo }}</td>
-                    <td>{{ programa.host }}</td>
-                    <td class="text-end">{{ programa.duracion }}</td>
+                    <td>El Rincón del Rock</td>
+                    <td>Juan Pérez</td>
+                    <td class="text-end">3.45</td>
                     <td class="text-end">
-                        <a href="{{ programa.url_reproducir }}" class="btn btn-sm btn-outline-danger">Reproducir</a>
+                        <a href="#" class="btn btn-sm btn-outline-danger">Reproducir</a>
                     </td>
                 </tr>
-                {% empty %}
                 <tr>
-                    <td colspan="4">No hay programas disponibles.</td>
+                    <td>Noticias al Día</td>
+                    <td>Ana Gómez</td>
+                    <td class="text-end">5.10</td>
+                    <td class="text-end">
+                        <a href="#" class="btn btn-sm btn-outline-danger">Reproducir</a>
+                    </td>
                 </tr>
-                {% endfor %}
+                <tr>
+                    <td>Jazz & Blues</td>
+                    <td>Carlos Ramírez</td>
+                    <td class="text-end">4.22</td>
+                    <td class="text-end">
+                        <a href="#" class="btn btn-sm btn-outline-danger">Reproducir</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Historia en Minutos</td>
+                    <td>Laura Méndez</td>
+                    <td class="text-end">2.58</td>
+                    <td class="text-end">
+                        <a href="#" class="btn btn-sm btn-outline-danger">Reproducir</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Viajes y Aventuras</td>
+                    <td>Pedro Castillo</td>
+                    <td class="text-end">3.30</td>
+                    <td class="text-end">
+                        <a href="#" class="btn btn-sm btn-outline-danger">Reproducir</a>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -60,24 +87,110 @@
         <span>PÁGINAS</span>
         <nav>
             <ul class="pagination pagination-sm mb-0">
-                <!-- Páginas anteriores -->
-                {% if page_obj.has_previous %}
-                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a></li>
-                {% else %}
-                    <li class="page-item disabled"><a class="page-link" href="#">Anterior</a></li>
-                {% endif %}
-
-                <!-- Páginas actuales -->
-                <li class="page-item active"><a class="page-link" href="#">{{ page_obj.number }}</a></li>
-
-                <!-- Páginas siguientes -->
-                {% if page_obj.has_next %}
-                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Siguiente</a></li>
-                {% else %}
-                    <li class="page-item disabled"><a class="page-link" href="#">Siguiente</a></li>
-                {% endif %}
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">Siguiente</a></li>
             </ul>
         </nav>
     </div>
 </div>
 {% endblock %}
+
+
+
+<!--
+
+    CODIGO CON LA LOGICA DEL BACKEND
+
+
+
+<div class="container mt-5 py-3 bg-light">
+
+    <div class="row align-items-center mb-4">
+        <div class="col-auto">
+            <h2 class="mb-0">Programas Anteriores</h2>
+        </div>
+        <div class="col d-flex justify-content-end">
+            <form class="input-group w-auto" method="GET" action="">
+                <span class="input-group-text text-light bg-secondary border-0" id="search-icon">
+                    <i class="bi bi-search"></i>
+                </span>
+                <input 
+                    type="text" 
+                    name="q" 
+                    class="form-control border-secondary" 
+                    placeholder="Buscar Programas" 
+                    aria-label="Buscar Programas" 
+                    aria-describedby="search-icon">
+            </form>
+        </div>
+    </div>
+
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Programa</th>
+                    <th scope="col">Host</th>
+                    <th scope="col" class="text-end">Duración</th>
+                    <th scope="col" class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for programa in programas %}
+                <tr>
+                    <td>{{ programa.nombre|escape }}</td>
+                    <td>{{ programa.host|escape }}</td>
+                    <td class="text-end">{{ programa.duracion|floatformat:2 }}</td>
+                    <td class="text-end">
+                        <a href="{% url 'reproducir' programa.id %}" class="btn btn-sm btn-outline-primary">
+                            Reproducir
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center text-muted">No hay programas disponibles.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+    <div class="d-flex justify-content-between align-items-center">
+        <span>PÁGINAS</span>
+        <nav>
+            <ul class="pagination pagination-sm mb-0">
+                {% if programas.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ programas.previous_page_number }}">Anterior</a>
+                    </li>
+                {% endif %}
+                
+                {% for num in programas.paginator.page_range %}
+                    <li class="page-item {% if programas.number == num %}active{% endif %}">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                {% endfor %}
+                
+                {% if programas.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ programas.next_page_number }}">Siguiente</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+-->
