@@ -131,3 +131,9 @@ STATICFILES_DIRS = (
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 APPEND_SLASH = True
+
+# Media files (user-uploaded content such as images and PDFs)
+# https://docs.djangoproject.com/en/5.1/ref/settings/#media-root
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
