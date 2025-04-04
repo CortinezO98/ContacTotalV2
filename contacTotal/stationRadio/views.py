@@ -1,14 +1,47 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import *
 from .views import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def IndexView(request):
-    return render(request, "index.html")
+    latest_edicion = EdicionRevista.objects.all().order_by('-fecha_publicacion', '-id').first()
+    main_video = MainVideo.objects.first()
+    anuncios = Anuncio.objects.all()
+    carousel_news_qs = CarouselNews.objects.all().order_by('-publication_date')
+    carousel_news_list = list(carousel_news_qs)
+    carousel_news = [carousel_news_list[i:i+3] for i in range(0, len(carousel_news_list), 3)]
+    main_news = MainNews.objects.all().order_by('-publication_date').first()
+    
+    context = {
+        'latest_edicion': latest_edicion,
+        'main_video': main_video,
+        'anuncios': anuncios,
+        'carousel_news': carousel_news,
+        'main_news': main_news,
+    }
+    return render(request, "index.html", context)
+
+
+def noticia_detalle(request, slug):
+    news_item = MainNews.objects.filter(slug=slug).first() or get_object_or_404(CarouselNews, slug=slug)
+    return render(request, 'noticia_detalle.html', {'news_item': news_item})
+
 
 def revista(request):
-    ediciones = EdicionRevista.objects.all().order_by('-fecha_publicacion') 
-    return render(request, 'revista.html', {'ediciones': ediciones})
+    ediciones_list = EdicionRevista.objects.all().order_by('-fecha_publicacion', '-id')
+    paginator = Paginator(ediciones_list, 12)
+    page_number = request.GET.get('page', 1)
+    try:
+        page_obj = paginator.get_page(page_number)
+    except PageNotAnInteger:
+        page_obj = paginator.get_page(1)
+    except EmptyPage:
+        page_obj = paginator.get_page(paginator.num_pages)
+    
+    return render(request, 'revista.html', {'page_obj': page_obj})
+
+
+
 
 
 def programas(request):

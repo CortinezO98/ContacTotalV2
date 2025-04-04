@@ -49,20 +49,33 @@
               </section>
               
               <section class="revista">
+                {% if latest_edicion %}
+                  <a href="{{ latest_edicion.url }}">
+                      <img src="{{ latest_edicion.imagen.url }}" alt="Revista Contacto Total">
+                  </a>
+                {% else %}
                   <img src="{% static 'img/revista.jpeg' %}" alt="Revista Contacto Total">
-              </section>
+                {% endif %}
+            </section>
           </div>
       </div>
       
       <div class="center-column">
-          <section class="main-video">
-              <div class="video-container">
-                  <iframe src="https://www.youtube.com/embed/RyewX_e5Blg?si=ppBcPOv8WzVBd_yB"
-                      title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      allowfullscreen>
-                  </iframe>
-              </div>
-          </section>
+        <section class="main-video">
+          <div class="video-container">
+              {% if main_video and main_video.video_source %}
+                  {% if main_video.video_file %}
+                      <video controls>
+                          <source src="{{ main_video.video_source }}" type="video/mp4"> Tu navegador no soporta el elemento de video. </video>
+                  {% else %}
+                      <iframe src="{{ main_video.video_source }}" title="Video principal" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen> </iframe>
+                  {% endif %}
+              {% else %}
+                  <iframe src="https://www.youtube.com/embed/RyewX_e5Blg?si=ppBcPOv8WzVBd_yB" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen> </iframe>
+              {% endif %}
+          </div>
+      </section>
+    
           
           <section class="social-section">
               <h3>¡Conéctate y disfruta en vivo desde nuestras redes sociales!</h3>
