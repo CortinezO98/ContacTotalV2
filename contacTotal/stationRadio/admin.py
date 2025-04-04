@@ -8,6 +8,14 @@ class EdicionRevistaAdmin(admin.ModelAdmin):
     list_filter = ('fecha_publicacion',)
     
 
+
+@admin.register(Podcast)
+class PodcastAdmin(admin.ModelAdmin):
+    list_display = ('title', 'date_created', 'featured')
+    search_fields = ('title', 'description')
+    list_filter = ('date_created', 'featured')
+
+
 @admin.register(MainVideo)
 class MainVideoAdmin(admin.ModelAdmin):
     list_display = ('title',)

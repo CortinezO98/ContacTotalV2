@@ -1,6 +1,5 @@
 from django.shortcuts import render, get_object_or_404
 from .models import *
-from .views import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def IndexView(request):
@@ -11,6 +10,7 @@ def IndexView(request):
     carousel_news_list = list(carousel_news_qs)
     carousel_news = [carousel_news_list[i:i+3] for i in range(0, len(carousel_news_list), 3)]
     main_news = MainNews.objects.all().order_by('-publication_date').first()
+    last_podcasts = Podcast.objects.order_by('-date_created')[:6]
     
     context = {
         'latest_edicion': latest_edicion,
@@ -18,6 +18,7 @@ def IndexView(request):
         'anuncios': anuncios,
         'carousel_news': carousel_news,
         'main_news': main_news,
+        'last_podcasts': last_podcasts,
     }
     return render(request, "index.html", context)
 
@@ -60,13 +61,21 @@ def podcast(request):
     if featured_podcast is not None:
         podcasts = Podcast.objects.exclude(id=featured_podcast.id).order_by('-date_created')
     else:
-        podcasts = []  
-
+        podcasts = []
+    
     context = {
         'featured_podcast': featured_podcast,
-        'podcasts': podcasts
+        'podcasts': podcasts,
     }
     return render(request, 'podcast.html', context)
+
+
+def podcast_detail(request, slug):
+    podcast = get_object_or_404(Podcast, slug=slug)
+    return render(request, 'podcast_detail.html', {'podcast': podcast})
+
+
+
 
 
 def radio(request):

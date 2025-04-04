@@ -1150,3 +1150,42 @@ footer {
 
 /* FIN */
 
+
+
+/* PODCAST INDEX */
+#index-podcast .podcast-img {
+  width: 180px;       
+  height: 180px;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+}
+
+#index-podcast h4 {
+  color: #ff0000;
+}
+#podcastCarousel .carousel-control-prev,
+#podcastCarousel .carousel-control-next {
+  width: auto;               
+  position: absolute;
+  top: 50%;                  
+  transform: translateY(-50%);
+  z-index: 5;                
+}
+
+#podcastCarousel .carousel-control-prev {
+  left: -30px;  
+}
+
+#podcastCarousel .carousel-control-next {
+  right: -30px; /
+}
+
+#podcastCarousel .carousel-control-prev-icon,
+#podcastCarousel .carousel-control-next-icon {
+  width: 2rem;
+  height: 2rem;
+  filter: invert(100%); /
+}
+
+/* FIN PODCAST INDEX */

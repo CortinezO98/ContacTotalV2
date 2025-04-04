@@ -34,93 +34,126 @@
         <h2 id="ColorTitulo1" class="text-center mb-4" >¡Lo que está pasando!</h2>
         
         <div id="noticiasCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
-          <div class="carousel-inner">
-              {% for group in carousel_news %}
-              <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                  <div class="row">
-                      {% for noticia in group %}
-                      <div class="col-md-4">
-                          <div class="card">
-                              <a href="{% url 'noticia_detalle' noticia.slug %}">
-                                  <img src="{{ noticia.image.url }}" class="card-img-top" alt="{{ noticia.title }}">
-                              </a>
-                              <div class="card-body">
-                                  <h5 class="card-title">{{ noticia.title }}</h5>
-                                  <p class="card-text">
-                                      {{ noticia.publication_date|date:"d F Y" }} - {{ noticia.author }}
-                                  </p>
-                                  <p class="card-text">{{ noticia.description|truncatewords:20 }}</p>
-                              </div>
-                          </div>
-                      </div>
-                      {% endfor %}
-                  </div>
-              </div>
-              {% endfor %}
-          </div>
-          <button class="carousel-control-prev" type="button" data-bs-target="#noticiasCarousel" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Anterior</span>
-          </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#noticiasCarousel" data-bs-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Siguiente</span>
-          </button>
-      </div>
-
-      <div class="row mt-4">
-  
-        <div class="col-md-8">
-          {% if main_news %}
-            <div class="main-article">
-              <a href="{% url 'noticia_detalle' main_news.slug %}" style="text-decoration: none; color: inherit;">
-                <h3>{{ main_news.title }}</h3>
-                {% if main_news.video or main_news.video_link %}
-                  <div class="video-container">
-                    <iframe src="{{ main_news.media_source }}" 
-                            title="Video principal" 
-                            frameborder="0" 
-                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-                            allowfullscreen>
-                    </iframe>
-                  </div>
-                {% elif main_news.image %}
-                  <img src="{{ main_news.image.url }}" alt="Imagen principal" class="img-fluid">
-                {% endif %}
-              </a>
-              <p>
-                <strong>Por:</strong> {{ main_news.author }}<br>
-                <strong>Fecha:</strong> {{ main_news.publication_date|date:"d F Y" }}
-              </p>
-              <p>{{ main_news.short_description }}</p>
+            <div class="carousel-inner">
+                {% for group in carousel_news %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="row">
+                        {% for noticia in group %}
+                        <div class="col-md-4">
+                            <div class="card">
+                                <a href="{% url 'noticia_detalle' noticia.slug %}">
+                                    <img src="{{ noticia.image.url }}" class="card-img-top" alt="{{ noticia.title }}">
+                                </a>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ noticia.title }}</h5>
+                                    <p class="card-text">
+                                        {{ noticia.publication_date|date:"d F Y" }} - {{ noticia.author }}
+                                    </p>
+                                    <p class="card-text">{{ noticia.description|truncatewords:20 }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
             </div>
-          {% endif %}
+            <button class="carousel-control-prev" type="button" data-bs-target="#noticiasCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#noticiasCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
         </div>
-        
-        <div class="col-md-4 mt-4 mt-md-0">
-          <h4>Anuncios</h4>
-          {% for anuncio in anuncios %}
-            <div class="side-news-item mb-3">
-              <img src="{{ anuncio.imagen.url }}" alt="{{ anuncio.titulo }}" class="img-fluid">
-            </div>
-          {% empty %}
-            <p>No hay anuncios disponibles.</p>
-          {% endfor %}
-        </div>
-      </div>
-      
 
         <div class="row mt-4">
-            <div class="col-12">
-            <div class="podcast-section">
-                <h4>Podcast</h4>
-                <img src="{%static 'img/podcast1.png' %}"  alt="Podcast Banner" class="img-fluid">
-                <p class="mt-2">
-                Disfruta de nuestro podcast con las últimas noticias, entrevistas y análisis.
+    
+            <div class="col-md-8">
+            {% if main_news %}
+                <div class="main-article">
+                <a href="{% url 'noticia_detalle' main_news.slug %}" style="text-decoration: none; color: inherit;">
+                    <h3>{{ main_news.title }}</h3>
+                    {% if main_news.video or main_news.video_link %}
+                    <div class="video-container">
+                        <iframe src="{{ main_news.media_source }}" 
+                                title="Video principal" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                    {% elif main_news.image %}
+                    <img src="{{ main_news.image.url }}" alt="Imagen principal" class="img-fluid">
+                    {% endif %}
+                </a>
+                <p>
+                    <strong>Por:</strong> {{ main_news.author }}<br>
+                    <strong>Fecha:</strong> {{ main_news.publication_date|date:"d F Y" }}
                 </p>
+                <p>{{ main_news.short_description }}</p>
+                </div>
+            {% endif %}
             </div>
+            
+            <div class="col-md-4 mt-4 mt-md-0">
+            <h4>Anuncios</h4>
+            {% for anuncio in anuncios %}
+                <div class="side-news-item mb-3">
+                <img src="{{ anuncio.imagen.url }}" alt="{{ anuncio.titulo }}" class="img-fluid">
+                </div>
+            {% empty %}
+                <p>No hay anuncios disponibles.</p>
+            {% endfor %}
             </div>
         </div>
+        
+
+        <div id="index-podcast" class="podcast-section text-center">
+            <h4>Podcast</h4>
+            <p>Disfruta de nuestro podcast con las últimas noticias, entrevistas y análisis.</p>
+            
+            <div id="podcastCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                    <div class="row justify-content-center">
+                        {% for p in last_podcasts|slice:"0:3" %}
+                        <div class="col-12 col-md-4 mb-4">
+                        <a href="{% url 'podcast_detail' p.slug %}">
+                            <img src="{{ p.cover_image.url }}" alt="{{ p.title }}" class="img-fluid rounded-circle" style="width:150px; height:150px; object-fit:cover;">
+                        </a>
+                        <h5 class="mt-2">{{ p.title }}</h5>
+                        <p>{{ p.date_created|date:"d F Y" }}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    </div>
+                    <div class="carousel-item">
+                    <div class="row justify-content-center">
+                        {% for p in last_podcasts|slice:"3:6" %}
+                        <div class="col-12 col-md-4 mb-4">
+                        <a href="{% url 'podcast_detail' p.slug %}">
+                            <img src="{{ p.cover_image.url }}" alt="{{ p.title }}" class="img-fluid rounded-circle" style="width:150px; height:150px; object-fit:cover;">
+                        </a>
+                        <h5 class="mt-2">{{ p.title }}</h5>
+                        <p>{{ p.date_created|date:"d F Y" }}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#podcastCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#podcastCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                </button>
+            </div>
+        </div>
+        
 
         <div class="row">
             <div class="col-12 d-flex justify-content-center">

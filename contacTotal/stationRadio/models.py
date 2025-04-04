@@ -2,22 +2,48 @@ from django.db import models
 from pytz import timezone
 import pytz
 from datetime import datetime
-from .models import *
 from django.utils.text import slugify
 
 
 # Podcast
-
 class Podcast(models.Model):
+    PODCAST_TYPE_CHOICES = (
+        ('audio', 'Audio'),
+        ('video', 'Video'),
+        ('mixed', 'Mixto'), 
+    )
+
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
-    audio_file = models.FileField(upload_to='podcasts/')
-    cover_image = models.ImageField(upload_to='podcasts_covers/')
-    date_created = models.DateTimeField(auto_now_add=True)
+    cover_image = models.ImageField(upload_to='podcasts_covers/', blank=True, null=True)
+    audio_file = models.FileField(upload_to='podcasts_audio/', blank=True, null=True)
+    video_link = models.URLField(blank=True, null=True, help_text="Enlace para el video (embed de YouTube, por ejemplo)")
+    podcast_type = models.CharField(max_length=10, choices=PODCAST_TYPE_CHOICES, default='audio')
+    date_created = models.DateField(auto_now_add=True)
     featured = models.BooleanField(default=False)
+    slug = models.SlugField(unique=True, blank=True, editable=False)
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title
+
+
+
+
+
+# ANUNCIO REUTILIZABLE EN VISTAS
+class Announcement(models.Model):
+    title = models.CharField(max_length=200, blank=True, null=True)
+    image = models.ImageField(upload_to='announcements/', blank=True, null=True)
+    link = models.URLField(blank=True, null=True, help_text="Link a donde redirige el anuncio")
+    date_created = models.DateTimeField(auto_now_add=True)
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.title or f"Anuncio {self.id}"
 
 
 
