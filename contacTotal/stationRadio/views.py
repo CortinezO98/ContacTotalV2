@@ -63,3 +63,6 @@ def tienda(request):
 
 def contacto(request):
     return render(request, 'contacto.html')
+
+def noticias(request):
+    return render(request, 'noticias.html')
