@@ -68,40 +68,46 @@
           </button>
       </div>
 
-        {% if main_news %}
-        <div class="main-article mt-5">
-            <div class="row">
-                <div class="col-md-8">
-                    <h3>{{ main_news.title }}</h3>
-                    {% if main_news.video or main_news.video_link %}
-                        <div class="video-container">
-                            <iframe src="{{ main_news.media_source }}" title="Video principal" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                        </div>
-                    {% elif main_news.image %}
-                        <img src="{{ main_news.image.url }}" alt="Imagen principal" class="img-fluid">
-                    {% endif %}
-                </div>
-                <div class="col-md-4">
-                    <p>
-                        <strong>Por:</strong> {{ main_news.author }}<br>
-                        <strong>Fecha:</strong> {{ main_news.publication_date|date:"d F Y" }}
-                    </p>
-                    <p>{{ main_news.short_description }}</p>
-                </div>
+      <div class="row mt-4">
+  
+        <div class="col-md-8">
+          {% if main_news %}
+            <div class="main-article">
+              <a href="{% url 'noticia_detalle' main_news.slug %}" style="text-decoration: none; color: inherit;">
+                <h3>{{ main_news.title }}</h3>
+                {% if main_news.video or main_news.video_link %}
+                  <div class="video-container">
+                    <iframe src="{{ main_news.media_source }}" 
+                            title="Video principal" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                    </iframe>
+                  </div>
+                {% elif main_news.image %}
+                  <img src="{{ main_news.image.url }}" alt="Imagen principal" class="img-fluid">
+                {% endif %}
+              </a>
+              <p>
+                <strong>Por:</strong> {{ main_news.author }}<br>
+                <strong>Fecha:</strong> {{ main_news.publication_date|date:"d F Y" }}
+              </p>
+              <p>{{ main_news.short_description }}</p>
             </div>
+          {% endif %}
         </div>
-        {% endif %}
         
         <div class="col-md-4 mt-4 mt-md-0">
-            <h4>Anuncios</h4>
-            {% for anuncio in anuncios %}
+          <h4>Anuncios</h4>
+          {% for anuncio in anuncios %}
             <div class="side-news-item mb-3">
-                <img src="{{ anuncio.imagen.url }}" alt="{{ anuncio.titulo }}" class="img-fluid">
+              <img src="{{ anuncio.imagen.url }}" alt="{{ anuncio.titulo }}" class="img-fluid">
             </div>
-            {% empty %}
-                <p>No hay anuncios disponibles.</p>
-            {% endfor %}
+          {% empty %}
+            <p>No hay anuncios disponibles.</p>
+          {% endfor %}
         </div>
+      </div>
       
 
         <div class="row mt-4">

@@ -9,8 +9,8 @@
 <div class="container py-5">
     <h2>{{ news_item.title }}</h2>
     <p>
-        <strong>Por:</strong> {{ news_item.author }} <br>
-        <strong>Fecha:</strong> {{ news_item.publication_date|date:"d F Y" }}
+        <strong>Publicado Por:</strong> {{ news_item.author }} <br>
+        <strong>Fecha de publicación:</strong> {{ news_item.publication_date|date:"d F Y" }}
     </p>
     {% if news_item.video or news_item.video_link %}
         <div class="video-container">
@@ -20,7 +20,13 @@
         <img src="{{ news_item.image.url }}" alt="Imagen de la noticia" class="img-fluid">
     {% endif %}
     <div class="news-content mt-4">
-        <p>{{ news_item.short_description }}</p>
+        {% if news_item.short_description %}
+            <p>{{ news_item.short_description }}</p>
+        {% elif news_item.description %}
+            <p>{{ news_item.description }}</p>
+        {% else %}
+            <p>No hay descripción disponible.</p>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
