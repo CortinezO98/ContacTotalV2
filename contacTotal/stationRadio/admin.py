@@ -9,6 +9,36 @@ class EdicionRevistaAdmin(admin.ModelAdmin):
     
 
 
+@admin.register(Podcast)
+class PodcastAdmin(admin.ModelAdmin):
+    list_display = ('title', 'date_created', 'featured')
+    search_fields = ('title', 'description')
+    list_filter = ('date_created', 'featured')
+
+
+@admin.register(MainVideo)
+class MainVideoAdmin(admin.ModelAdmin):
+    list_display = ('title',)
+    search_fields = ('title',)
+
+
+@admin.register(CarouselNews)
+class CarouselNewsAdmin(admin.ModelAdmin):
+    list_display = ('title', 'publication_date', 'author')
+    search_fields = ('title', 'description', 'author')
+    list_filter = ('publication_date',)
+
+@admin.register(MainNews)
+class MainNewsAdmin(admin.ModelAdmin):
+    list_display = ('title', 'publication_date', 'author')
+    search_fields = ('title', 'short_description', 'author')
+    list_filter = ('publication_date',)
+
+
+@admin.register(Anuncio)
+class AnuncioAdmin(admin.ModelAdmin):
+    list_display = ('titulo',)
+    search_fields = ('titulo',)
 
 @admin.register(Programa)
 class ProgramaAdmin(admin.ModelAdmin):

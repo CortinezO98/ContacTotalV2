@@ -35,245 +35,125 @@
         
         <div id="noticiasCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
             <div class="carousel-inner">
-              <div class="carousel-item active">
-                <div class="row">
-                  <div class="col-md-4">
-                    <div class="card" id="card-1">
-                      <img src="{% static 'img/noticia 1.jpg' %}" class="card-img-top" alt="Noticia 1">
-                      <div class="card-body">
-                        <h5 class="card-title">La crisis migratoria continua</h5>
-                        <p class="card-text">Las medidas de Trump generan incertidumbre a ciudadanos venezolanos.</p>
-                      </div>
+                {% for group in carousel_news %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="row">
+                        {% for noticia in group %}
+                        <div class="col-md-4">
+                            <div class="card">
+                                <a href="{% url 'noticia_detalle' noticia.slug %}">
+                                    <img src="{{ noticia.image.url }}" class="card-img-top" alt="{{ noticia.title }}">
+                                </a>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ noticia.title }}</h5>
+                                    <p class="card-text">
+                                        {{ noticia.publication_date|date:"d F Y" }} - {{ noticia.author }}
+                                    </p>
+                                    <p class="card-text">{{ noticia.description|truncatewords:20 }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
                     </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="card" id="card-2">
-                      <img src="{% static 'img/noticia2.avif' %}" class="card-img-top" alt="Noticia 2">
-                      <div class="card-body">
-                        <h5 class="card-title">Reunión entre Trump y Zelenski</h5>
-                        <p class="card-text">El gobernante ucraniano destacó además la reunión "altamente productiva".</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="card" id="card-3">
-                      <img src="{% static 'img/noticia3.jpg' %}" class="card-img-top" alt="Noticia 3">
-                      <div class="card-body">
-                        <h5 class="card-title">Nuevo accidente en transmilenio</h5>
-                        <p class="card-text">Se repite, un accidente entre articulados deja un balance de 7 heridos.</p>
-                      </div>
-                    </div>
-                  </div>
                 </div>
-              </div>
-              <div class="carousel-item">
-                <div class="row">
-                  <div class="col-md-4">
-                    <div class="card" id="card-2">
-                      <img src="{% static 'img/noticia2.avif' %}" class="card-img-top" alt="Noticia 2">
-                      <div class="card-body">
-                        <h5 class="card-title">Reunión entre Trump y Zelenski</h5>
-                        <p class="card-text">El gobernante ucraniano destacó además la reunión "altamente productiva".</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="card" id="card-3">
-                      <img src="{% static 'img/noticia3.jpg' %}" class="card-img-top" alt="Noticia 3">
-                      <div class="card-body">
-                        <h5 class="card-title">Nuevo accidente en transmilenio</h5>
-                        <p class="card-text">Se repite, un accidente entre articulados deja un balance de 7 heridos.</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="card" id="card-4">
-                      <img src="{% static 'img/ucrania.avif' %}" class="card-img-top" alt="Noticia 4">
-                      <div class="card-body">
-                        <h5 class="card-title">Zelenski espera "llegar a acuerdos" con EEUU</h5>
-                        <p class="card-text">El presidente de Ucrania, afirmó este sábado que espera que puedan "llegar a acuerdos" en la reunión prevista con representantes de Estados Unidos.</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="carousel-item">
-                <div class="row">
-                  <div class="col-md-4">
-                    <div class="card" id="card-3">
-                      <img src="{% static 'img/noticia3.jpg' %}" class="card-img-top" alt="Noticia 3">
-                      <div class="card-body">
-                        <h5 class="card-title">Nuevo accidente en transmilenio</h5>
-                        <p class="card-text">Se repite, un accidente entre articulados deja un balance de 7 heridos.</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="card" id="card-4">
-                      <img src="{% static 'img/ucrania.avif' %}" class="card-img-top" alt="Noticia 4">
-                      <div class="card-body">
-                        <h5 class="card-title">Zelenski espera "llegar a acuerdos" con EEUU</h5>
-                        <p class="card-text">El presidente de Ucrania, afirmó este sábado que espera que puedan "llegar a acuerdos" en la reunión prevista con representantes de Estados Unidos.</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="card" id="card-5">
-                      <img src="{% static 'img/james.jpeg' %}" class="card-img-top" alt="Noticia 5">
-                      <div class="card-body">
-                        <h5 class="card-title">James se reencuentra en León</h5>
-                        <p class="card-text">El colombiano es figura en su equipo apareciendo en los momentos importantes.</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="carousel-item">
-                <div class="row">
-                  <div class="col-md-4">
-                    <div class="card" id="card-4">
-                      <img src="{% static 'img/ucrania.avif' %}" class="card-img-top" alt="Noticia 4">
-                      <div class="card-body">
-                        <h5 class="card-title">Zelenski espera "llegar a acuerdos" con EEUU</h5>
-                        <p class="card-text">El presidente de Ucrania, afirmó este sábado que espera que puedan "llegar a acuerdos" en la reunión prevista con representantes de Estados Unidos.</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="card" id="card-5">
-                      <img src="{% static 'img/james.jpeg' %}" class="card-img-top" alt="Noticia 5">
-                      <div class="card-body">
-                        <h5 class="card-title">James se reencuentra en León</h5>
-                        <p class="card-text">El colombiano es figura en su equipo apareciendo en los momentos importantes.</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="card" id="card-6">
-                      <img src="{% static 'img/petro.jpeg' %}" class="card-img-top" alt="Noticia 6">
-                      <div class="card-body">
-                        <h5 class="card-title">¿Desaparece el ministerio de la igualdad?</h5>
-                        <p class="card-text">Después de ser despedida Francia Márquez del Ministerio, el presidente Gustavo Petro dio declaraciones donde deja ver su preocupación...</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="carousel-item">
-                <div class="row">
-                  <div class="col-md-4">
-                    <div class="card" id="card-5">
-                      <img src="{% static 'img/james.jpeg' %}" class="card-img-top" alt="Noticia 5">
-                      <div class="card-body">
-                        <h5 class="card-title">James se reencuentra en León</h5>
-                        <p class="card-text">El colombiano es figura en su equipo apareciendo en los momentos importantes.</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="card" id="card-6">
-                      <img src="{% static 'img/petro.jpeg' %}" class="card-img-top" alt="Noticia 6">
-                      <div class="card-body">
-                        <h5 class="card-title">¿Desaparece el ministerio de la igualdad?</h5>
-                        <p class="card-text">Después de ser despedida Francia Márquez del Ministerio, el presidente Gustavo Petro dio declaraciones donde deja ver su preocupación...</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="card" id="card-1">
-                      <img src="{% static 'img/noticia 1.jpg' %}" class="card-img-top" alt="Noticia 1">
-                      <div class="card-body">
-                        <h5 class="card-title">La crisis migratoria continua</h5>
-                        <p class="card-text">Las medidas de Trump generan incertidumbre a ciudadanos venezolanos.</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="carousel-item">
-                <div class="row">
-                  <div class="col-md-4">
-                    <div class="card" id="card-6">
-                      <img src="{% static 'img/petro.jpeg' %}" class="card-img-top" alt="Noticia 6">
-                      <div class="card-body">
-                        <h5 class="card-title">¿Desaparece el ministerio de la igualdad?</h5>
-                        <p class="card-text">Después de ser despedida Francia Márquez del Ministerio, el presidente Gustavo Petro dio declaraciones donde deja ver su preocupación...</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="card" id="card-1">
-                      <img src="{% static 'img/noticia 1.jpg' %}" class="card-img-top" alt="Noticia 1">
-                      <div class="card-body">
-                        <h5 class="card-title">La crisis migratoria continua</h5>
-                        <p class="card-text">Las medidas de Trump generan incertidumbre a ciudadanos venezolanos.</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="card" id="card-2">
-                      <img src="{% static 'img/noticia2.avif' %}" class="card-img-top" alt="Noticia 2">
-                      <div class="card-body">
-                        <h5 class="card-title">Reunión entre Trump y Zelenski</h5>
-                        <p class="card-text">El gobernante ucraniano destacó además la reunión "altamente productiva".</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                {% endfor %}
             </div>
-          
             <button class="carousel-control-prev" type="button" data-bs-target="#noticiasCarousel" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Anterior</span>
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
             </button>
             <button class="carousel-control-next" type="button" data-bs-target="#noticiasCarousel" data-bs-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Siguiente</span>
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
             </button>
-        </div>
-
-        <div class="main-article mt-4">
-            <div class="row">
-                <div class="col-md-8">
-                    <h3 class="mt-3">EE.UU. despliega otros 3.000 soldados en servicio activo en la frontera con México</h3>
-                    <img src="{%static 'img/frontera-mex-eeuu.jpg' %}" alt="Imagen de Noticia Principal" class="img-fluid">
-                    <p>
-                        La administración Trump está desplegando más soldados en servicio activo en la frontera sur de Estados Unidos, mientras el presidente continúa haciendo de la seguridad fronteriza y el freno a la inmigración indocumentada una prioridad.
-                    </p>
-                </div>
-                <div class="col-md-4 mt-4 mt-md-0">
-                    <h4>Anuncios</h4>
-                    <div class="side-news-item mb-3">
-                    <img src="https://nebula.wsimg.com/1b625da8fba5e4e3965b91edfd1cd3a0?AccessKeyId=235D9179367ECC66BBC2&disposition=0&alloworigin=1" alt="Noticia Secundaria 1" class="img-fluid">
-                    <!-- <h5 class="mt-2">Nombre del autor</h5>
-                    <p>Breve descripción de la noticia o autor.</p> -->
-                    </div>
-                    <div class="side-news-item mb-3">
-                    <img src="https://nebula.wsimg.com/168cc167a8c56ee7ae9fbed289254989?AccessKeyId=235D9179367ECC66BBC2&disposition=0&alloworigin=1" alt="Noticia Secundaria 2" class="img-fluid">
-                    <!-- <h5 class="mt-2">Otra Noticia</h5>
-                    <p>Pequeña descripción de otra noticia secundaria.</p> -->
-                    </div>
-                    <div class="side-news-item mb-3">
-                    <img src="https://nebula.wsimg.com/2db7cd3d8cb6c8746d9e2ad8d7a415a7?AccessKeyId=235D9179367ECC66BBC2&disposition=0&alloworigin=1" alt="Noticia Secundaria 2" class="img-fluid">
-                    <!-- <h5 class="mt-2">Otra Noticia</h5>
-                    <p>Pequeña descripción de otra noticia secundaria.</p> -->
-                    </div>
-                </div>
-            </div>
         </div>
 
         <div class="row mt-4">
-            <div class="col-12">
-            <div class="podcast-section">
-                <h4>Podcast</h4>
-                <img src="{%static 'img/podcast1.png' %}"  alt="Podcast Banner" class="img-fluid">
-                <p class="mt-2">
-                Disfruta de nuestro podcast con las últimas noticias, entrevistas y análisis.
+    
+            <div class="col-md-8">
+            {% if main_news %}
+                <div class="main-article">
+                <a href="{% url 'noticia_detalle' main_news.slug %}" style="text-decoration: none; color: inherit;">
+                    <h3>{{ main_news.title }}</h3>
+                    {% if main_news.video or main_news.video_link %}
+                    <div class="video-container">
+                        <iframe src="{{ main_news.media_source }}" 
+                                title="Video principal" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                    {% elif main_news.image %}
+                    <img src="{{ main_news.image.url }}" alt="Imagen principal" class="img-fluid">
+                    {% endif %}
+                </a>
+                <p>
+                    <strong>Por:</strong> {{ main_news.author }}<br>
+                    <strong>Fecha:</strong> {{ main_news.publication_date|date:"d F Y" }}
                 </p>
+                <p>{{ main_news.short_description }}</p>
+                </div>
+            {% endif %}
             </div>
+            
+            <div class="col-md-4 mt-4 mt-md-0">
+            <h4>Anuncios</h4>
+            {% for anuncio in anuncios %}
+                <div class="side-news-item mb-3">
+                <img src="{{ anuncio.imagen.url }}" alt="{{ anuncio.titulo }}" class="img-fluid">
+                </div>
+            {% empty %}
+                <p>No hay anuncios disponibles.</p>
+            {% endfor %}
             </div>
         </div>
+        
+
+        <div id="index-podcast" class="podcast-section text-center">
+            <h4>Podcast</h4>
+            <p>Disfruta de nuestro podcast con las últimas noticias, entrevistas y análisis.</p>
+            
+            <div id="podcastCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                    <div class="row justify-content-center">
+                        {% for p in last_podcasts|slice:"0:3" %}
+                        <div class="col-12 col-md-4 mb-4">
+                        <a href="{% url 'podcast_detail' p.slug %}">
+                            <img src="{{ p.cover_image.url }}" alt="{{ p.title }}" class="img-fluid rounded-circle" style="width:150px; height:150px; object-fit:cover;">
+                        </a>
+                        <h5 class="mt-2">{{ p.title }}</h5>
+                        <p>{{ p.date_created|date:"d F Y" }}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    </div>
+                    <div class="carousel-item">
+                    <div class="row justify-content-center">
+                        {% for p in last_podcasts|slice:"3:6" %}
+                        <div class="col-12 col-md-4 mb-4">
+                        <a href="{% url 'podcast_detail' p.slug %}">
+                            <img src="{{ p.cover_image.url }}" alt="{{ p.title }}" class="img-fluid rounded-circle" style="width:150px; height:150px; object-fit:cover;">
+                        </a>
+                        <h5 class="mt-2">{{ p.title }}</h5>
+                        <p>{{ p.date_created|date:"d F Y" }}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#podcastCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#podcastCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                </button>
+            </div>
+        </div>
+        
 
         <div class="row">
             <div class="col-12 d-flex justify-content-center">
