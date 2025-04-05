@@ -11,6 +11,7 @@ def IndexView(request):
     carousel_news = [carousel_news_list[i:i+3] for i in range(0, len(carousel_news_list), 3)]
     main_news = MainNews.objects.all().order_by('-publication_date').first()
     last_podcasts = Podcast.objects.order_by('-date_created')[:6]
+    last_programs = Programa.objects.order_by('-fecha_creacion', '-id')[:6]
     
     context = {
         'latest_edicion': latest_edicion,
@@ -19,6 +20,7 @@ def IndexView(request):
         'carousel_news': carousel_news,
         'main_news': main_news,
         'last_podcasts': last_podcasts,
+        'last_programs': last_programs,
     }
     return render(request, "index.html", context)
 
@@ -39,33 +41,65 @@ def revista(request):
     except EmptyPage:
         page_obj = paginator.get_page(paginator.num_pages)
     
+    left_ads = Announcement.objects.filter(active=True)[:2]
+    right_ads = Announcement.objects.filter(active=True)[2:4]
+    
+    context = {
+        'page_obj': page_obj,
+        'left_ads': left_ads,
+        'right_ads': right_ads,
+    }
+    
     return render(request, 'revista.html', {'page_obj': page_obj})
 
 
 
 
-
 def programas(request):
-    programas_list = Programa.objects.all()  
-    paginator = Paginator(programas_list, 10) 
+    query = request.GET.get('q', '')
+    if query:
+        programas_list = Programa.objects.filter(titulo__icontains=query).order_by('-id')
+    else:
+        programas_list = Programa.objects.all().order_by('-id')
+    
+    paginator = Paginator(programas_list, 10)
+    page_number = request.GET.get('page')
+    try:
+        page_obj = paginator.get_page(page_number)
+    except PageNotAnInteger:
+        page_obj = paginator.get_page(1)
+    except EmptyPage:
+        page_obj = paginator.get_page(paginator.num_pages)
+    
+    left_ads = Announcement.objects.filter(active=True)[:2]
+    right_ads = Announcement.objects.filter(active=True)[2:4]
+    
+    context = {
+        'page_obj': page_obj,
+        'query': query,
+        'left_ads': left_ads,
+        'right_ads': right_ads,
+    }
+    return render(request, 'programas.html', context)
 
-    page_number = request.GET.get('page')  
-    page_obj = paginator.get_page(page_number)  
-
-    return render(request, 'programas.html', {'page_obj': page_obj})
 
 def podcast(request):
     featured_podcast = Podcast.objects.filter(featured=True).first()
     if not featured_podcast:
         featured_podcast = Podcast.objects.order_by('-date_created').first()
-    if featured_podcast is not None:
+    if featured_podcast:
         podcasts = Podcast.objects.exclude(id=featured_podcast.id).order_by('-date_created')
     else:
-        podcasts = []
+        podcasts = Podcast.objects.order_by('-date_created')
     
+    left_ads = Announcement.objects.filter(active=True)[:2]
+    right_ads = Announcement.objects.filter(active=True)[2:4]
+
     context = {
         'featured_podcast': featured_podcast,
         'podcasts': podcasts,
+        'left_ads': left_ads,
+        'right_ads': right_ads,
     }
     return render(request, 'podcast.html', context)
 

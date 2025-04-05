@@ -40,6 +40,13 @@ class AnuncioAdmin(admin.ModelAdmin):
     list_display = ('titulo',)
     search_fields = ('titulo',)
 
+
+@admin.register(Announcement)
+class AnnouncementAdmin(admin.ModelAdmin):
+    list_display = ('title', 'date_created', 'active')
+    search_fields = ('title',)
+    list_filter = ('active', 'date_created',)
+
 @admin.register(Programa)
 class ProgramaAdmin(admin.ModelAdmin):
     list_display = ('titulo', 'host', 'duracion', 'url_reproducir')  

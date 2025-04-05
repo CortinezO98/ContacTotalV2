@@ -1189,3 +1189,51 @@ footer {
 }
 
 /* FIN PODCAST INDEX */
+
+
+
+/* PROGRAMAS INDEX */
+
+#index-programs {
+  color: #ff0000;
+}
+
+.bg-danger {
+  background-color: #ff0000 !important;
+}
+
+.btn-outline-danger {
+  border-color: #ff0000 !important;
+  color: #ff0000 !important;
+}
+.btn-outline-danger:hover,
+.btn-outline-danger:focus {
+  background-color: #ff0000 !important;
+  color: #fff !important;
+}
+
+.badge.bg-danger {
+  background-color: #ff0000 !important;
+}
+
+#index-programs .list-group-item {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border: none;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  transition: transform 0.2s ease;
+}
+
+#index-programs .list-group-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+#index-programs .list-group-item h5 {
+  color: #ff0000;
+}
+
+
+
+
+

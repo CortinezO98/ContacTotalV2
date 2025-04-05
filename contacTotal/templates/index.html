@@ -180,6 +180,42 @@
             </div>
         </div>
 
+        <div id="index-programs" class="program-section my-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center mb-4">
+                    <img src="{% static 'img/reproductor.png' %}" alt="Programas" class="img-fluid" style="max-width: 250px;">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                    <h4 class="text-center mb-3">Programas Recientes</h4>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center">
+                    <div class="col-12">
+                    <ul class="list-group">
+                        {% for program in last_programs %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-1">{{ program.titulo }}</h5>
+                            <small class="text-muted">{{ program.fecha_creacion|date:"d F Y" }}</small>
+                        </div>
+                        <div>
+                            <span class="badge bg-danger rounded-pill me-2">{{ program.duracion }}</span>
+                            {% if program.url_reproducir %}
+                            <a href="{{ program.url_reproducir }}" class="btn btn-sm btn-outline-danger" target="_blank">Reproducir</a>
+                            {% endif %}
+                        </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
             <div class="magazine-section mt-4">
                 <h4>Contacto Total Magazine</h4>
                 <div class="row magazine-fade">

@@ -3,6 +3,8 @@ from pytz import timezone
 import pytz
 from datetime import datetime
 from django.utils.text import slugify
+from django.utils import timezone
+
 
 
 # Podcast
@@ -29,9 +31,6 @@ class Podcast(models.Model):
 
     def __str__(self):
         return self.title
-
-
-
 
 
 # ANUNCIO REUTILIZABLE EN VISTAS
@@ -90,7 +89,7 @@ class CarouselNews(models.Model):
     author = models.CharField(max_length=255)
     description = models.TextField()
     image = models.ImageField(upload_to='carousel_news/')
-    slug = models.SlugField(unique=True, blank=True)
+    slug = models.SlugField(unique=True, blank=True, editable=False)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -147,9 +146,10 @@ class Anuncio(models.Model):
 # Vista Programa
 class Programa(models.Model):
     titulo = models.CharField(max_length=200)
-    host = models.CharField(max_length=200)
-    duracion = models.DecimalField(max_digits=5, decimal_places=2)  
-    url_reproducir = models.URLField()  
+    host = models.CharField(max_length=200, blank=True, null=True)
+    duracion = models.CharField(max_length=10, blank=True, null=True, help_text="Ejemplo: 4:47")
+    url_reproducir = models.URLField(blank=True, null=True)
+    fecha_creacion = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return self.titulo
