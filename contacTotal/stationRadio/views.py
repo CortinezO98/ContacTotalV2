@@ -6,7 +6,7 @@ def IndexView(request):
     latest_edicion = EdicionRevista.objects.all().order_by('-fecha_publicacion', '-id').first()
     main_video = MainVideo.objects.first()
     anuncios = Anuncio.objects.all()
-    carousel_news_qs = CarouselNews.objects.all().order_by('-publication_date')
+    carousel_news_qs = CarouselNews.objects.all().order_by('-publication_date')[:6]
     carousel_news_list = list(carousel_news_qs)
     carousel_news = [carousel_news_list[i:i+3] for i in range(0, len(carousel_news_list), 3)]
     main_news = MainNews.objects.all().order_by('-publication_date').first()

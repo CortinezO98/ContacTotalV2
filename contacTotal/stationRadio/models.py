@@ -54,6 +54,7 @@ class EdicionRevista(models.Model):
     imagen = models.ImageField(upload_to='revistas/')
     fecha_publicacion = models.DateField(auto_now_add=True)
     url = models.URLField()
+    pdf = models.FileField(upload_to='revistas/pdf/', blank=True, null=True, help_text="Sube la revista en formato PDF")
 
     def __str__(self):
         return self.titulo
