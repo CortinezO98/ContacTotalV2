@@ -8,68 +8,77 @@
 {% block main %}
 <div class="container-fluid mt-4">
     <div class="row">
-        <!-- Columna Izquierda: Anuncios -->
         <div class="col-md-2 d-none d-md-block">
-            {% for ad in left_ads %}
-            <div class="mb-3">
-                <a href="{{ ad.link|default:'#' }}" target="_blank">
-                    <img src="{{ ad.image.url }}" alt="{{ ad.title }}" class="img-fluid">
-                </a>
-            </div>
-            {% endfor %}
+            {% include 'base/announcement_component.html' with announcements=left_ads %}
         </div>
-
-        <!-- Columna Central: Podcast Destacado y Lista -->
-        <div class="col-md-8 text-center">
-            <h1 id="mainTitle">{% if featured_podcast %}{{ featured_podcast.title }}{% else %}Podcast{% endif %}</h1>
-            <div class="badge-new">Nuevo episodio</div>
-
-            <div class="main-podcast2-container">
-                {% if featured_podcast %}
-                    <img id="mainCoverImage" 
-                        src="{% if featured_podcast.cover_image %}{{ featured_podcast.cover_image.url }}{% else %}{% static 'img/default-podcast.png' %}{% endif %}" 
-                        alt="Portada Principal" 
-                        class="podcast2-mic mb-2">
-
-                    <p id="mainDescription" class="mt-2">{{ featured_podcast.description }}</p>
-                    <audio id="mainAudio" class="audio-player" controls>
-                        <source id="mainAudioSource" 
-                                src="{% if featured_podcast.audio_file %}{{ featured_podcast.audio_file.url }}{% else %}https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3{% endif %}" 
-                                type="audio/mpeg">
-                        Tu navegador no soporta la reproducción de audio.
-                    </audio>
+        <!-- Sección Principal y Carrusel -->
+        <div class="col-md-8">
+            {% if featured_section %}
+            <div class="text-center mb-4 p-3 border rounded">
+                <h1 class="display-4 fw-bold">{{ featured_section.title }}</h1>
+                <p>{{ featured_section.description }}</p>
+                {% if featured_section.cover_image %}
+                    <img src="{{ featured_section.cover_image.url }}" alt="{{ featured_section.title }}" class="img-fluid rounded" style="max-width:300px;">
                 {% else %}
-                    <img id="mainCoverImage" src="{% static 'img/default-podcast.png' %}" alt="Portada Principal" class="podcast2-mic mb-2">
-                    <p id="mainDescription" class="mt-2">Descripción del episodio actual</p>
-                    <audio id="mainAudio" class="audio-player" controls>
-                        <source id="mainAudioSource" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-                        Tu navegador no soporta la reproducción de audio.
-                    </audio>
+                    <img src="{% static 'img/default-podcast.png' %}" alt="{{ featured_section.title }}" class="img-fluid rounded" style="max-width:300px;">
                 {% endif %}
-            </div>
-            
-            <!-- Carrusel de Podcasts -->
-            <div class="podcast2-carousel mt-4">
-                {% for p in podcasts %}
-                <div class="podcast2-item" data-title="{{ p.title }}" data-description="{{ p.description }}" data-audio="{% if p.audio_file %}{{ p.audio_file.url }}{% elif p.video_link %}{{ p.video_link }}{% else %}https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3{% endif %}" data-image="{% if p.cover_image %}{{ p.cover_image.url }}{% else %}{% static 'img/default-podcast.png' %}{% endif %}" data-slug="{{ p.slug }}">
-                    <img src="{% if p.cover_image %}{{ p.cover_image.url }}{% else %}{% static 'img/default-podcast.png' %}{% endif %}" alt="{{ p.title }}">
-                    <p>{{ p.title }}</p>
+                <div class="mt-3">
+                    <a href="{% url 'podcast_detail' featured_section.slug %}" class="btn btn-primary btn-lg">Ver detalles</a>
                 </div>
-                {% endfor %}
+            </div>
+            {% endif %}
+            <!-- Carrusel-->
+            <div id="sectionCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="row justify-content-center">
+                            {% for section in sections|slice:"0:3" %}
+                            <div class="col-12 col-md-4 mb-4">
+                                <a href="{% url 'podcast_detail' section.slug %}">
+                                {% if section.cover_image %}
+                                <img src="{{ section.cover_image.url }}" alt="{{ section.title }}" class="img-fluid rounded-circle" style="width:150px; height:150px; object-fit:cover;">
+                                {% else %}
+                                <img src="{% static 'img/default-podcast.png' %}" alt="{{ section.title }}" class="img-fluid rounded-circle" style="width:150px; height:150px; object-fit:cover;">
+                                {% endif %}
+                                </a>
+                                <h5 class="mt-2">{{ section.title }}</h5>
+                                <p>{{ section.date_created|date:"d F Y" }}</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="row justify-content-center">
+                            {% for section in sections|slice:"3:6" %}
+                            <div class="col-12 col-md-4 mb-4">
+                                <a href="{% url 'podcast_detail' section.slug %}">
+                                {% if section.cover_image %}
+                                <img src="{{ section.cover_image.url }}" alt="{{ section.title }}" class="img-fluid rounded-circle" style="width:150px; height:150px; object-fit:cover;">
+                                {% else %}
+                                <img src="{% static 'img/default-podcast.png' %}" alt="{{ section.title }}" class="img-fluid rounded-circle" style="width:150px; height:150px; object-fit:cover;">
+                                {% endif %}
+                                </a>
+                                <h5 class="mt-2">{{ section.title }}</h5>
+                                <p>{{ section.date_created|date:"d F Y" }}</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#sectionCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#sectionCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                </button>
             </div>
         </div>
-
-        <!-- Columna Derecha: Anuncios -->
         <div class="col-md-2 d-none d-md-block">
-            {% for ad in right_ads %}
-            <div class="mb-3">
-                <a href="{{ ad.link|default:'#' }}" target="_blank">
-                    <img src="{{ ad.image.url }}" alt="{{ ad.title }}" class="img-fluid">
-                </a>
-            </div>
-            {% endfor %}
+            {% include 'base/announcement_component.html' with announcements=right_ads %}
         </div>
-    </div>
+        </div>
 </div>
 
 <script>
@@ -107,7 +116,6 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 window.location.href = "/podcast/" + slug + "/";
             }, 500);
-
         });
     });
 });

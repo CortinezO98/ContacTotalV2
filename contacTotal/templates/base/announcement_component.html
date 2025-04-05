@@ -1,0 +1,9 @@
+<div class="announcement-component">
+    {% for ad in announcements %}
+    <div class="mb-3">
+        <a href="{{ ad.link|default:'#' }}" target="_blank">
+            <img src="{{ ad.image.url }}" alt="{{ ad.title }}" class="img-fluid">
+        </a>
+    </div>
+    {% endfor %}
+</div>
