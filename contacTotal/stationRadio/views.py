@@ -1,6 +1,16 @@
 from django.shortcuts import render, get_object_or_404
 from .models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.mail import EmailMessage, BadHeaderError
+from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.contrib import messages
+from django.conf import settings
+from django.conf.urls.static import static
+import smtplib
+import urllib.parse
+
 
 def IndexView(request):
     latest_edicion = EdicionRevista.objects.all().order_by('-fecha_publicacion', '-id').first()
@@ -143,5 +153,83 @@ def programacion(request):
 def tienda(request):
     return render(request, 'tienda.html')
 
+
+
 def contacto(request):
-    return render(request, 'contacto.html')
+    left_ads = Announcement.objects.filter(active=True)[:2]
+    right_ads = Announcement.objects.filter(active=True)[2:4]
+
+    context = {
+        'left_ads': left_ads,
+        'right_ads': right_ads,
+    }
+
+    status = request.GET.get('status')
+    msg = request.GET.get('msg')
+    if status:
+        context.update({
+            'status': status,
+            'swal_title': "Éxito" if status == "success" else "Error",
+            'msg': urllib.parse.unquote(msg) if msg else "",
+        })
+
+    if request.method == 'POST':
+        nombre = request.POST.get('nombre', '').strip()
+        telefono = request.POST.get('telefono', '').strip()
+        email = request.POST.get('email', '').strip()
+        mensaje = request.POST.get('mensaje', '').strip()
+        
+        context.update({
+            'nombre': nombre,
+            'telefono': telefono,
+            'email': email,
+            'mensaje': mensaje,
+        })
+
+        if not nombre or not telefono or not email:
+            error_msg = urllib.parse.quote("Por favor completa todos los campos obligatorios.")
+            return HttpResponseRedirect(f"{reverse('contacto')}?status=error&msg={error_msg}")
+
+        html_contenido = f"""
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 30px; background-color: #ffffff; border: 1px solid #ddd; border-radius: 10px;">
+            <div style="text-align: center;">
+                <img src="https://contactototalmedia.com/img/Logo%20CT%20Media%20PNG.png" alt="Logo Contacto Total" style="max-width: 150px; margin-bottom: 20px;">
+                <h2 style="color: #ff0000; margin-bottom: 5px;">📬 Mensaje de Contacto</h2>
+                <p style="margin-top: 0; color: #ff0000;">Revista Contacto Total</p>
+                <hr style="margin: 20px 0;">
+            </div>
+            <h4 style="color: #333;">📌 Detalles del remitente</h4>
+            <table style="width: 100%; font-size: 15px;">
+                <tr><td style="padding: 8px 0;"><strong>👤 Nombre:</strong></td><td>{nombre}</td></tr>
+                <tr><td style="padding: 8px 0;"><strong>📞 Teléfono:</strong></td><td>{telefono}</td></tr>
+                <tr><td style="padding: 8px 0;"><strong>📧 Correo:</strong></td><td>{email}</td></tr>
+            </table>
+            <hr style="margin: 20px 0;">
+            <h4 style="color: #333;">📝 Mensaje</h4>
+            <p style="font-size: 15px; line-height: 1.6; color: #444;">{mensaje or "Sin mensaje adicional."}</p>
+            <hr style="margin: 30px 0;">
+            <p style="font-size: 12px; color: #888; text-align: center;">
+                Este mensaje fue enviado desde el formulario de contacto de Revista Contacto Total.
+            </p>
+        </div>
+        """
+
+        try:
+            email_message = EmailMessage(
+                subject='📬 Contacto desde Revista Contacto Total',
+                body=html_contenido,
+                from_email=settings.EMAIL_HOST_USER,
+                to=['jcortinezosorio@gmail.com'],
+                headers={'Reply-To': 'no-reply@revistacontactototal.com'}
+            )
+            email_message.content_subtype = 'html'
+            email_message.send(fail_silently=False)
+
+            success_msg = urllib.parse.quote("Tu mensaje fue enviado con éxito.")
+            return HttpResponseRedirect(f"{reverse('contacto')}?status=success&msg={success_msg}")
+
+        except (BadHeaderError, smtplib.SMTPException, Exception) as e:
+            err_msg = urllib.parse.quote(f"Error al enviar el mensaje: {str(e)}")
+            return HttpResponseRedirect(f"{reverse('contacto')}?status=error&msg={err_msg}")
+
+    return render(request, 'contacto.html', context)
