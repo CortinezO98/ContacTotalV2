@@ -1,6 +1,16 @@
 from django.contrib import admin
 from .models import *
 
+class PodcastAudioInline(admin.TabularInline):
+    model = PodcastAudio
+    extra = 1
+
+class PodcastVideoInline(admin.TabularInline):
+    model = PodcastVideo
+    extra = 1
+
+
+
 @admin.register(EdicionRevista)
 class EdicionRevistaAdmin(admin.ModelAdmin):
     list_display = ('titulo', 'fecha_publicacion', 'url')  
@@ -9,11 +19,23 @@ class EdicionRevistaAdmin(admin.ModelAdmin):
     
 
 
-@admin.register(Podcast)
-class PodcastAdmin(admin.ModelAdmin):
-    list_display = ('title', 'date_created', 'featured')
-    search_fields = ('title', 'description')
-    list_filter = ('date_created', 'featured')
+@admin.register(PodcastSection)
+class PodcastSectionAdmin(admin.ModelAdmin):
+    list_display = ('title', 'date_created')
+    readonly_fields = ('slug',)
+    inlines = [PodcastAudioInline, PodcastVideoInline]
+
+@admin.register(PodcastAudio)
+class PodcastAudioAdmin(admin.ModelAdmin):
+    list_display = ('title', 'podcast_section', 'date_created')
+    list_filter = ('podcast_section',)
+    search_fields = ('title',)
+
+@admin.register(PodcastVideo)
+class PodcastVideoAdmin(admin.ModelAdmin):
+    list_display = ('title', 'podcast_section', 'date_created')
+    list_filter = ('podcast_section',)
+    search_fields = ('title',)
 
 
 @admin.register(MainVideo)
@@ -39,6 +61,13 @@ class MainNewsAdmin(admin.ModelAdmin):
 class AnuncioAdmin(admin.ModelAdmin):
     list_display = ('titulo',)
     search_fields = ('titulo',)
+
+
+@admin.register(Announcement)
+class AnnouncementAdmin(admin.ModelAdmin):
+    list_display = ('title', 'date_created', 'active')
+    search_fields = ('title',)
+    list_filter = ('active', 'date_created',)
 
 @admin.register(Programa)
 class ProgramaAdmin(admin.ModelAdmin):

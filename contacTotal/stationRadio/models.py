@@ -3,35 +3,47 @@ from pytz import timezone
 import pytz
 from datetime import datetime
 from django.utils.text import slugify
+from django.utils import timezone
+
 
 
 # Podcast
-class Podcast(models.Model):
-    PODCAST_TYPE_CHOICES = (
-        ('audio', 'Audio'),
-        ('video', 'Video'),
-        ('mixed', 'Mixto'), 
-    )
-
+class PodcastSection(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
     cover_image = models.ImageField(upload_to='podcasts_covers/', blank=True, null=True)
-    audio_file = models.FileField(upload_to='podcasts_audio/', blank=True, null=True)
-    video_link = models.URLField(blank=True, null=True, help_text="Enlace para el video (embed de YouTube, por ejemplo)")
-    podcast_type = models.CharField(max_length=10, choices=PODCAST_TYPE_CHOICES, default='audio')
     date_created = models.DateField(auto_now_add=True)
-    featured = models.BooleanField(default=False)
     slug = models.SlugField(unique=True, blank=True, editable=False)
+    featured = models.BooleanField(default=False)
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
-        super().save(*args, **kwargs)
+        super(PodcastSection, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title
 
+class PodcastAudio(models.Model):
+    podcast_section = models.ForeignKey(PodcastSection, related_name='audios', on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    audio_file = models.FileField(upload_to='podcasts_audio/')
+    duration = models.CharField(max_length=20, blank=True, null=True)
+    date_created = models.DateField(auto_now_add=True)
+    
 
+    def __str__(self):
+        return self.title
 
+class PodcastVideo(models.Model):
+    podcast_section = models.ForeignKey(PodcastSection, related_name='videos', on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    video_link = models.URLField(blank=True, null=True, help_text="Enlace embed de YouTube, por ejemplo")
+    cover_image = models.ImageField(upload_to='podcasts_video_covers/', blank=True, null=True)
+    date_created = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
 
 
 # ANUNCIO REUTILIZABLE EN VISTAS
@@ -54,6 +66,7 @@ class EdicionRevista(models.Model):
     imagen = models.ImageField(upload_to='revistas/')
     fecha_publicacion = models.DateField(auto_now_add=True)
     url = models.URLField()
+    pdf = models.FileField(upload_to='revistas/pdf/', blank=True, null=True, help_text="Sube la revista en formato PDF")
 
     def __str__(self):
         return self.titulo
@@ -89,7 +102,7 @@ class CarouselNews(models.Model):
     author = models.CharField(max_length=255)
     description = models.TextField()
     image = models.ImageField(upload_to='carousel_news/')
-    slug = models.SlugField(unique=True, blank=True)
+    slug = models.SlugField(unique=True, blank=True, editable=False)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -146,9 +159,10 @@ class Anuncio(models.Model):
 # Vista Programa
 class Programa(models.Model):
     titulo = models.CharField(max_length=200)
-    host = models.CharField(max_length=200)
-    duracion = models.DecimalField(max_digits=5, decimal_places=2)  
-    url_reproducir = models.URLField()  
+    host = models.CharField(max_length=200, blank=True, null=True)
+    duracion = models.CharField(max_length=10, blank=True, null=True, help_text="Ejemplo: 4:47")
+    url_reproducir = models.URLField(blank=True, null=True)
+    fecha_creacion = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return self.titulo
