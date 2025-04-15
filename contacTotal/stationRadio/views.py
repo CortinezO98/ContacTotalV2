@@ -23,6 +23,16 @@ def IndexView(request):
     last_podcasts = PodcastSection.objects.order_by('-date_created')[:6]
     last_programs = Programa.objects.order_by('-fecha_creacion', '-id')[:6]
     
+    # Banners verticales
+    banners_left = Banner.objects.filter(activo=True, position='vertical_left').order_by('orden')
+    banners_right = Banner.objects.filter(activo=True, position='vertical_right').order_by('orden')
+    
+    # Banners horizontales por posición
+    banner_horizontal_after_carousel = Banner.objects.filter(activo=True, position='horizontal_after_carousel').order_by('orden')
+    banner_horizontal_after_main_news = Banner.objects.filter(activo=True, position='horizontal_after_main_news').order_by('orden')
+    banner_horizontal_after_podcast = Banner.objects.filter(activo=True, position='horizontal_after_podcast').order_by('orden')
+    banner_horizontal_after_programs = Banner.objects.filter(activo=True, position='horizontal_after_programs').order_by('orden')
+    
     context = {
         'latest_edicion': latest_edicion,
         'main_video': main_video,
@@ -31,6 +41,12 @@ def IndexView(request):
         'main_news': main_news,
         'last_podcasts': last_podcasts,
         'last_programs': last_programs,
+        'banners_left': banners_left,
+        'banners_right': banners_right,
+        'banner_horizontal_after_carousel': banner_horizontal_after_carousel,
+        'banner_horizontal_after_main_news': banner_horizontal_after_main_news,
+        'banner_horizontal_after_podcast': banner_horizontal_after_podcast,
+        'banner_horizontal_after_programs': banner_horizontal_after_programs,
     }
     return render(request, "index.html", context)
 

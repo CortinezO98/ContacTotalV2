@@ -21,7 +21,7 @@ class PodcastSection(models.Model):
             self.slug = slugify(self.title)
         super(PodcastSection, self).save(*args, **kwargs)
 
-    def __str__(self):
+    def _str_(self):
         return self.title
 
 class PodcastAudio(models.Model):
@@ -32,7 +32,7 @@ class PodcastAudio(models.Model):
     date_created = models.DateField(auto_now_add=True)
     
 
-    def __str__(self):
+    def _str_(self):
         return self.title
 
 class PodcastVideo(models.Model):
@@ -42,7 +42,7 @@ class PodcastVideo(models.Model):
     cover_image = models.ImageField(upload_to='podcasts_video_covers/', blank=True, null=True)
     date_created = models.DateField(auto_now_add=True)
 
-    def __str__(self):
+    def _str_(self):
         return self.title
 
 
@@ -54,7 +54,7 @@ class Announcement(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=True)
 
-    def __str__(self):
+    def _str_(self):
         return self.title or f"Anuncio {self.id}"
 
 
@@ -68,7 +68,7 @@ class EdicionRevista(models.Model):
     url = models.URLField()
     pdf = models.FileField(upload_to='revistas/pdf/', blank=True, null=True, help_text="Sube la revista en formato PDF")
 
-    def __str__(self):
+    def _str_(self):
         return self.titulo
     
 
@@ -91,7 +91,7 @@ class MainVideo(models.Model):
             return self.video_link
         return None
 
-    def __str__(self):
+    def _str_(self):
         return self.title or "Main Video"
 
 
@@ -109,7 +109,7 @@ class CarouselNews(models.Model):
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
-    def __str__(self):
+    def _str_(self):
         return self.title
 
 
@@ -144,7 +144,7 @@ class MainNews(models.Model):
             return self.image.url
         return None
 
-    def __str__(self):
+    def _str_(self):
         return self.title
 
 # Anuncios
@@ -152,9 +152,49 @@ class Anuncio(models.Model):
     imagen = models.ImageField(upload_to='anuncios/')
     titulo = models.CharField(max_length=255, blank=True, null=True, help_text="Opcional: Título o descripción breve del anuncio.")
 
-    def __str__(self):
+    def _str_(self):
         return self.titulo or "Anuncio"
 
+
+class Banner(models.Model):
+    POSITION_CHOICES = (
+        ('vertical_left', 'Vertical Izquierdo'),
+        ('vertical_right', 'Vertical Derecho'),
+        ('horizontal_after_carousel', 'Horizontal - Después del Carrusel'),
+        ('horizontal_after_main_news', 'Horizontal - Después de Noticias Principal'),
+        ('horizontal_after_podcast', 'Horizontal - Después del Podcast'),
+        ('horizontal_after_programs', 'Horizontal - Después de Programas'),
+    )
+    
+    position = models.CharField(
+        max_length=30,
+        choices=POSITION_CHOICES,
+        verbose_name="Posición"
+    )
+    orden = models.PositiveIntegerField(
+        default=1,
+        verbose_name="Orden de aparición",
+        help_text="Número que define el orden de aparición (de menor a mayor)"
+    )
+    script = models.TextField(
+        verbose_name="Código del Banner",
+        help_text="Copia y pega el código HTML del banner generado"
+    )
+    activo = models.BooleanField(
+        default=True,
+        verbose_name="Activo",
+        help_text="Indica si el banner se muestra en la página"
+    )
+    creado_en = models.DateTimeField(auto_now_add=True, verbose_name="Creado el")
+    actualizado_en = models.DateTimeField(auto_now=True, verbose_name="Actualizado el")
+    
+    class Meta:
+        ordering = ['position', 'orden']
+        verbose_name = "Banner Publicitario"
+        verbose_name_plural = "Banners Publicitarios"
+    
+    def _str_(self):
+        return f"{self.get_position_display()} - Orden {self.orden}"
 
 # Vista Programa
 class Programa(models.Model):
@@ -164,7 +204,7 @@ class Programa(models.Model):
     url_reproducir = models.URLField(blank=True, null=True)
     fecha_creacion = models.DateField(auto_now_add=True)
 
-    def __str__(self):
+    def _str_(self):
         return self.titulo
 
 
@@ -200,5 +240,5 @@ class Programacion(models.Model):
         """Devuelve el día de la semana en formato textual, como 'Lunes', 'Martes', etc."""
         return self.dia.strftime('%A')
 
-    def __str__(self):
+    def _str_(self):
         return f'{self.dia_semana} - {self.programa}'
