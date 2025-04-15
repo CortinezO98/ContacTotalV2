@@ -1133,3 +1133,36 @@ footer {
     font-size: 14px;
   }
 }
+
+
+/* BOTON FLOTANTE */
+.floating-logo {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1050;
+  width: 70px;
+  height: 70px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  transition: transform 0.3s ease;
+}
+
+.floating-logo:hover {
+  transform: scale(1.1);
+}
+
+.floating-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+
+
+/* FIN BTN FLOTANTE */

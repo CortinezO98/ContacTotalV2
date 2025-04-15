@@ -164,41 +164,49 @@
                 </div>
             </div>
             
-            <!-- Sección: Programas Recientes -->
-            <div id="index-programs" class="program-section my-4">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-12 text-center mb-4">
-                            <img src="{% static 'img/Logo CT Radio PNG.png' %}" alt="Programas" class="img-fluid" style="max-width: 250px;">
+            <!-- Sección combinada: Programas Recientes y Magazine -->
+            <div class="container my-5">
+                <div class="row align-items-center">
+                    <!-- Programas Recientes -->
+                    <div class="col-12 col-md-6 mb-4">
+                        <div class="text-center mb-3">
+                            <img src="{% static 'img/Logo CT Radio PNG.png' %}" alt="Programas" class="img-fluid" style="max-width: 200px;">
+                            <h4 class="mt-3">Programas Recientes</h4>
                         </div>
+                        <ul class="list-group">
+                            {% for program in last_programs %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">{{ program.titulo }}</h6>
+                                    <small class="text-muted">{{ program.fecha_creacion|date:"d F Y" }}</small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="badge bg-danger rounded-pill me-2">{{ program.duracion }}</span>
+                                    {% if program.url_reproducir %}
+                                        <a href="{{ program.url_reproducir }}" class="btn btn-sm btn-outline-danger" target="_blank">Reproducir</a>
+                                    {% endif %}
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
                     </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <h4 class="text-center mb-3">Programas Recientes</h4>
-                        </div>
-                    </div>
-                    <div class="row justify-content-center">
-                        <div class="col-12">
-                            <ul class="list-group">
-                                {% for program in last_programs %}
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h5 class="mb-1">{{ program.titulo }}</h5>
-                                        <small class="text-muted">{{ program.fecha_creacion|date:"d F Y" }}</small>
-                                        </div>
-                                        <div>
-                                        <span class="badge bg-danger rounded-pill me-2">{{ program.duracion }}</span>
-                                        {% if program.url_reproducir %}
-                                            <a href="{{ program.url_reproducir }}" class="btn btn-sm btn-outline-danger" target="_blank">Reproducir</a>
-                                        {% endif %}
-                                    </div>
-                                </li>
-                                {% endfor %}
-                            </ul>
+
+                    <!-- Magazine -->
+                    <div class="col-12 col-md-6 mb-4 d-flex justify-content-center">
+                        <div class="text-center">
+                            <h4>Contacto Total Magazine</h4>
+                            <a href="{% url 'revista' %}" class="text-decoration-none d-block">
+                                <div class="magazine-cover mt-3">
+                                    <img src="{% static 'img/revista.jpeg' %}" alt="Magazine" class="img-fluid rounded mx-auto d-block" style="max-height: 300px;">
+                                    <h5 class="mt-3 text-primary">Ver Ediciones Anteriores</h5>
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
+
+
             
             <!-- Banner Horizontal: Después de la sección de Programas -->
             <div class="row my-4">
@@ -211,18 +219,6 @@
                 </div>
             </div>
             
-            <!-- Sección: Magazine (u otra) -->
-            <div class="magazine-section mt-4">
-                <h4>Contacto Total Magazine</h4>
-                <div class="row magazine-fade">
-                    <div class="col-6 col-md-3">
-                        <div class="magazine-cover text-center">
-                            <img src="{% static 'img/revista.jpeg' %}" alt="Magazine 1" class="img-fluid">
-                            <h4>Ediciones Anteriores</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
         
         <!-- Columna lateral derecha: Banner vertical derecho -->

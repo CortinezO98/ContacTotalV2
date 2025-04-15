@@ -1,4 +1,6 @@
 from django.contrib import admin
+from import_export.admin import ExportMixin
+from import_export import resources
 from .models import *
 
 class PodcastAudioInline(admin.TabularInline):
@@ -104,3 +106,19 @@ class ProgramacionAdmin(admin.ModelAdmin):
     def hora_eeuu(self, obj):
         return obj.get_otra_zona_horaria('America/New_York')
     hora_eeuu.short_description = 'Hora EEUU'
+
+
+
+# Datos de Anunciate con nosotros
+
+class PublicidadContactoResource(resources.ModelResource):
+    class Meta:
+        model = PublicidadContacto
+        fields = ('id', 'nombre', 'cargo', 'empresa', 'telefono', 'email', 'comentarios', 'fecha_envio')
+
+@admin.register(PublicidadContacto)
+class PublicidadContactoAdmin(ExportMixin, admin.ModelAdmin):
+    resource_class = PublicidadContactoResource
+    list_display = ('nombre', 'empresa', 'email', 'telefono', 'fecha_envio')
+    search_fields = ('nombre', 'empresa', 'email')
+    list_filter = ('fecha_envio',)

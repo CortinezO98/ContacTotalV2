@@ -21,7 +21,7 @@ def IndexView(request):
     carousel_news = [carousel_news_list[i:i+3] for i in range(0, len(carousel_news_list), 3)]
     main_news = MainNews.objects.all().order_by('-publication_date').first()
     last_podcasts = PodcastSection.objects.order_by('-date_created')[:6]
-    last_programs = Programa.objects.order_by('-fecha_creacion', '-id')[:6]
+    last_programs = Programa.objects.order_by('-fecha_creacion', '-id')[:3]
     
     # Banners verticales
     banners_left = Banner.objects.filter(activo=True, position='vertical_left').order_by('orden')
@@ -74,6 +74,7 @@ def revista(request):
         'page_obj': page_obj,
         'left_ads': left_ads,
         'right_ads': right_ads,
+        'logo_type': 'revista'
     }
     
     return render(request, 'revista.html', {'page_obj': page_obj})
@@ -105,6 +106,7 @@ def programas(request):
         'query': query,
         'left_ads': left_ads,
         'right_ads': right_ads,
+        'logo_type': 'programas'
     }
     return render(request, 'programas.html', context)
 
@@ -124,6 +126,7 @@ def podcast(request):
         'sections': sections,
         'left_ads': left_ads,
         'right_ads': right_ads,
+        'logo_type': 'podcast'
     }
     return render(request, 'podcast.html', context)
 
@@ -149,7 +152,8 @@ def radio(request):
 
 
 def quienesSomos(request):
-    return render(request, 'quienesSomos.html')
+    return render(request, 'quienesSomos.html', {'logo_type': 'quienes_somos'})
+
 
 def programacion(request):
     programacion_list = Programacion.objects.all()
@@ -162,6 +166,7 @@ def programacion(request):
 
     context = {
         'programacion': programacion_list,
+        'logo_type': 'programacion'
     }
     return render(request, 'programacion.html', context)
 
@@ -178,6 +183,7 @@ def contacto(request):
     context = {
         'left_ads': left_ads,
         'right_ads': right_ads,
+        'logo_type': 'contacto'
     }
 
     status = request.GET.get('status')
@@ -249,3 +255,101 @@ def contacto(request):
             return HttpResponseRedirect(f"{reverse('contacto')}?status=error&msg={err_msg}")
 
     return render(request, 'contacto.html', context)
+
+
+
+def anunciate(request):
+    left_ads = Announcement.objects.filter(active=True)[:2]
+    right_ads = Announcement.objects.filter(active=True)[2:4]
+
+    context = {
+        'left_ads': left_ads,
+        'right_ads': right_ads,
+        'logo_type': 'contacto'
+    }
+
+    if request.method == 'POST':
+        nombre = request.POST.get('nombre', '').strip()
+        cargo = request.POST.get('cargo', '').strip()
+        empresa = request.POST.get('empresa', '').strip()
+        telefono = request.POST.get('telefono', '').strip()
+        email = request.POST.get('email', '').strip()
+        comentarios = request.POST.get('comentarios', '').strip()
+
+        context.update({
+            'nombre': nombre,
+            'cargo': cargo,
+            'empresa': empresa,
+            'telefono': telefono,
+            'email': email,
+            'comentarios': comentarios,
+        })
+
+        if not nombre or not cargo or not empresa or not telefono or not email:
+            context.update({
+                'status': 'error',
+                'swal_title': 'Error',
+                'msg': 'Por favor completa todos los campos obligatorios.'
+            })
+            return render(request, 'anunciate.html', context)
+
+        html_contenido = f"""
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 30px; background-color: #ffffff; border: 1px solid #ddd; border-radius: 10px;">
+            <div style="text-align: center;">
+                <img src="https://contactototalmedia.com/img/Logo%20CT%20Media%20PNG.png" alt="Logo Contacto Total" style="max-width: 150px; margin-bottom: 20px;">
+                <h2 style="color: #e60000; margin-bottom: 5px;">📢 Solicitud de Publicidad</h2>
+                <p style="margin-top: 0; color: #e60000;">Contacto Total Media</p>
+                <hr style="margin: 20px 0;">
+            </div>
+            <h4 style="color: #333;">🧾 Detalles del solicitante</h4>
+            <table style="width: 100%; font-size: 15px;">
+                <tr><td style="padding: 8px 0;"><strong>👤 Nombre:</strong></td><td>{nombre}</td></tr>
+                <tr><td style="padding: 8px 0;"><strong>💼 Cargo:</strong></td><td>{cargo}</td></tr>
+                <tr><td style="padding: 8px 0;"><strong>🏢 Empresa:</strong></td><td>{empresa}</td></tr>
+                <tr><td style="padding: 8px 0;"><strong>📞 Teléfono:</strong></td><td>{telefono}</td></tr>
+                <tr><td style="padding: 8px 0;"><strong>📧 Correo:</strong></td><td>{email}</td></tr>
+            </table>
+            <hr style="margin: 20px 0;">
+            <h4 style="color: #333;">📝 Comentarios</h4>
+            <p style="font-size: 15px; line-height: 1.6; color: #444;">{comentarios or "Sin comentarios adicionales."}</p>
+            <hr style="margin: 30px 0;">
+            <p style="font-size: 12px; color: #888; text-align: center;">
+                Este mensaje fue enviado desde el formulario de publicidad de Contacto Total Media.
+            </p>
+        </div>
+        """
+
+        try:
+            PublicidadContacto.objects.create(
+                nombre=nombre,
+                cargo=cargo,
+                empresa=empresa,
+                telefono=telefono,
+                email=email,
+                comentarios=comentarios
+            )
+
+            email_message = EmailMessage(
+                subject='📢 Solicitud de publicidad desde Contacto Total Media',
+                body=html_contenido,
+                from_email=settings.EMAIL_HOST_USER,
+                to=['jcortinezosorio@gmail.com'],
+                headers={'Reply-To': 'no-reply@contactototalmedia.com'}
+            )
+            email_message.content_subtype = 'html'
+            email_message.send(fail_silently=False)
+
+            context.update({
+                'status': 'success',
+                'swal_title': 'Éxito',
+                'msg': 'Tu solicitud fue enviada con éxito.'
+            })
+
+        except (BadHeaderError, smtplib.SMTPException, Exception) as e:
+            context.update({
+                'status': 'error',
+                'swal_title': 'Error',
+                'msg': f'Error al enviar el mensaje: {str(e)}'
+            })
+
+    return render(request, 'anunciate.html', context)

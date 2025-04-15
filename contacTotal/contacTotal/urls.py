@@ -33,5 +33,7 @@ urlpatterns = [
     path('contacto/', contacto, name="contacto"),
     path('podcast/<slug:slug>/', podcast_detail, name='podcast_detail'),
     path('noticia/<slug:slug>/', noticia_detalle, name='noticia_detalle'),
+    path('anunciate/', anunciate, name="anunciate"),
+    
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

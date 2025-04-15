@@ -8,7 +8,9 @@ certifi==2024.12.14
 charset-normalizer==3.4.1
 click==8.1.8
 colorama==0.4.6
+diff-match-patch==20241021
 Django==5.1.5
+django-import-export==4.3.7
 docstring_parser==0.16
 et_xmlfile==2.0.0
 gitdb==4.0.12
@@ -73,6 +75,7 @@ six==1.17.0
 smmap==5.0.2
 sqlparse==0.5.3
 streamlit==1.41.1
+tablib==3.8.0
 tenacity==9.0.0
 toml==0.10.2
 tornado==6.4.2
