@@ -50,6 +50,7 @@ def IndexView(request):
     }
     return render(request, "index.html", context)
 
+
 def noticia_detalle(request, slug):
     news_item = MainNews.objects.filter(slug=slug).first() or get_object_or_404(CarouselNews, slug=slug)
     return render(request, 'noticia_detalle.html', {'news_item': news_item})

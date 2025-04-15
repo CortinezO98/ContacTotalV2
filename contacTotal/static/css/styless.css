@@ -239,13 +239,14 @@ footer {
 }
 
 .magazine-cover h6, .magazine-section h4 {
-  font-size: 0.9rem;
+  font-size: 1.5rem;
   text-align: center;
+  color: #ff0000;
 }
 
 .magazine-section h4 {
   margin-bottom: 1rem;
-  color: #1f1f1f;
+  color: #ff0000;
 }
 
 .revista::before {
@@ -867,6 +868,7 @@ footer {
 
 #index-podcast h4 {
   color: #ff0000;
+  font-size: 1.5rem;
 }
 
 /* Programs Styles */
@@ -955,6 +957,51 @@ footer {
 .my-4 {
   margin-top: 0.5rem !important;
   margin-bottom: 1.5rem !important;
+}
+
+/* PROGRAMAS INDEX */
+
+.title-radio {
+  margin-bottom: 0.5rem !important;
+}
+
+#index-programs {
+  color: #ff0000;
+}
+
+.bg-danger {
+  background-color: #ff0000 !important;
+}
+
+.btn-outline-danger {
+  border-color: #ff0000 !important;
+  color: #ff0000 !important;
+}
+.btn-outline-danger:hover,
+.btn-outline-danger:focus {
+  background-color: #ff0000 !important;
+  color: #fff !important;
+}
+
+.badge.bg-danger {
+  background-color: #ff0000 !important;
+}
+
+#index-programs .list-group-item {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border: none;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  transition: transform 0.2s ease;
+}
+
+#index-programs .list-group-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+#index-programs .list-group-item h5 {
+  color: #ff0000;
 }
 
 /* Animations */
@@ -1085,48 +1132,4 @@ footer {
     padding: 15px;
     font-size: 14px;
   }
-
-/* FIN PODCAST INDEX */
-
-
-
-/* PROGRAMAS INDEX */
-
-#index-programs {
-  color: #ff0000;
-}
-
-.bg-danger {
-  background-color: #ff0000 !important;
-}
-
-.btn-outline-danger {
-  border-color: #ff0000 !important;
-  color: #ff0000 !important;
-}
-.btn-outline-danger:hover,
-.btn-outline-danger:focus {
-  background-color: #ff0000 !important;
-  color: #fff !important;
-}
-
-.badge.bg-danger {
-  background-color: #ff0000 !important;
-}
-
-#index-programs .list-group-item {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  border: none;
-  border-radius: 4px;
-  margin-bottom: 10px;
-  transition: transform 0.2s ease;
-}
-
-#index-programs .list-group-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-#index-programs .list-group-item h5 {
-  color: #ff0000;
 }
