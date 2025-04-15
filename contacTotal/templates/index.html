@@ -183,8 +183,8 @@
         <div id="index-programs" class="program-section my-4">
             <div class="container">
                 <div class="row">
-                    <div class="col-12 text-center mb-4">
-                    <img src="{% static 'img/reproductor.png' %}" alt="Programas" class="img-fluid" style="max-width: 250px;">
+                    <div class="col-12 text-center mb-4 title-radio">
+                    <img src="{% static 'img/Logo CT Radio PNG.png' %}" alt="Programas" class="img-fluid" style="max-width: 250px;">
                     </div>
                 </div>
                 <div class="row">
@@ -205,7 +205,7 @@
                         <div>
                             <span class="badge bg-danger rounded-pill me-2">{{ program.duracion }}</span>
                             {% if program.url_reproducir %}
-                            <a href="{{ program.url_reproducir }}" class="btn btn-sm btn-outline-danger" target="_blank">Reproducir</a>
+                            <a href="{{ program.url_reproducir }}" class="btn btn-sm btn-outline-danger" target="_blank">Escuchar</a>
                             {% endif %}
                         </div>
                         </li>
@@ -222,7 +222,8 @@
                     <div class="col-6 col-md-3">
                         <div class="magazine-cover text-center">
                             <img src="{% static 'img/revista.jpeg' %}" alt="Magazine 1" class="img-fluid">
-                            <h4>Ediciones Anteriores</h4>
+                            <!-- <h4>Ediciones Anteriores</h4> -->
+                            <h4><a href="{% url 'revista' %}" class="nav-link">Ediciones Anteriores</a></h4>
                         </div>
                     </div>
                 </div>
