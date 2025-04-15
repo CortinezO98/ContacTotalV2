@@ -69,15 +69,6 @@ class AnnouncementAdmin(admin.ModelAdmin):
     search_fields = ('title',)
     list_filter = ('active', 'date_created',)
 
-
-@admin.register(Banner)
-class BannerAdmin(admin.ModelAdmin):
-    list_display = ('id', 'position', 'orden', 'activo', 'actualizado_en')
-    list_filter = ('position', 'activo')
-    search_fields = ('script',)
-    ordering = ('position', 'orden')
-
-
 @admin.register(Programa)
 class ProgramaAdmin(admin.ModelAdmin):
     list_display = ('titulo', 'host', 'duracion', 'url_reproducir')  

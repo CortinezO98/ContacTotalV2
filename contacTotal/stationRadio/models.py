@@ -156,46 +156,6 @@ class Anuncio(models.Model):
         return self.titulo or "Anuncio"
 
 
-class Banner(models.Model):
-    POSITION_CHOICES = (
-        ('vertical_left', 'Vertical Izquierdo'),
-        ('vertical_right', 'Vertical Derecho'),
-        ('horizontal_after_carousel', 'Horizontal - Después del Carrusel'),
-        ('horizontal_after_main_news', 'Horizontal - Después de Noticias Principal'),
-        ('horizontal_after_podcast', 'Horizontal - Después del Podcast'),
-        ('horizontal_after_programs', 'Horizontal - Después de Programas'),
-    )
-    
-    position = models.CharField(
-        max_length=30,
-        choices=POSITION_CHOICES,
-        verbose_name="Posición"
-    )
-    orden = models.PositiveIntegerField(
-        default=1,
-        verbose_name="Orden de aparición",
-        help_text="Número que define el orden de aparición (de menor a mayor)"
-    )
-    script = models.TextField(
-        verbose_name="Código del Banner",
-        help_text="Copia y pega el código HTML del banner generado"
-    )
-    activo = models.BooleanField(
-        default=True,
-        verbose_name="Activo",
-        help_text="Indica si el banner se muestra en la página"
-    )
-    creado_en = models.DateTimeField(auto_now_add=True, verbose_name="Creado el")
-    actualizado_en = models.DateTimeField(auto_now=True, verbose_name="Actualizado el")
-    
-    class Meta:
-        ordering = ['position', 'orden']
-        verbose_name = "Banner Publicitario"
-        verbose_name_plural = "Banners Publicitarios"
-    
-    def __str__(self):
-        return f"{self.get_position_display()} - Orden {self.orden}"
-
 # Vista Programa
 class Programa(models.Model):
     titulo = models.CharField(max_length=200)
