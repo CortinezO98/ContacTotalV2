@@ -1,9 +1,23 @@
 <div class="announcement-component">
-    {% for ad in announcements %}
-    <div class="mb-3">
-        <a href="{{ ad.link|default:'#' }}" target="_blank">
-            <img src="{{ ad.image.url }}" alt="{{ ad.title }}" class="img-fluid">
-        </a>
+  {% for ad in announcements %}
+    <div class="mb-4 text-center">
+
+      {% if ad.custom_script %}
+        {{ ad.custom_script|safe }}
+
+      {% elif ad.image %}
+        {% if ad.link %}
+          <a href="{{ ad.link }}" target="_blank" rel="noopener noreferrer">
+            <img src="{{ ad.image.url }}" alt="{{ ad.title|default:'Anuncio' }}" class="img-fluid rounded shadow-sm">
+          </a>
+        {% else %}
+          <img src="{{ ad.image.url }}" alt="{{ ad.title|default:'Anuncio' }}" class="img-fluid rounded shadow-sm">
+        {% endif %}
+        
+      {% else %}
+        <small class="text-muted">Anuncio no disponible</small>
+      {% endif %}
+
     </div>
-    {% endfor %}
+  {% endfor %}
 </div>

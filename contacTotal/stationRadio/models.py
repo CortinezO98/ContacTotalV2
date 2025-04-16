@@ -48,13 +48,31 @@ class PodcastVideo(models.Model):
 
 # ANUNCIO REUTILIZABLE EN VISTAS
 class Announcement(models.Model):
+    POSITION_CHOICES = [
+        ('left', 'Izquierda'),
+        ('right', 'Derecha'),
+        ('inline', 'Dentro del contenido'),
+        ('bottom', 'Final del contenido'),
+    ]
+
     title = models.CharField(max_length=200, blank=True, null=True)
     image = models.ImageField(upload_to='announcements/', blank=True, null=True)
     link = models.URLField(blank=True, null=True, help_text="Link a donde redirige el anuncio")
+    position = models.CharField(
+        max_length=10,
+        choices=POSITION_CHOICES,
+        default='right',
+        help_text="Ubicación del anuncio en la página"
+    )
+    custom_script = models.TextField(
+        blank=True,
+        null=True,
+        help_text="Código HTML o script del anuncio (tendrá prioridad sobre la imagen si se define)"
+    )
     date_created = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=True)
 
-    def _str_(self):
+    def __str__(self):
         return self.title or f"Anuncio {self.id}"
 
 

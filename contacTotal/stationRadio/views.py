@@ -52,8 +52,24 @@ def IndexView(request):
 
 
 def noticia_detalle(request, slug):
+
     news_item = MainNews.objects.filter(slug=slug).first() or get_object_or_404(CarouselNews, slug=slug)
-    return render(request, 'noticia_detalle.html', {'news_item': news_item})
+
+    left_ads = Announcement.objects.filter(active=True, position='left')[:2]
+    right_ads = Announcement.objects.filter(active=True, position='right')[:2]
+    inline_ads = Announcement.objects.filter(active=True, position='inline')[:1]
+    bottom_ads = Announcement.objects.filter(active=True, position='bottom')[:1]
+
+    context = {
+        'news_item': news_item,
+        'left_ads': left_ads,
+        'right_ads': right_ads,
+        'inline_ads': inline_ads,
+        'bottom_ads': bottom_ads,
+        'logo_type': 'noticia',  
+    }
+
+    return render(request, 'noticia_detalle.html', context)
 
 
 def revista(request):
@@ -148,10 +164,6 @@ def podcast_detail(request, slug):
 
 
 
-def radio(request):
-    return render(request, 'radio.html')
-
-
 def quienesSomos(request):
     left_ads = Announcement.objects.filter(active=True)[:2]
     right_ads = Announcement.objects.filter(active=True)[2:4]
@@ -182,10 +194,6 @@ def programacion(request):
         'logo_type': 'programacion'
     }
     return render(request, 'programacion.html', context)
-
-
-def tienda(request):
-    return render(request, 'tienda.html')
 
 
 

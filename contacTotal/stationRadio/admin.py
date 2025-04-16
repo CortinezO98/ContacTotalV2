@@ -1,5 +1,6 @@
 from django.contrib import admin
 from import_export.admin import ExportMixin
+from django.utils.html import format_html
 from import_export import resources
 from .models import *
 
@@ -67,9 +68,35 @@ class AnuncioAdmin(admin.ModelAdmin):
 
 @admin.register(Announcement)
 class AnnouncementAdmin(admin.ModelAdmin):
-    list_display = ('title', 'date_created', 'active')
+    list_display = ('id', 'title', 'position', 'active', 'image_preview', 'script_preview', 'date_created')
+    list_filter = ('active', 'position', 'date_created')
     search_fields = ('title',)
-    list_filter = ('active', 'date_created',)
+    readonly_fields = ('image_preview', 'script_preview')
+    actions = ['activar_anuncios', 'desactivar_anuncios']
+
+    def image_preview(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" width="100" style="border-radius:6px;" />', obj.image.url)
+        return "—"
+    image_preview.short_description = "Vista previa imagen"
+
+    def script_preview(self, obj):
+        if obj.custom_script:
+            content = (obj.custom_script[:100] + '...') if len(obj.custom_script) > 100 else obj.custom_script
+            return format_html('<code style="white-space:pre-wrap; font-size:11px;">{}</code>', content)
+        return "—"
+    script_preview.short_description = "Vista previa script"
+
+    @admin.action(description="✅ Activar anuncios seleccionados")
+    def activar_anuncios(self, request, queryset):
+        updated = queryset.update(active=True)
+        self.message_user(request, f"{updated} anuncio(s) activado(s) correctamente.")
+
+    @admin.action(description="🚫 Desactivar anuncios seleccionados")
+    def desactivar_anuncios(self, request, queryset):
+        updated = queryset.update(active=False)
+        self.message_user(request, f"{updated} anuncio(s) desactivado(s) correctamente.")
+
 
 
 @admin.register(Banner)
@@ -122,3 +149,4 @@ class PublicidadContactoAdmin(ExportMixin, admin.ModelAdmin):
     list_display = ('nombre', 'empresa', 'email', 'telefono', 'fecha_envio')
     search_fields = ('nombre', 'empresa', 'email')
     list_filter = ('fecha_envio',)
+
