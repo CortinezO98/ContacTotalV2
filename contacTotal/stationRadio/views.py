@@ -83,8 +83,8 @@ def revista(request):
     except EmptyPage:
         page_obj = paginator.get_page(paginator.num_pages)
     
-    left_ads = Announcement.objects.filter(active=True)[:2]
-    right_ads = Announcement.objects.filter(active=True)[2:4]
+    left_ads  = Announcement.objects.filter(active=True, position='left')[:2]
+    right_ads = Announcement.objects.filter(active=True, position='right')[:2]
     
     context = {
         'page_obj': page_obj,
@@ -115,8 +115,8 @@ def programas(request):
     except EmptyPage:
         page_obj = paginator.get_page(paginator.num_pages)
     
-    left_ads = Announcement.objects.filter(active=True)[:2]
-    right_ads = Announcement.objects.filter(active=True)[2:4]
+    left_ads  = Announcement.objects.filter(active=True, position='left')[:2]
+    right_ads = Announcement.objects.filter(active=True, position='right')[:2]
     
     context = {
         'page_obj': page_obj,
@@ -135,8 +135,8 @@ def podcast(request):
     else:
         sections = PodcastSection.objects.all().order_by('-date_created')
     
-    left_ads = Announcement.objects.filter(active=True)[:2]
-    right_ads = Announcement.objects.filter(active=True)[2:4]
+    left_ads  = Announcement.objects.filter(active=True, position='left')[:2]
+    right_ads = Announcement.objects.filter(active=True, position='right')[:2]
 
     context = {
         'featured_section': featured_section,
@@ -165,8 +165,8 @@ def podcast_detail(request, slug):
 
 
 def quienesSomos(request):
-    left_ads = Announcement.objects.filter(active=True)[:2]
-    right_ads = Announcement.objects.filter(active=True)[2:4]
+    left_ads  = Announcement.objects.filter(active=True, position='left')[:2]
+    right_ads = Announcement.objects.filter(active=True, position='right')[:2]
 
     context = {
         'left_ads': left_ads,
@@ -178,8 +178,8 @@ def quienesSomos(request):
 
 def programacion(request):
     programacion_list = Programacion.objects.all()
-    left_ads = Announcement.objects.filter(active=True)[:2]
-    right_ads = Announcement.objects.filter(active=True)[2:4]
+    left_ads  = Announcement.objects.filter(active=True, position='left')[:2]
+    right_ads = Announcement.objects.filter(active=True, position='right')[:2]
 
     for item in programacion_list:
         item.hora_bogota = item.get_otra_zona_horaria('America/Bogota')  
@@ -198,58 +198,71 @@ def programacion(request):
 
 
 def contacto(request):
-    left_ads = Announcement.objects.filter(active=True)[:2]
-    right_ads = Announcement.objects.filter(active=True)[2:4]
+    left_ads  = Announcement.objects.filter(active=True, position='left')[:2]
+    right_ads = Announcement.objects.filter(active=True, position='right')[:2]
+
 
     context = {
-        'left_ads': left_ads,
+        'left_ads':  left_ads,
         'right_ads': right_ads,
-        'logo_type': 'contacto'
+        'logo_type': 'contacto',
     }
 
     status = request.GET.get('status')
-    msg = request.GET.get('msg')
+    msg    = request.GET.get('msg')
     if status:
         context.update({
-            'status': status,
+            'status':    status,
             'swal_title': "Éxito" if status == "success" else "Error",
-            'msg': urllib.parse.unquote(msg) if msg else "",
+            'msg':        urllib.parse.unquote(msg) if msg else "",
         })
 
     if request.method == 'POST':
-        nombre = request.POST.get('nombre', '').strip()
+        nombre  = request.POST.get('nombre', '').strip()
         telefono = request.POST.get('telefono', '').strip()
-        email = request.POST.get('email', '').strip()
-        mensaje = request.POST.get('mensaje', '').strip()
-        
+        email    = request.POST.get('email', '').strip()
+        mensaje  = request.POST.get('mensaje', '').strip()
+
+
         context.update({
-            'nombre': nombre,
+            'nombre':  nombre,
             'telefono': telefono,
-            'email': email,
-            'mensaje': mensaje,
+            'email':    email,
+            'mensaje':  mensaje,
         })
 
         if not nombre or not telefono or not email:
             error_msg = urllib.parse.quote("Por favor completa todos los campos obligatorios.")
             return HttpResponseRedirect(f"{reverse('contacto')}?status=error&msg={error_msg}")
 
+        ContactMessage.objects.create(
+            nombre=nombre,
+            telefono=telefono,
+            email=email,
+            mensaje=mensaje
+        )
+
         html_contenido = f"""
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 30px; background-color: #ffffff; border: 1px solid #ddd; border-radius: 10px;">
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 30px;
+                    background-color: #ffffff; border: 1px solid #ddd; border-radius: 10px;">
             <div style="text-align: center;">
-                <img src="https://contactototalmedia.com/img/Logo%20CT%20Media%20PNG.png" alt="Logo Contacto Total" style="max-width: 150px; margin-bottom: 20px;">
+                <img src="https://contactototalmedia.com/img/Logo%20CT%20Media%20PNG.png"
+                     alt="Logo Contacto Total" style="max-width: 150px; margin-bottom: 20px;">
                 <h2 style="color: #ff0000; margin-bottom: 5px;">📬 Mensaje de Contacto</h2>
                 <p style="margin-top: 0; color: #ff0000;">Revista Contacto Total</p>
                 <hr style="margin: 20px 0;">
             </div>
             <h4 style="color: #333;">📌 Detalles del remitente</h4>
             <table style="width: 100%; font-size: 15px;">
-                <tr><td style="padding: 8px 0;"><strong>👤 Nombre:</strong></td><td>{nombre}</td></tr>
-                <tr><td style="padding: 8px 0;"><strong>📞 Teléfono:</strong></td><td>{telefono}</td></tr>
-                <tr><td style="padding: 8px 0;"><strong>📧 Correo:</strong></td><td>{email}</td></tr>
+                <tr><td><strong>👤 Nombre:</strong></td><td>{nombre}</td></tr>
+                <tr><td><strong>📞 Teléfono:</strong></td><td>{telefono}</td></tr>
+                <tr><td><strong>📧 Correo:</strong></td><td>{email}</td></tr>
             </table>
             <hr style="margin: 20px 0;">
             <h4 style="color: #333;">📝 Mensaje</h4>
-            <p style="font-size: 15px; line-height: 1.6; color: #444;">{mensaje or "Sin mensaje adicional."}</p>
+            <p style="font-size: 15px; line-height: 1.6; color: #444;">
+                {mensaje or "Sin mensaje adicional."}
+            </p>
             <hr style="margin: 30px 0;">
             <p style="font-size: 12px; color: #888; text-align: center;">
                 Este mensaje fue enviado desde el formulario de contacto de Revista Contacto Total.
@@ -278,10 +291,9 @@ def contacto(request):
     return render(request, 'contacto.html', context)
 
 
-
 def anunciate(request):
-    left_ads = Announcement.objects.filter(active=True)[:2]
-    right_ads = Announcement.objects.filter(active=True)[2:4]
+    left_ads  = Announcement.objects.filter(active=True, position='left')[:2]
+    right_ads = Announcement.objects.filter(active=True, position='right')[:2]
 
     context = {
         'left_ads': left_ads,

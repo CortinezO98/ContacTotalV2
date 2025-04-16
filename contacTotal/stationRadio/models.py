@@ -4,7 +4,7 @@ import pytz
 from datetime import datetime
 from django.utils.text import slugify
 from django.utils import timezone
-
+from django.core.validators import FileExtensionValidator
 
 
 # Podcast
@@ -184,25 +184,10 @@ class Banner(models.Model):
         ('horizontal_after_programs', 'Horizontal - Después de Programas'),
     )
     
-    position = models.CharField(
-        max_length=30,
-        choices=POSITION_CHOICES,
-        verbose_name="Posición"
-    )
-    orden = models.PositiveIntegerField(
-        default=1,
-        verbose_name="Orden de aparición",
-        help_text="Número que define el orden de aparición (de menor a mayor)"
-    )
-    script = models.TextField(
-        verbose_name="Código del Banner",
-        help_text="Copia y pega el código HTML del banner generado"
-    )
-    activo = models.BooleanField(
-        default=True,
-        verbose_name="Activo",
-        help_text="Indica si el banner se muestra en la página"
-    )
+    position = models.CharField(max_length=30,choices=POSITION_CHOICES,verbose_name="Posición")
+    orden = models.PositiveIntegerField(default=1,verbose_name="Orden de aparición",help_text="Número que define el orden de aparición (de menor a mayor)")
+    script = models.TextField(verbose_name="Código del Banner",help_text="Copia y pega el código HTML del banner generado")
+    activo = models.BooleanField(default=True,verbose_name="Activo",help_text="Indica si el banner se muestra en la página")
     creado_en = models.DateTimeField(auto_now_add=True, verbose_name="Creado el")
     actualizado_en = models.DateTimeField(auto_now=True, verbose_name="Actualizado el")
     
@@ -217,12 +202,13 @@ class Banner(models.Model):
 # Vista Programa
 class Programa(models.Model):
     titulo = models.CharField(max_length=200)
-    host = models.CharField(max_length=200, blank=True, null=True)
-    duracion = models.CharField(max_length=10, blank=True, null=True, help_text="Ejemplo: 4:47")
-    url_reproducir = models.URLField(blank=True, null=True)
+    host = models.CharField(max_length=200,blank=True,null=True)
+    duracion = models.CharField(max_length=10,blank=True,null=True,help_text="Ejemplo: 4:47")
+    url_reproducir = models.URLField(blank=True,null=True,help_text="URL externa de reproducción (opcional)")
+    audio = models.FileField(upload_to='programas/audios/',blank=True,null=True,validators=[FileExtensionValidator(allowed_extensions=['mp3', 'wav', 'ogg', 'm4a'])],help_text="Sube un archivo de audio (.mp3, .wav, .ogg, .m4a)")
     fecha_creacion = models.DateField(auto_now_add=True)
 
-    def _str_(self):
+    def __str__(self):
         return self.titulo
 
 
@@ -276,3 +262,24 @@ class PublicidadContacto(models.Model):
 
     def __str__(self):
         return f"{self.nombre} - {self.empresa}"
+    
+
+
+class ContactMessage(models.Model):
+    """
+    Modelo para almacenar los mensajes enviados desde el formulario de contacto.
+    """
+    nombre = models.CharField("Nombre", max_length=100)
+    telefono = models.CharField("Teléfono", max_length=20)
+    email = models.EmailField("Correo electrónico")
+    mensaje = models.TextField("Mensaje", blank=True)
+    date_created = models.DateTimeField("Fecha de envío", auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Mensaje de Contacto"
+        verbose_name_plural = "Mensajes de Contacto"
+        ordering = ['-date_created']
+
+    def __str__(self):
+        return f"{self.nombre} - {self.email} ({self.date_created:%Y-%m-%d %H:%M})"
+

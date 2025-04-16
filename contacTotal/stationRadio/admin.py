@@ -2,7 +2,14 @@ from django.contrib import admin
 from import_export.admin import ExportMixin
 from django.utils.html import format_html
 from import_export import resources
+from django.utils.translation import gettext_lazy as _
+import os
+
 from .models import *
+
+admin.site.site_header = "Administración Revista Contacto Total"
+admin.site.site_title = "Panel de Contacto Total"
+admin.site.index_title = "Bienvenido al Panel de Administración"
 
 class PodcastAudioInline(admin.TabularInline):
     model = PodcastAudio
@@ -12,59 +19,62 @@ class PodcastVideoInline(admin.TabularInline):
     model = PodcastVideo
     extra = 1
 
-
-
 @admin.register(EdicionRevista)
 class EdicionRevistaAdmin(admin.ModelAdmin):
-    list_display = ('titulo', 'fecha_publicacion', 'url')  
-    search_fields = ('titulo', 'descripcion')  
+    list_display = ('titulo', 'fecha_publicacion', 'url')
+    search_fields = ('titulo', 'descripcion')
     list_filter = ('fecha_publicacion',)
-    
-
+    list_per_page = 25
 
 @admin.register(PodcastSection)
 class PodcastSectionAdmin(admin.ModelAdmin):
     list_display = ('title', 'date_created')
     readonly_fields = ('slug',)
+    search_fields = ('title',)
     inlines = [PodcastAudioInline, PodcastVideoInline]
+    list_per_page = 25
 
 @admin.register(PodcastAudio)
 class PodcastAudioAdmin(admin.ModelAdmin):
     list_display = ('title', 'podcast_section', 'date_created')
     list_filter = ('podcast_section',)
     search_fields = ('title',)
+    autocomplete_fields = ['podcast_section']
+    list_per_page = 25
 
 @admin.register(PodcastVideo)
 class PodcastVideoAdmin(admin.ModelAdmin):
     list_display = ('title', 'podcast_section', 'date_created')
     list_filter = ('podcast_section',)
     search_fields = ('title',)
-
+    autocomplete_fields = ['podcast_section']
+    list_per_page = 25
 
 @admin.register(MainVideo)
 class MainVideoAdmin(admin.ModelAdmin):
     list_display = ('title',)
     search_fields = ('title',)
-
+    list_per_page = 25
 
 @admin.register(CarouselNews)
 class CarouselNewsAdmin(admin.ModelAdmin):
     list_display = ('title', 'publication_date', 'author')
     search_fields = ('title', 'description', 'author')
     list_filter = ('publication_date',)
+    list_per_page = 25
 
 @admin.register(MainNews)
 class MainNewsAdmin(admin.ModelAdmin):
     list_display = ('title', 'publication_date', 'author')
     search_fields = ('title', 'short_description', 'author')
     list_filter = ('publication_date',)
-
+    list_per_page = 25
 
 @admin.register(Anuncio)
 class AnuncioAdmin(admin.ModelAdmin):
     list_display = ('titulo',)
     search_fields = ('titulo',)
-
+    list_per_page = 25
 
 @admin.register(Announcement)
 class AnnouncementAdmin(admin.ModelAdmin):
@@ -73,6 +83,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
     search_fields = ('title',)
     readonly_fields = ('image_preview', 'script_preview')
     actions = ['activar_anuncios', 'desactivar_anuncios']
+    list_per_page = 25
 
     def image_preview(self, obj):
         if obj.image:
@@ -97,26 +108,49 @@ class AnnouncementAdmin(admin.ModelAdmin):
         updated = queryset.update(active=False)
         self.message_user(request, f"{updated} anuncio(s) desactivado(s) correctamente.")
 
-
-
 @admin.register(Banner)
 class BannerAdmin(admin.ModelAdmin):
     list_display = ('id', 'position', 'orden', 'activo', 'actualizado_en')
     list_filter = ('position', 'activo')
     search_fields = ('script',)
     ordering = ('position', 'orden')
-
+    list_per_page = 25
 
 @admin.register(Programa)
 class ProgramaAdmin(admin.ModelAdmin):
-    list_display = ('titulo', 'host', 'duracion', 'url_reproducir')  
-    search_fields = ('titulo', 'host')  
-    list_filter = ('host',)  
+    list_display = (
+        'titulo', 'host', 'duracion', 'audio_file_player', 'fecha_creacion'
+    )
+    search_fields = ('titulo', 'host')
+    list_filter = ('host', 'fecha_creacion')
+    readonly_fields = ('fecha_creacion',)
+    list_per_page = 25
 
+    fieldsets = (
+        ('Información del programa', {
+            'fields': (
+                'titulo', 'host', 'duracion', 'url_reproducir', 'audio',
+            ),
+        }),
+        ('Metadatos', {
+            'fields': ('fecha_creacion',),
+            'classes': ('collapse',),
+        }),
+    )
+
+    def audio_file_player(self, obj):
+        if obj.audio:
+            return format_html(
+                '<audio controls><source src="{}" type="audio/mpeg">Tu navegador no soporta audio.</audio>',
+                obj.audio.url
+            )
+        return "-"
+    audio_file_player.short_description = 'Reproductor de audio'
 
 @admin.register(Programacion)
 class ProgramacionAdmin(admin.ModelAdmin):
     list_display = ('dia', 'programa', 'hora', 'zona_horaria_usuario', 'hora_mexico', 'hora_argentina', 'hora_eeuu', 'hora_bogota')
+    list_per_page = 25
 
     def hora_mexico(self, obj):
         return obj.get_otra_zona_horaria('America/Mexico_City')
@@ -132,11 +166,7 @@ class ProgramacionAdmin(admin.ModelAdmin):
 
     def hora_eeuu(self, obj):
         return obj.get_otra_zona_horaria('America/New_York')
-    hora_eeuu.short_description = 'Hora EEUU'
-
-
-
-# Datos de Anunciate con nosotros
+    hora_eeuu.short_description = 'Hora EE.UU.'
 
 class PublicidadContactoResource(resources.ModelResource):
     class Meta:
@@ -149,4 +179,22 @@ class PublicidadContactoAdmin(ExportMixin, admin.ModelAdmin):
     list_display = ('nombre', 'empresa', 'email', 'telefono', 'fecha_envio')
     search_fields = ('nombre', 'empresa', 'email')
     list_filter = ('fecha_envio',)
+    list_per_page = 25
 
+class ContactMessageResource(resources.ModelResource):
+    class Meta:
+        model = ContactMessage
+        fields = ('id', 'nombre', 'telefono', 'email', 'mensaje', 'date_created')
+
+@admin.register(ContactMessage)
+class ContactMessageAdmin(ExportMixin, admin.ModelAdmin):
+    resource_class = ContactMessageResource
+    list_display = ('nombre', 'email', 'telefono', 'short_message', 'date_created')
+    search_fields = ('nombre', 'email', 'telefono')
+    list_filter = ('date_created',)
+    readonly_fields = ('nombre', 'email', 'telefono', 'mensaje', 'date_created')
+    list_per_page = 25
+
+    def short_message(self, obj):
+        return obj.mensaje[:50] + ('...' if len(obj.mensaje) > 50 else '')
+    short_message.short_description = 'Mensaje'
