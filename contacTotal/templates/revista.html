@@ -6,62 +6,85 @@
 {% endblock %}
 
 {% block main %}
-    <div class="container py-5">
-        <h2 class="text-center mb-4">Ediciones Anteriores</h2>
+<div class="container-fluid min-vh-100 bg-light p-3">
+    <div class="row">
+        <!-- Anuncios Izquierda -->
+        <div class="col-md-2 d-none d-md-block">
+            {% include 'base/announcement_component.html' with announcements=left_ads %}
+        </div>
 
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-            {% for edicion in page_obj %}
-            <div class="col">
-                <div class="card text-black h-100">
-                    <img src="{{ edicion.imagen.url }}" class="card-img-top" alt="Revista Edición">
-                    <div class="card-body">
-                        <p class="text-muted mb-1">
-                            {{ edicion.fecha_publicacion|date:"d F Y" }} | {{ edicion.comentarios.count }} Comentarios
-                        </p>
-                        <p class="card-text">{{ edicion.descripcion }}</p>
-                        <a href="{{ edicion.url }}" class="btn btn-primary">Leer más</a>
+        <!-- Contenido Principal -->
+        <div class="col-12 col-md-8">
+            <h2 class="text-center mb-4">Ediciones Anteriores</h2>
+            
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                {% for edicion in page_obj %}
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <img src="{{ edicion.imagen.url }}" 
+                             class="card-img-top" 
+                             alt="Revista Edición"
+                             style="object-fit: cover; height: 200px;">
+                        <div class="card-body">
+                            <p class="text-muted mb-1">
+                                {{ edicion.fecha_publicacion|date:"d F Y" }} | {{ edicion.comentarios.count }} Comentarios
+                            </p>
+                            <p class="card-text">{{ edicion.descripcion }}</p>
+                        </div>
+                        <div class="card-footer bg-transparent border-top-0 text-center">
+                            <a href="{{ edicion.url }}" class="btn btn-primary">Leer más</a>
+                        </div>
                     </div>
                 </div>
+                {% empty %}
+                <div class="col-12">
+                    <p class="text-center">No hay ediciones disponibles.</p>
+                </div>
+                {% endfor %}
             </div>
-            {% empty %}
-                <p>No hay ediciones disponibles.</p>
-            {% endfor %}
-        </div>
-
-        <div class="d-flex justify-content-center mt-4">
-            <nav>
-                <ul class="pagination">
-                    {% if page_obj.has_previous %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
-                        </li>
-                    {% else %}
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#">Anterior</a>
-                        </li>
-                    {% endif %}
-                    {% for num in page_obj.paginator.page_range %}
-                        {% if page_obj.number == num %}
-                            <li class="page-item active" aria-current="page">
-                                <a class="page-link" href="#">{{ num }}</a>
+            
+            <!-- Paginación -->
+            <div class="d-flex justify-content-center mt-4">
+                <nav>
+                    <ul class="pagination">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
                             </li>
                         {% else %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            <li class="page-item disabled">
+                                <span class="page-link">Anterior</span>
                             </li>
                         {% endif %}
-                    {% endfor %}
-                    {% if page_obj.has_next %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Siguiente</a>
-                        </li>
-                    {% else %}
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#">Siguiente</a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </nav>
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <li class="page-item active" aria-current="page">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                            {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">Siguiente</span>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Anuncios Derecha-->
+        <div class="col-md-2 d-none d-md-block">
+            {% include 'base/announcement_component.html' with announcements=right_ads %}
         </div>
     </div>
+</div>
 {% endblock %}

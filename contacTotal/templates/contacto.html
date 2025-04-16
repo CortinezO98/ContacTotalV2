@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block main %}
-<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-light">
+<div class="container-fluid min-vh-100 d-flex align-items-center py-2 bg-light">
   <div class="container">
     <div class="row justify-content-center align-items-start g-4">
 
@@ -16,8 +16,8 @@
       </div>
 
       <!-- Formulario principal -->
-      <div class="col-12 col-lg-12">
-        <div class="card p-4 shadow-sm border-0">
+      <div class="col-12 col-lg-8">
+        <div class="card shadow-sm border-0 p-4">
           <h2 class="fw-bold text-center mb-3">Contáctanos <span class="text-danger">/ Contact us</span></h2>
           <form method="POST" action="{% url 'contacto' %}">
             {% csrf_token %}

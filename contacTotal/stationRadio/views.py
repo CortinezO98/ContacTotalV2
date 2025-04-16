@@ -77,7 +77,8 @@ def revista(request):
         'logo_type': 'revista'
     }
     
-    return render(request, 'revista.html', {'page_obj': page_obj})
+    return render(request, 'revista.html', context)
+
 
 
 
@@ -152,11 +153,21 @@ def radio(request):
 
 
 def quienesSomos(request):
-    return render(request, 'quienesSomos.html', {'logo_type': 'quienes_somos'})
+    left_ads = Announcement.objects.filter(active=True)[:2]
+    right_ads = Announcement.objects.filter(active=True)[2:4]
+
+    context = {
+        'left_ads': left_ads,
+        'right_ads': right_ads,
+        'logo_type': 'quienes_somos'
+    }
+    return render(request, 'quienesSomos.html', context)
 
 
 def programacion(request):
     programacion_list = Programacion.objects.all()
+    left_ads = Announcement.objects.filter(active=True)[:2]
+    right_ads = Announcement.objects.filter(active=True)[2:4]
 
     for item in programacion_list:
         item.hora_bogota = item.get_otra_zona_horaria('America/Bogota')  
@@ -166,6 +177,8 @@ def programacion(request):
 
     context = {
         'programacion': programacion_list,
+        'left_ads': left_ads,
+        'right_ads': right_ads,
         'logo_type': 'programacion'
     }
     return render(request, 'programacion.html', context)
@@ -353,3 +366,4 @@ def anunciate(request):
             })
 
     return render(request, 'anunciate.html', context)
+
