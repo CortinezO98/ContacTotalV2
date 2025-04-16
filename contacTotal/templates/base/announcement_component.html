@@ -1,23 +1,23 @@
 <div class="announcement-component">
-  {% for ad in announcements %}
-    <div class="mb-4 text-center">
-
-      {% if ad.custom_script %}
-        {{ ad.custom_script|safe }}
-
-      {% elif ad.image %}
-        {% if ad.link %}
-          <a href="{{ ad.link }}" target="_blank" rel="noopener noreferrer">
+  {% if announcements %}
+    {% for ad in announcements %}
+      <div class="mb-4 text-center">
+        {% if ad.custom_script %}
+          {{ ad.custom_script|safe }}
+        {% elif ad.image %}
+          {% if ad.link %}
+            <a href="{{ ad.link }}" target="_blank" rel="noopener noreferrer">
+              <img src="{{ ad.image.url }}" alt="{{ ad.title|default:'Anuncio' }}" class="img-fluid rounded shadow-sm">
+            </a>
+          {% else %}
             <img src="{{ ad.image.url }}" alt="{{ ad.title|default:'Anuncio' }}" class="img-fluid rounded shadow-sm">
-          </a>
+          {% endif %}
         {% else %}
-          <img src="{{ ad.image.url }}" alt="{{ ad.title|default:'Anuncio' }}" class="img-fluid rounded shadow-sm">
+          <small class="text-muted">Anuncio no disponible</small>
         {% endif %}
-        
-      {% else %}
-        <small class="text-muted">Anuncio no disponible</small>
-      {% endif %}
-
-    </div>
-  {% endfor %}
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="text-center text-muted small">No hay anuncios disponibles.</div>
+  {% endif %}
 </div>
