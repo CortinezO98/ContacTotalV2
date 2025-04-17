@@ -28,6 +28,7 @@ class PodcastAudio(models.Model):
     podcast_section = models.ForeignKey(PodcastSection, related_name='audios', on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     audio_file = models.FileField(upload_to='podcasts_audio/')
+    audio_link = models.URLField(blank=True, null=True, help_text="Enlace embed de YouTube, por ejemplo")
     duration = models.CharField(max_length=20, blank=True, null=True)
     date_created = models.DateField(auto_now_add=True)
     

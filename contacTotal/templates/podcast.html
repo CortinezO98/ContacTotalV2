@@ -11,12 +11,12 @@
         <div class="col-md-2 d-none d-md-block">
             {% include 'base/announcement_component.html' with announcements=left_ads %}
         </div>
-        <!-- Sección Principal y Carrusel -->
-        <div class="col-12 col-lg-8">
+        <!-- Sección Principal -->
+        <div class="col-md-8">
             {% if featured_section %}
             <div class="text-center mb-4 p-3 border rounded">
                 <h1 class="display-4 fw-bold">{{ featured_section.title }}</h1>
-                <p>{{ featured_section.description|truncatechars:100 }}</p>
+                <p>{{ featured_section.description }}</p>
                 {% if featured_section.cover_image %}
                     <img src="{{ featured_section.cover_image.url }}" alt="{{ featured_section.title }}" class="img-fluid rounded" style="max-width:300px;">
                 {% else %}

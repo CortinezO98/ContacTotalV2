@@ -150,13 +150,31 @@ def podcast(request):
 
 def podcast_detail(request, slug):
     section = get_object_or_404(PodcastSection, slug=slug)
-    audios = section.audios.all().order_by('-date_created')
-    videos = section.videos.all().order_by('-date_created')
+    all_audios = section.audios.order_by('-date_created')
+    all_videos = section.videos.order_by('-date_created')
+    paginator_audio = Paginator(all_audios, 12)
+    page_audio = request.GET.get('audio_page', 1)
+    try:
+        audios = paginator_audio.page(page_audio)
+    except (PageNotAnInteger, EmptyPage):
+        audios = paginator_audio.page(1)
+        
+    paginator_video = Paginator(all_videos, 12)
+    page_video = request.GET.get('video_page', 1)
+    try:
+        videos = paginator_video.page(page_video)
+    except (PageNotAnInteger, EmptyPage):
+        videos = paginator_video.page(1)
 
     context = {
-        'section': section,
-        'audios': audios,
-        'videos': videos,
+        'section':       section,
+        'audios':        audios,
+        'videos':        videos,
+        'audio_page':    audios.number,
+        'video_page':    videos.number,
+        'left_ads':      Announcement.objects.filter(active=True, position='left')[:2],
+        'right_ads':     Announcement.objects.filter(active=True, position='right')[:2],
+        'inline_ads':    Announcement.objects.filter(active=True, position='inline'),
     }
     return render(request, 'podcast_detail.html', context)
 
