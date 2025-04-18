@@ -29,7 +29,9 @@
                                         <img src="{{ noticia.image.url }}" class="card-img-top" alt="{{ noticia.title }}">
                                     </a>
                                     <div class="card-body">
-                                        <h5 class="card-title">{{ noticia.title }}</h5>
+                                        <a href="{% url 'noticia_detalle' noticia.slug %}">
+                                            <h5 class="card-title">{{ noticia.title }}</h5>
+                                        </a>
                                         <p class="card-text">
                                         {{ noticia.publication_date|date:"d F Y" }} - {{ noticia.author }}
                                         </p>

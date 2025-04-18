@@ -43,7 +43,7 @@
           {% if news_item.short_description %}
             <p class="lead">{{ news_item.short_description }}</p>
           {% elif news_item.description %}
-            <p style="text-align: justify;">{{ news_item.description }}</p>
+            <p style="white-space: pre-wrap; text-align: justify;">{{ news_item.description }}</p>
           {% else %}
             <p>No hay descripción disponible.</p>
           {% endif %}
