@@ -42,6 +42,7 @@ jsonschema-specifications==2024.10.1
 markdown-it-py==3.0.0
 MarkupSafe==3.0.2
 mdurl==0.1.2
+mutagen==1.47.0
 mysql==0.0.3
 mysqlclient==2.2.7
 narwhals==1.21.1

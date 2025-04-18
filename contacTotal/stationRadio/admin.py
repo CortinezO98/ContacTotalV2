@@ -4,7 +4,7 @@ from django.utils.html import format_html
 from import_export import resources
 from django.utils.translation import gettext_lazy as _
 import os
-
+import mutagen
 from .models import *
 
 admin.site.site_header = "Administración Revista Contacto Total"
@@ -19,35 +19,70 @@ class PodcastVideoInline(admin.TabularInline):
     model = PodcastVideo
     extra = 1
 
+@admin.register(PodcastSection)
+class PodcastSectionAdmin(admin.ModelAdmin):
+    list_display = ('title', 'featured', 'date_created', 'cover_image_preview')
+    readonly_fields = ('slug', 'date_created', 'cover_image_preview')
+    search_fields = ('title',)
+    list_per_page = 25
+    inlines = [PodcastAudioInline, PodcastVideoInline]
+
+    fieldsets = (
+        ('Información general', {
+            'fields': ('title', 'description', 'cover_image', 'cover_image_preview', 'featured')
+        }),
+        ('Información automática', {
+            'fields': ('slug', 'date_created'),
+            'classes': ('collapse',)
+        }),
+    )
+
+    def cover_image_preview(self, obj):
+        if obj.cover_image:
+            return format_html('<img src="{}" width="120" style="border-radius:6px;">', obj.cover_image.url)
+        return "—"
+    cover_image_preview.short_description = "Vista previa de portada"
+
+@admin.register(PodcastAudio)
+class PodcastAudioAdmin(admin.ModelAdmin):
+    list_display = ('title', 'podcast_section', 'duration', 'date_created')
+    list_filter = ('podcast_section',)
+    search_fields = ('title',)
+    autocomplete_fields = ['podcast_section']
+    list_per_page = 25
+
+    def save_model(self, request, obj, form, change):
+        if obj.audio_file:
+            try:
+                audio = mutagen.File(obj.audio_file, easy=True)
+                if audio and audio.info:
+                    duration_sec = int(audio.info.length)
+                    minutes = duration_sec // 60
+                    seconds = duration_sec % 60
+                    obj.duration = f"{minutes}:{seconds:02}"
+            except Exception as e:
+                print(f"Error al calcular duración del audio: {e}")
+        super().save_model(request, obj, form, change)
+
+@admin.register(PodcastVideo)
+class PodcastVideoAdmin(admin.ModelAdmin):
+    list_display = ('title', 'podcast_section', 'date_created', 'cover_image_preview')
+    list_filter = ('podcast_section',)
+    search_fields = ('title',)
+    autocomplete_fields = ['podcast_section']
+    list_per_page = 25
+
+    def cover_image_preview(self, obj):
+        if obj.cover_image:
+            return format_html('<img src="{}" width="120" style="border-radius:6px;">', obj.cover_image.url)
+        return "—"
+    cover_image_preview.short_description = "Vista previa de portada"
+
 @admin.register(EdicionRevista)
 class EdicionRevistaAdmin(admin.ModelAdmin):
     list_display = ('titulo', 'fecha_publicacion', 'url')
     search_fields = ('titulo', 'descripcion')
     list_filter = ('fecha_publicacion',)
-    list_per_page = 25
-
-@admin.register(PodcastSection)
-class PodcastSectionAdmin(admin.ModelAdmin):
-    list_display = ('title', 'date_created')
-    readonly_fields = ('slug',)
-    search_fields = ('title',)
-    inlines = [PodcastAudioInline, PodcastVideoInline]
-    list_per_page = 25
-
-@admin.register(PodcastAudio)
-class PodcastAudioAdmin(admin.ModelAdmin):
-    list_display = ('title', 'podcast_section', 'date_created')
-    list_filter = ('podcast_section',)
-    search_fields = ('title',)
-    autocomplete_fields = ['podcast_section']
-    list_per_page = 25
-
-@admin.register(PodcastVideo)
-class PodcastVideoAdmin(admin.ModelAdmin):
-    list_display = ('title', 'podcast_section', 'date_created')
-    list_filter = ('podcast_section',)
-    search_fields = ('title',)
-    autocomplete_fields = ['podcast_section']
     list_per_page = 25
 
 @admin.register(MainVideo)

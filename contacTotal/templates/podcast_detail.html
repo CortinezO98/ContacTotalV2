@@ -2,103 +2,214 @@
 {% load static %}
 
 {% block header %}
-    {% include 'base/headerCompact.html' %}
+  {% include 'base/headerCompact.html' %}
 {% endblock %}
 
 {% block main %}
-<div class="container my-4">
-    <div class="row align-items-center">
-        <div class="col-md-8">
-            <h1 class="mb-3">{{ section.title }}</h1>
-            <p>{{ section.description }}</p>
-
-            <!-- Sección de plataformas para escuchar -->
-            <div class="mt-3">
-                <h5>Escúchalo en:</h5>
-                <ul class="list-inline">
-                    <li class="list-inline-item">
-                        <a href="https://open.spotify.com/" target="_blank">
-                            <img src="{% static 'img/spotify-icon.png' %}" alt="Spotify" style="max-width: 40px;">
-                        </a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="https://podcasts.apple.com/" target="_blank">
-                            <img src="{% static 'img/apple-podcasts-icon.png' %}" alt="Apple Podcasts" style="max-width: 40px;">
-                        </a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="https://podcasts.google.com/" target="_blank">
-                            <img src="{% static 'img/google-podcasts-icon.png' %}" alt="Google Podcasts" style="max-width: 40px;">
-                        </a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="https://music.amazon.com/podcasts" target="_blank">
-                            <img src="{% static 'img/amazon-music-icon.png' %}" alt="Amazon Music" style="max-width: 40px;">
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="col-md-4 text-end">
-            {% if section.cover_image %}
-                <img src="{{ section.cover_image.url }}" class="rounded-circle img-fluid" alt="{{ section.title }}">
-            {% else %}
-                <img src="{% static 'img/default-podcast.png' %}" class="rounded-circle img-fluid" alt="{{ section.title }}">
-            {% endif %}
-        </div>
+<div class="container my-5">
+  <!--Encabezado de Podcast -->
+  <div class="row align-items-center mb-5">
+    <div class="col-12 col-lg-8">
+      <h1 class="fw-bold">{{ section.title }}</h1>
+      <p class="text-muted" style="text-align: justify;">{{ section.description }}</p>
     </div>
-
-    <!-- Sección de episodios de Audio -->
-    {% if audios %}
-    <div class="mt-5">
-        <h4>Episodios de Audio</h4>
-        <div class="list-group">
-            {% for audio in audios %}
-            <div class="list-group-item">
-                <div class="d-flex justify-content-between align-items-center flex-wrap">
-                    <div class="mb-2 mb-md-0">
-                        <h5 class="mb-1">{{ audio.title }}</h5>
-                        {% if audio.duration %}
-                        <small>Duración: {{ audio.duration }}</small>
-                        {% endif %}
-                    </div>
-                    <div>
-                        <audio controls style="max-width: 300px;">
-                            <source src="{{ audio.audio_file.url }}" type="audio/mpeg">
-                            Tu navegador no soporta la reproducción de audio.
-                        </audio>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
+    <div class="col-12 col-lg-4 text-lg-end">
+      {% if section.cover_image %}
+        <img
+          src="{{ section.cover_image.url }}"
+          alt="{{ section.title }}"
+          class="rounded-circle img-fluid"
+          style="width: 150px; height: 150px; object-fit: cover;"
+        >
+      {% else %}
+        <img
+          src="{% static 'img/default-podcast.png' %}"
+          alt="{{ section.title }}"
+          class="rounded-circle img-fluid"
+          style="width: 150px; height: 150px; object-fit: cover;"
+        >
+      {% endif %}
     </div>
-    {% endif %}
+  </div>
 
-    <!-- Sección de episodios de Video -->
-    {% if videos %}
-    <div class="mt-5">
-        <h4>Episodios de Video</h4>
-        <div class="row">
-            {% for video in videos %}
-            <div class="col-md-4 mb-3">
-                <div class="card h-100">
-                    {% if video.cover_image %}
-                    <img src="{{ video.cover_image.url }}" class="card-img-top img-fluid" alt="{{ video.title }}">
-                    {% else %}
-                    <img src="{% static 'img/default-podcast.png' %}" class="card-img-top img-fluid" alt="{{ video.title }}">
+  <!--Plataformas y Episodios -->
+  <div class="row gx-4 mb-5">
+    <aside class="col-12 col-lg-4 mb-4 mb-lg-0">
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h5 class="card-title">Sigue a este podcast en:</h5>
+          <div class="d-grid gap-3">
+            <a href="https://open.spotify.com/" target="_blank" class="btn btn-outline-secondary text-start">
+              <img src="{% static 'img/spotify.png' %}" alt="Spotify" class="me-2" style="width:30px;">
+              Spotify
+            </a>
+            <a href="https://podcasts.apple.com/" target="_blank" class="btn btn-outline-secondary text-start">
+              <img src="{% static 'img/apple.png' %}" alt="Apple Podcasts" class="me-2" style="width:30px;">
+              Apple Podcasts
+            </a>
+            <a href="https://podcasts.google.com/" target="_blank" class="btn btn-outline-secondary text-start">
+              <img src="{% static 'img/youtube.png' %}" alt="YouTube Podcasts" class="me-2" style="width:32px;">
+              YouTube
+            </a>
+            <a href="https://music.amazon.com/podcasts" target="_blank" class="btn btn-outline-secondary text-start">
+              <img src="{% static 'img/amazon.png' %}" alt="Amazon Music" class="me-2" style="width:50px;">
+              Amazon Music
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Anuncios inline -->
+      {% if inline_ads %}
+        {% include 'base/announcement_component.html' with announcements=inline_ads %}
+      {% else %}
+        <div class="card text-center shadow-sm mb-4">
+          <div class="card-body">
+            <small class="text-muted">No hay anuncios disponibles</small>
+          </div>
+        </div>
+      {% endif %}
+    </aside>
+
+    <!-- Episodios de Audio -->
+    <section class="col-12 col-lg-8">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="mb-3">Episodios de Audio</h5>
+
+          {% if audios %}
+            <div class="list-group" style="max-height: 400px; overflow-y: auto;">
+              {% for audio in audios %}
+                <div
+                  class="list-group-item d-flex flex-column flex-md-row align-items-start align-items-md-center gap-3"
+                >
+                  <audio
+                    controls class="flex-shrink-0" style="width: 100%; max-width: 300px;"
+                  >
+                    <source src="{{ audio.audio_file.url }}" type="audio/mpeg">
+                    Tu navegador no soporta audio.
+                  </audio>
+                  <div class="flex-grow-1">
+                    <div class="fw-semibold text-truncate">{{ audio.title }}</div>
+                    {% if audio.duration %}
+                      <small class="text-secondary">{{ audio.duration }}</small>
                     {% endif %}
-                    <div class="card-body">
-                        <h5 class="card-title">{{ video.title }}</h5>
-                        {% if video.video_link %}
-                        <a href="{{ video.video_link }}" target="_blank" class="btn btn-sm btn-outline-primary">Ver Video</a>
-                        {% endif %}
-                    </div>
+                  </div>
                 </div>
+              {% endfor %}
             </div>
-            {% endfor %}
+
+            <!-- Paginación Audios -->
+            <nav aria-label="Paginación audios" class="mt-5">
+              <ul class="pagination justify-content-center mb-0">
+                <li class="page-item{% if not audios.has_previous %} disabled{% endif %}">
+                  {% if audios.has_previous %}
+                    <a
+                      class="page-link"
+                      href="?audio_page={{ audios.previous_page_number }}&video_page={{ video_page }}"
+                    >Anterior</a>
+                  {% else %}
+                    <span class="page-link">Anterior</span>
+                  {% endif %}
+                </li>
+                {% for num in audios.paginator.page_range %}
+                  <li class="page-item{% if audios.number == num %} active{% endif %}">
+                    <a
+                      class="page-link"
+                      href="?audio_page={{ num }}&video_page={{ video_page }}"
+                    >{{ num }}</a>
+                  </li>
+                {% endfor %}
+                <li class="page-item{% if not audios.has_next %} disabled{% endif %}">
+                  {% if audios.has_next %}
+                    <a
+                      class="page-link"
+                      href="?audio_page={{ audios.next_page_number }}&video_page={{ video_page }}"
+                    >Siguiente</a>
+                  {% else %}
+                    <span class="page-link">Siguiente</span>
+                  {% endif %}
+                </li>
+              </ul>
+            </nav>
+          {% else %}
+            <p class="text-muted">No hay episodios disponibles.</p>
+          {% endif %}
         </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Video + Paginación -->
+  <hr class="my-5">
+  <h3 class="mb-4">{{ section.title }} – Video</h3>
+  <div class="row gx-4">
+    <div class="col-lg-2 d-none d-lg-block">
+      {% include 'base/announcement_component.html' with announcements=left_ads %}
     </div>
-    {% endif %}
+
+    <div class="col-12 col-lg-8">
+      <div class="row g-3">
+        {% for video in videos %}
+          <div class="col-6 col-md-4 col-xl-3">
+            <div class="card h-100 shadow-sm">
+              <div class="ratio ratio-16x9">
+                {% if video.video_link %}
+                  <iframe src="{{ video.video_link }}" allowfullscreen></iframe>
+                {% else %}
+                  <img
+                    src="{% static 'img/default-podcast.png' %}"
+                    class="img-fluid"
+                    alt="{{ video.title }}"
+                  >
+                {% endif %}
+              </div>
+              <div class="card-body p-2">
+                <h6 class="card-title mb-0 text-truncate">{{ video.title }}</h6>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Paginación Videos -->
+      <nav aria-label="Paginación videos" class="mt-4">
+        <ul class="pagination justify-content-center mb-0">
+          <li class="page-item{% if not videos.has_previous %} disabled{% endif %}">
+            {% if videos.has_previous %}
+              <a
+                class="page-link"
+                href="?video_page={{ videos.previous_page_number }}&audio_page={{ audio_page }}"
+              >Anterior</a>
+            {% else %}
+              <span class="page-link">Anterior</span>
+            {% endif %}
+          </li>
+          {% for num in videos.paginator.page_range %}
+            <li class="page-item{% if videos.number == num %} active{% endif %}">
+              <a
+                class="page-link"
+                href="?video_page={{ num }}&audio_page={{ audio_page }}"
+              >{{ num }}</a>
+            </li>
+          {% endfor %}
+          <li class="page-item{% if not videos.has_next %} disabled{% endif %}">
+            {% if videos.has_next %}
+              <a
+                class="page-link"
+                href="?video_page={{ videos.next_page_number }}&audio_page={{ audio_page }}"
+              >Siguiente</a>
+            {% else %}
+              <span class="page-link">Siguiente</span>
+            {% endif %}
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="col-lg-2 d-none d-lg-block">
+      {% include 'base/announcement_component.html' with announcements=right_ads %}
+    </div>
+  </div>
 </div>
 {% endblock %}
