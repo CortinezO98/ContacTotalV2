@@ -24,21 +24,20 @@
                         <div class="carousel-item {% if forloop.first %}active{% endif %}">
                             <div class="row">
                                 {% for noticia in group %}
-                                <div class="col-md-4"><div class="card">
-                                    <a href="{% url 'noticia_detalle' noticia.slug %}">
-                                        <img src="{{ noticia.image.url }}" class="card-img-top" alt="{{ noticia.title }}">
-                                    </a>
-                                    <div class="card-body">
-                                        <a href="{% url 'noticia_detalle' noticia.slug %}">
-                                            <h5 class="card-title">{{ noticia.title }}</h5>
-                                        </a>
-                                        <p class="card-text">
-                                        {{ noticia.publication_date|date:"d F Y" }} - {{ noticia.author }}
-                                        </p>
-                                        <p class="card-text">{{ noticia.description|truncatewords:20 }}</p>
+                                    <div class="col-md-4">
+                                        <div class="card">
+                                            <a href="{% url 'noticia_detalle' noticia.slug %}" class="text-decoration-none text-dark">
+                                                <img src="{{ noticia.image.url }}" class="card-img-top" alt="{{ noticia.title }}">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">{{ noticia.title }}</h5>
+                                                    <p class="card-text">
+                                                    {{ noticia.publication_date|date:"d F Y" }} - {{ noticia.author }}
+                                                    </p>
+                                                    <p class="card-text">{{ noticia.description|truncatewords:20 }}</p>
+                                                </div>
+                                            </a>    
+                                        </div>
                                     </div>
-                                    </div>
-                                </div>
                                 {% endfor %}
                             </div>
                         </div>
