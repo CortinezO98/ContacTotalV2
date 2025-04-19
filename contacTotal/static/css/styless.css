@@ -655,7 +655,7 @@ footer {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  height: auto;
+  height: 50px;
 }
 
 #noticiasCarousel .card-text {
@@ -1166,3 +1166,20 @@ footer {
 
 
 /* FIN BTN FLOTANTE */
+
+
+/* Logo */
+.logo {
+  width: 100%;
+  max-width: 400px; 
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto; 
+}
+
+@media (min-width: 992px) {
+  .logo {
+    max-width: 1000px; 
+  }
+}

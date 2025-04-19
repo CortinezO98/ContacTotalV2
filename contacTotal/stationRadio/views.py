@@ -175,6 +175,7 @@ def podcast_detail(request, slug):
         'left_ads':      Announcement.objects.filter(active=True, position='left')[:2],
         'right_ads':     Announcement.objects.filter(active=True, position='right')[:2],
         'inline_ads':    Announcement.objects.filter(active=True, position='inline'),
+        'logo_type': 'podcastsDetalle'
     }
     return render(request, 'podcast_detail.html', context)
 

@@ -33,9 +33,9 @@
     <!-- LOGO PARA ESCRITORIO -->
     <div class="header d-none d-lg-block">
         <div class="container text-center">
-            <div class="logo-container mt-3">
+            <div class="logo-container">
                 {% if logo_type %}
-                    <img src="{% static 'img/'|add:logo_type|add:'_logo.png' %}" alt="Logo {{ logo_type }}" class="logo" width="200">
+                    <img src="{% static 'img/'|add:logo_type|add:'_logo.png' %}" alt="Logo {{ logo_type }}" class="logo" width="100">
                 {% else %}
                     <img src="{% static 'img/LogoRojo.png' %}" alt="Contacto Total Media" class="logo" width="200">
                 {% endif %}
