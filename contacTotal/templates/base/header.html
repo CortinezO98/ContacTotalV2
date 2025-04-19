@@ -90,26 +90,41 @@
       
       <div class="right-column">
           <div class="right-content">
-              <section class="podcast">
-                  <img src="{% static 'img/Copia de Podcast 1.png' %}" alt="Podcast">
-                  <div class="podcast-info">
-                      <h3>Podcast</h3>
-                      <p>Contacto Total</p>
-                  </div>
-                  <div class="podcast-controls">
-                      <button>↺</button>
-                      <button>◀◀</button>
-                      <button>▶</button>
-                      <button>▶▶</button>
-                      <button>↻</button>
-                  </div>
-                  <div class="podcast-time">
-                      <span>02:10</span>
-                      <div class="time-bar"><div class="time-progress"></div></div>
-                      <span>03:45</span>
-                  </div>
+              {% if latest_podcast_section %}
+              <section class="podcast text-center py-4">
+                {# Portada centrada #}
+                {% if latest_podcast_section.cover_image %}
+                  <imgsrc="{{ latest_podcast_section.cover_image.url }}"alt="{{ latest_podcast_section.title }}"class="rounded-circle img-fluid mx-auto d-block mb-3"style="width: 150px; height: 150px; object-fit: cover;">
+                {% else %}
+                  <imgsrc="{% static 'img/Copia de Podcast 1.png' %}"alt="{{ latest_podcast_section.title }}"class="rounded-circle img-fluid mx-auto d-block mb-3"style="width: 150px; height: 150px; object-fit: cover;">
+                {% endif %}
+                {# Título y descripción #}
+                <div class="podcast-info mb-3">
+                  <h3 class="mb-1">{{ latest_podcast_section.title }}</h3>
+                  <p class="text-muted mb-2">{{ latest_podcast_section.description|truncatechars:50 }}</p>
+                </div>
+                {# Reproductor inline #}
+                {% if latest_audio %}
+                  <audio controls class="w-100" style="max-width: 300px;">
+                    <source src="{{ latest_audio.audio_file.url }}" type="audio/mpeg">
+                    Tu navegador no soporta la reproducción de audio.
+                  </audio>
+                {% endif %}
               </section>
-              
+            {% else %}
+              <section class="podcast text-center py-4">
+                <img
+                  src="{% static 'img/Copia de Podcast 1.png' %}"
+                  alt="Podcast"
+                  class="rounded-circle img-fluid mx-auto d-block mb-3"
+                  style="width: 150px; height: 150px; object-fit: cover;"
+                >
+                <div class="podcast-info">
+                  <h3 class="mb-1">Podcast</h3>
+                  <p class="text-muted">Próximamente…</p>
+                </div>
+              </section>
+            {% endif %}              
               <section class="weather">
                   <a class="weatherwidget-io" href="https://forecast7.com/es/33d45n112d07/phoenix/" data-label_1="PHOENIX" data-label_2="WEATHER" data-font="Verdana" data-icons="Climacons Animated" data-days="5" data-theme="weather_one">PHOENIX WEATHER</a>
               </section>
