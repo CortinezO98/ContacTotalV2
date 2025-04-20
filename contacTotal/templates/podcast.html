@@ -36,9 +36,9 @@
                             <div class="col-12 col-md-4 mb-4">
                                 <a href="{% url 'podcast_detail' section.slug %}">
                                 {% if section.cover_image %}
-                                <img src="{{ section.cover_image.url }}" alt="{{ section.title }}" class="img-fluid rounded-circle" style="width:150px; height:150px; object-fit:cover;">
+                                <img src="{{ section.cover_image.url }}" alt="{{ section.title }}" class="img-fluid rounded-circle" style="width:150px; height:120px; object-fit:cover;">
                                 {% else %}
-                                <img src="{% static 'img/default-podcast.png' %}" alt="{{ section.title }}" class="img-fluid rounded-circle" style="width:150px; height:150px; object-fit:cover;">
+                                <img src="{% static 'img/default-podcast.png' %}" alt="{{ section.title }}" class="img-fluid rounded-circle" style="width:150px; height:120px; object-fit:cover;">
                                 {% endif %}
                                 </a>
                                 <h5 class="mt-2">{{ section.title }}</h5>
