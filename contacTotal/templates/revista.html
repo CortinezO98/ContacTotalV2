@@ -21,18 +21,15 @@
                 {% for edicion in page_obj %}
                 <div class="col">
                     <div class="card h-100 shadow-sm">
-                        <img src="{{ edicion.imagen.url }}" 
-                             class="card-img-top" 
-                             alt="Revista Edición"
-                             style="object-fit: cover; height: 200px;">
+                        <img src="{{ edicion.imagen.url }}" class="card-img-top" alt="{{ edicion.titulo }}" style="object-fit: cover; height: 200px;">
                         <div class="card-body">
                             <p class="text-muted mb-1">
-                                {{ edicion.fecha_publicacion|date:"d F Y" }} | {{ edicion.comentarios.count }} Comentarios
+                                {{ edicion.fecha_publicacion|date:"d M Y" }} | {{ edicion.articulos.count }} Artículos
                             </p>
-                            <p class="card-text">{{ edicion.descripcion }}</p>
+                            <p class="card-text">{{ edicion.descripcion|truncatechars:100 }}</p>
                         </div>
                         <div class="card-footer bg-transparent border-top-0 text-center">
-                            <a href="{{ edicion.url }}" class="btn btn-primary">Leer más</a>
+                            <a href="{{ edicion.get_absolute_url }}" class="btn btn-primary">Leer más</a>
                         </div>
                     </div>
                 </div>

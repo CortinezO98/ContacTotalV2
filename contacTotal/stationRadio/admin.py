@@ -78,12 +78,101 @@ class PodcastVideoAdmin(admin.ModelAdmin):
         return "—"
     cover_image_preview.short_description = "Vista previa de portada"
 
+
+
+
+@admin.action(description="📢 Marcar como Publicado")
+def make_published(modeladmin, request, queryset):
+    queryset.update(status='published')
+
+@admin.action(description="🚫 Marcar como Borrador")
+def make_draft(modeladmin, request, queryset):
+    queryset.update(status='draft')
+
+
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+    list_display         = ('name', 'slug')
+    readonly_fields      = ('slug',)
+
+
+class ArticuloInline(admin.TabularInline):
+    model             = Articulo
+    extra             = 1
+    fields            = (
+        'titulo','portada','descripcion_corta','contenido',
+        'autor','external_url', 'es_principal','orden','status'
+    )
+    readonly_fields   = ('slug','fecha_publicado','view_count')
+    sortable_by       = ('orden',)
+    show_change_link  = True
+
+
 @admin.register(EdicionRevista)
 class EdicionRevistaAdmin(admin.ModelAdmin):
-    list_display = ('titulo', 'fecha_publicacion', 'url')
-    search_fields = ('titulo', 'descripcion')
-    list_filter = ('fecha_publicacion',)
-    list_per_page = 25
+    list_display        = (
+        'titulo','fecha_publicacion','status','num_articulos',
+        'is_pdf_only','link_preview'
+    )
+    list_filter         = ('status','fecha_publicacion')
+    date_hierarchy      = 'fecha_publicacion'
+    search_fields       = ('titulo','descripcion')
+    readonly_fields     = ('slug','created_at','updated_at','fecha_publicacion')
+    inlines             = [ArticuloInline]
+    actions             = [make_published, make_draft]
+    fieldsets = (
+        (None, {
+            'fields': ('titulo','descripcion','imagen','pdf','status')
+        }),
+        ('Metadatos', {
+            'fields': ('fecha_publicacion','slug','created_at','updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+
+    def num_articulos(self, obj):
+        return obj.articulos.count()
+    num_articulos.short_description = "Artículos"
+
+    def is_pdf_only(self, obj):
+        return obj.is_pdf_only()
+    is_pdf_only.boolean = True
+    is_pdf_only.short_description = "Solo PDF?"
+
+    def link_preview(self, obj):
+        url = obj.get_absolute_url()
+        return format_html('<a href="{}" target="_blank">Abrir</a>', url)
+    link_preview.short_description = "Enlace"
+
+
+@admin.register(Articulo)
+class ArticuloAdmin(admin.ModelAdmin):
+    list_display        = ('titulo','edicion','es_principal','status','orden','view_count','external_url' )
+    list_filter         = ('status','es_principal','edicion')
+    date_hierarchy      = 'fecha_publicado'
+    search_fields       = ('titulo','descripcion_corta','contenido','autor')
+    readonly_fields     = ('slug','fecha_publicado','created_at','updated_at','view_count')
+    list_editable       = ('es_principal','orden','status')
+    actions             = [make_published, make_draft]
+    filter_horizontal   = ('tags',)
+    fieldsets = (
+        (None, {
+            'fields': (
+                'edicion','titulo','portada',
+                'descripcion_corta','contenido','autor','external_url','tags'
+            )
+        }),
+        ('Opciones', {
+            'fields': ('es_principal','orden','status')
+        }),
+        ('Metadatos', {
+            'fields': ('fecha_publicado','slug','view_count','created_at','updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+
+
+
 
 @admin.register(MainVideo)
 class MainVideoAdmin(admin.ModelAdmin):

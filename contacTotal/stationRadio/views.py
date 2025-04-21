@@ -82,6 +82,9 @@ def noticia_detalle(request, slug):
     return render(request, 'noticia_detalle.html', context)
 
 
+
+
+#REVISTA
 def revista(request):
     ediciones_list = EdicionRevista.objects.all().order_by('-fecha_publicacion', '-id')
     paginator = Paginator(ediciones_list, 12)
@@ -106,8 +109,59 @@ def revista(request):
     return render(request, 'revista.html', context)
 
 
+#DETALLE REVISTA
+def revista_detail(request, slug):
+    """Detalle de una edición con su artículo principal y secundarios"""
+    edicion     = get_object_or_404(EdicionRevista, slug=slug)
+    if edicion.is_pdf_only():
+        return redirect(edicion.pdf.url)
+
+    articulos   = edicion.articulos.all()
+    principal   = articulos.filter(es_principal=True).first()
+    secundarios = articulos.filter(es_principal=False)
 
 
+    left_ads   = Announcement.objects.filter(active=True, position='left')[:2]
+    right_ads  = Announcement.objects.filter(active=True, position='right')[:2]
+    inline_ads = Announcement.objects.filter(active=True, position='inline')[:3]
+
+
+    context = {
+        'edicion':     edicion,
+        'principal':   principal,
+        'secundarios': secundarios,
+        'left_ads':    left_ads,
+        'right_ads':   right_ads,
+        'inline_ads':  inline_ads,
+        'logo_type':   'revista',
+    }
+
+    return render(request, 'revista_detail.html',context)
+
+#ARTICULO
+def articulo_detail(request, slug):
+    """Detalle de un artículo específico"""
+    articulo = get_object_or_404(Articulo, slug=slug)
+
+    left_ads   = Announcement.objects.filter(active=True, position='left')[:1]
+    right_ads  = Announcement.objects.filter(active=True, position='right')[:1]
+    inline_ads = Announcement.objects.filter(active=True, position='inline')[:2]
+
+
+    context = {
+        'articulo':  articulo,
+        'left_ads':  left_ads,
+        'right_ads': right_ads,
+        'inline_ads': inline_ads,
+        'logo_type': 'revista',
+    }
+
+    return render(request, 'articulo_detail.html',context)
+
+
+
+
+#PROGRAMAS/RADIO
 
 def programas(request):
     query = request.GET.get('q', '')
@@ -137,7 +191,7 @@ def programas(request):
     }
     return render(request, 'programas.html', context)
 
-
+# PODCAST
 def podcast(request):
     featured_section = PodcastSection.objects.filter(featured=True).first()
     if featured_section:
@@ -157,7 +211,7 @@ def podcast(request):
     }
     return render(request, 'podcast.html', context)
 
-
+# PODCAST DETALLE
 def podcast_detail(request, slug):
     section = get_object_or_404(PodcastSection, slug=slug)
     all_audios = section.audios.order_by('-date_created')
@@ -192,7 +246,7 @@ def podcast_detail(request, slug):
 
 
 
-
+#QUIENES SOMOS
 def quienesSomos(request):
     left_ads  = Announcement.objects.filter(active=True, position='left')[:2]
     right_ads = Announcement.objects.filter(active=True, position='right')[:2]
@@ -204,7 +258,7 @@ def quienesSomos(request):
     }
     return render(request, 'quienesSomos.html', context)
 
-
+#HORARIO DE PROGRAMACION
 def programacion(request):
     programacion_list = Programacion.objects.all()
     left_ads  = Announcement.objects.filter(active=True, position='left')[:2]
@@ -225,7 +279,7 @@ def programacion(request):
     return render(request, 'programacion.html', context)
 
 
-
+#CONTACTATE
 def contacto(request):
     left_ads  = Announcement.objects.filter(active=True, position='left')[:2]
     right_ads = Announcement.objects.filter(active=True, position='right')[:2]
@@ -319,7 +373,7 @@ def contacto(request):
 
     return render(request, 'contacto.html', context)
 
-
+#ANUNCIATE CON NOSTROS PARA PUBLICIDAD
 def anunciate(request):
     left_ads  = Announcement.objects.filter(active=True, position='left')[:2]
     right_ads = Announcement.objects.filter(active=True, position='right')[:2]

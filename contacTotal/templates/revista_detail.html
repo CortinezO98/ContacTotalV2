@@ -1,0 +1,82 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block header %}
+  {% include 'base/headerCompact.html' %}
+{% endblock %}
+
+{% block main %}
+<main class="container-fluid py-5 bg-light">
+  <div class="row gx-4">
+
+    <!-- ANUNCIOS IZQUIERDA -->
+    <aside class="col-md-2 d-none d-md-block">
+      {% include 'base/announcement_component.html' with announcements=left_ads %}
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <section class="col-12 col-md-8">
+      <header class="text-center mb-5">
+        <h1 class="display-5">{{ edicion.titulo }}</h1>
+        {% if edicion.descripcion %}
+          <p class="lead">{{ edicion.descripcion }}</p>
+        {% endif %}
+        {% if edicion.pdf and not edicion.articulos.exists %}
+          <a href="{{ edicion.pdf.url }}" class="btn btn-outline-primary mt-3" target="_blank" aria-label="Descargar PDF de la revista">
+            <i class="bi bi-file-earmark-pdf me-2"></i>Descargar PDF
+          </a>
+        {% endif %}
+      </header>
+
+      {# ARTÍCULO PRINCIPAL #}
+      {% if principal %}
+      <article class="card mb-5 shadow-sm">
+        <img src="{{ principal.portada.url }}" class="card-img-top" alt="{{ principal.titulo }}">
+        <div class="card-body">
+          <h2 class="h4 card-title">{{ principal.titulo }}</h2>
+          <p class="text-muted mb-2">
+            Por {{ principal.autor }} | {{ principal.fecha_publicado|date:"d M Y" }}
+          </p>
+          <p class="card-text">{{ principal.descripcion_corta }}</p>
+          <a href="{{ principal.get_absolute_url }}" class="btn btn-primary" aria-label="Leer artículo completo">Leer artículo completo</a>
+        </div>
+      </article>
+      {% endif %}
+
+      {# GRID DE ARTÍCULOS SECUNDARIOS #}
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+        {% for art in secundarios %}
+        <div class="col">
+          <article class="card h-100 shadow-sm">
+            <div class="ratio ratio-16x9">
+              <img src="{{ art.portada.url }}" class="card-img-top" alt="{{ art.titulo }}" style="object-fit: cover;">
+            </div>
+            <div class="card-body d-flex flex-column">
+              <h3 class="h6 card-title">{{ art.titulo }}</h3>
+              <p class="card-text flex-grow-1">{{ art.descripcion_corta }}</p>
+            </div>
+            <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between align-items-center">
+              <small class="text-muted">{{ art.fecha_publicado|date:"d M Y" }}</small>
+              <a href="{{ art.get_absolute_url }}" class="btn btn-sm btn-outline-secondary"aria-label="Ver más de {{ art.titulo }}"> Ver más </a>
+            </div>
+          </article>
+        </div>
+
+        {% if forloop.counter == 3 %}
+        <div class="col-12">
+          {% include 'base/announcement_component.html' with announcements=inline_ads %}
+        </div>
+        {% endif %}
+
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- ANUNCIOS DERECHA -->
+    <aside class="col-md-2 d-none d-md-block">
+      {% include 'base/announcement_component.html' with announcements=right_ads %}
+    </aside>
+
+  </div>
+</main>
+{% endblock %}

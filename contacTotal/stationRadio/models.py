@@ -5,6 +5,7 @@ from datetime import datetime
 from django.utils.text import slugify
 from django.utils import timezone
 from django.core.validators import FileExtensionValidator
+from django.urls import reverse
 
 
 # Podcast
@@ -78,17 +79,127 @@ class Announcement(models.Model):
 
 
 
-# Revistas
-class EdicionRevista(models.Model):
-    titulo = models.CharField(max_length=200)
-    descripcion = models.TextField(blank=True, null=True)
-    imagen = models.ImageField(upload_to='revistas/')
-    fecha_publicacion = models.DateField(auto_now_add=True)
-    url = models.URLField()
-    pdf = models.FileField(upload_to='revistas/pdf/', blank=True, null=True, help_text="Sube la revista en formato PDF")
+# REVISTA Y ARTICULOS
 
-    def _str_(self):
+class TimeStampedModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    class Meta:
+        abstract = True
+
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    slug = models.SlugField(max_length=60, unique=True, editable=False)
+
+    class Meta:
+        ordering = ['name']
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+
+class EdicionRevista(TimeStampedModel):
+    STATUS_CHOICES = [
+        ('draft',     'Borrador'),
+        ('published','Publicado'),
+    ]
+
+    titulo            = models.CharField(max_length=200)
+    descripcion       = models.TextField(blank=True, null=True)
+    imagen            = models.ImageField(upload_to='revistas/portadas/')
+    fecha_publicacion = models.DateField(auto_now_add=True, db_index=True)
+    status            = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft', db_index=True)
+    slug              = models.SlugField(max_length=200, unique=True, blank=True, editable=False)
+    pdf               = models.FileField(
+                           upload_to='revistas/pdf/',
+                           blank=True, null=True,
+                           help_text="Si sólo subes este PDF, no habrá detalle de artículos"
+                       )
+
+    class Meta:
+        ordering = ['-fecha_publicacion', '-id']
+        indexes = [
+            models.Index(fields=['slug']),
+            models.Index(fields=['status','fecha_publicacion']),
+        ]
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.titulo)
+        super().save(*args, **kwargs)
+
+    def is_pdf_only(self):
+        return bool(self.pdf and not self.articulos.exists())
+
+    def get_absolute_url(self):
+        if self.is_pdf_only():
+            return self.pdf.url
+        return reverse('revista_detail', kwargs={'slug': self.slug})
+
+    def __str__(self):
         return self.titulo
+
+
+class Articulo(TimeStampedModel):
+    STATUS_CHOICES = [
+        ('draft',     'Borrador'),
+        ('published','Publicado'),
+    ]
+
+    edicion           = models.ForeignKey(
+                           EdicionRevista,
+                           related_name='articulos',
+                           on_delete=models.CASCADE
+                       )
+    titulo            = models.CharField(max_length=200)
+    slug              = models.SlugField(max_length=200, unique=True, blank=True, editable=False)
+    portada           = models.ImageField(upload_to='revistas/articulos/')
+    descripcion_corta = models.CharField(max_length=255, help_text="Resumen breve")
+    contenido         = models.TextField(help_text="Descripción completa")
+    autor             = models.CharField(max_length=100, blank=True, null=True)
+    fecha_publicado   = models.DateField(auto_now_add=True, db_index=True)
+    es_principal      = models.BooleanField(default=False, help_text="Marca este artículo como principal", db_index=True)
+    orden             = models.PositiveIntegerField(default=0, help_text="Orden en la lista")
+    status            = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft', db_index=True)
+    view_count        = models.PositiveIntegerField(default=0, help_text="Número de vistas")
+    tags              = models.ManyToManyField(Tag, blank=True, related_name='articulos')
+    external_url      = models.URLField(max_length=500,blank=True,null=True,help_text="URL externa relacionada con este artículo")
+
+
+    class Meta:
+        ordering = ['-es_principal', 'orden']
+        indexes = [
+            models.Index(fields=['slug']),
+            models.Index(fields=['status','es_principal']),
+        ]
+        constraints = [
+            models.UniqueConstraint(
+                fields=['edicion'],
+                condition=models.Q(es_principal=True),
+                name='one_principal_per_edicion'
+            ),
+        ]
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.titulo)
+        super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('articulo_detail', kwargs={'slug': self.slug})
+
+    def __str__(self):
+        return f"{self.titulo} ({self.edicion.titulo})"
+    
+
+
+
+
     
 
 # Video principal del header
