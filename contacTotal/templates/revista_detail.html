@@ -155,6 +155,11 @@
         {% endfor %}
       </div>
 
+      <!-- ANUNCIO ENTRE LOS TRES ARTICULOS FINALES Y LOS DOS ULTIMOS -->
+      <div class="my-5 py-3">
+        {% include 'base/announcement_component.html' with announcements=inline_ads|slice:"1:2" %}
+      </div>
+
       <!-- ÚLTIMOS ARTÍCULOS (PORTADA A LA DERECHA) -->
       <div class="row row-cols-1 g-4">
         {% for art in secundarios|slice:"9:11" %}
