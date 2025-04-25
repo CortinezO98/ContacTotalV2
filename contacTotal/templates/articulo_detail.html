@@ -45,15 +45,15 @@
 
           <!-- Botón fuente externa -->
           {% if articulo.external_url %}
-          <div class="text-center mb-5">
-            <a href="{{ articulo.external_url }}" class="btn btn-outline-primary px-4 py-2" target="_blank" rel="noopener noreferrer">
+          <div class="text-center mb-2">
+            <a href="{{ articulo.external_url }}" class="btn btn-outline-primary px-4" target="_blank" rel="noopener noreferrer">
               <i class="bi bi-box-arrow-up-right me-2"></i>Leer en la fuente original
             </a>
           </div>
           {% endif %}
 
           <!-- Contador de vistas -->
-          <p class="text-center text-muted mb-4">
+          <p class="text-center text-muted mb-3">
             <small><i class="bi bi-eye"></i> Vistas: {{ articulo.view_count }}</small>
           </p>
 
