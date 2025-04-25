@@ -9,9 +9,11 @@
 <div class="container mt-5">
   <div class="row">
     <!-- Columna de Anuncios Izquierda-->
-    <div class="col-lg-2 d-none d-lg-block">
-      {% include 'base/announcement_component.html' with announcements=left_ads %}
-    </div>
+    <aside class="col-lg-2 d-none d-lg-block">
+      <div class="sticky-top pt-4">
+        {% include 'base/announcement_component.html' with announcements=left_ads %}
+      </div>
+    </aside>
 
     <div class="col-12 col-lg-8">
       <div class="content-box p-4">
@@ -33,9 +35,11 @@
     </div>
 
     <!-- Columna de Anuncios Derecha  -->
-    <div class="col-lg-2 d-none d-lg-block">
-      {% include 'base/announcement_component.html' with announcements=right_ads %}
-    </div>
+    <aside class="col-lg-2 d-none d-lg-block">
+      <div class="sticky-top pt-4">
+        {% include 'base/announcement_component.html' with announcements=right_ads %}
+      </div>
+    </aside>
   </div>
 </div>
 {% endblock %}

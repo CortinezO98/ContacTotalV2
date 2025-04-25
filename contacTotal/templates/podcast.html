@@ -8,9 +8,11 @@
 {% block main %}
 <div class="container-fluid mt-4">
     <div class="row">
-        <div class="col-md-2 d-none d-md-block">
-            {% include 'base/announcement_component.html' with announcements=left_ads %}
-        </div>
+        <aside class="col-lg-2 d-none d-lg-block">
+            <div class="sticky-top pt-4">
+                {% include 'base/announcement_component.html' with announcements=left_ads %}
+            </div>
+        </aside>
         <!-- Sección Principal -->
         <div class="col-md-8">
             {% if featured_section %}
@@ -75,9 +77,11 @@
                 </button>
             </div>
         </div>
-        <div class="col-md-2 d-none d-md-block">
-            {% include 'base/announcement_component.html' with announcements=right_ads %}
-        </div>
+        <aside class="col-lg-2 d-none d-lg-block">
+            <div class="sticky-top pt-4">
+                {% include 'base/announcement_component.html' with announcements=right_ads %}
+            </div>
+        </aside>
         </div>
 </div>
 

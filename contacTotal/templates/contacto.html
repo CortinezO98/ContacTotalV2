@@ -11,9 +11,11 @@
     <div class="row justify-content-center align-items-start g-4">
 
       <!-- Anuncios izquierda -->
-      <div class="col-lg-2 d-none d-lg-block">
-        {% include 'base/announcement_component.html' with announcements=left_ads %}
-      </div>
+      <aside class="col-lg-2 d-none d-lg-block">
+        <div class="sticky-top pt-4">
+          {% include 'base/announcement_component.html' with announcements=left_ads %}
+        </div>
+      </aside>
 
       <!-- Formulario principal -->
       <div class="col-12 col-lg-8">
@@ -45,9 +47,11 @@
       </div>
 
       <!-- Anuncios derecha -->
-      <div class="col-lg-2 d-none d-lg-block">
-        {% include 'base/announcement_component.html' with announcements=right_ads %}
-      </div>
+      <aside class="col-lg-2 d-none d-lg-block">
+        <div class="sticky-top pt-4">
+          {% include 'base/announcement_component.html' with announcements=right_ads %}
+        </div>
+      </aside>
 
     </div>
   </div>

@@ -10,9 +10,11 @@
   <div class="row gx-3 gy-3">
 
     <!-- Anuncios Izquierda-->
-    <div class="col-lg-2 d-none d-lg-block">
-      {% include 'base/announcement_component.html' with announcements=left_ads %}
-    </div>
+    <aside class="col-lg-2 d-none d-lg-block">
+      <div class="sticky-top pt-4">
+        {% include 'base/announcement_component.html' with announcements=left_ads %}
+      </div>
+  </aside>
 
     <!-- Contenido Principal -->
     <div class="col-12 col-lg-8">
@@ -107,9 +109,11 @@
     </div>
 
     <!-- Anuncios Derecha-->
-    <div class="col-lg-2 d-none d-lg-block">
-      {% include 'base/announcement_component.html' with announcements=right_ads %}
-    </div>
+    <aside class="col-lg-2 d-none d-lg-block">
+      <div class="sticky-top pt-4">
+        {% include 'base/announcement_component.html' with announcements=right_ads %}
+      </div>
+  </aside>
 
   </div>
 </div>
