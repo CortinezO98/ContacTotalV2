@@ -48,13 +48,13 @@
               
               <section class="revista">
                 {% if latest_edicion %}
-                  <a href="{{ latest_edicion.url }}">
-                      <img src="{{ latest_edicion.imagen.url }}" alt="Revista Contacto Total">
+                  <a href="{{ latest_edicion.get_absolute_url }}">
+                    <img src="{{ latest_edicion.imagen.url }}" alt="{{ latest_edicion.titulo }}" class="img-fluid">
                   </a>
                 {% else %}
-                  <img src="{% static 'img/revista.jpeg' %}" alt="Revista Contacto Total">
+                  <img src="{% static 'img/revista.jpeg' %}" alt="Revista Contacto Total" class="img-fluid">
                 {% endif %}
-            </section>
+              </section>
           </div>
       </div>
       
