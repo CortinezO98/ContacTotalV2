@@ -141,14 +141,8 @@ def revista_detail(request, slug):
 #ARTICULO
 def articulo_detail(request, slug):
     articulo = get_object_or_404(Articulo, slug=slug)
-
-    # 1. Dividir el contenido en párrafos
-    parrafos = articulo.contenido.split('\n\n')  # Separar por dobles saltos de línea
-
-    # 2. Obtener todas las imágenes
+    parrafos = articulo.contenido.split('\n\n') 
     imagenes = list(articulo.imagenes.all().order_by('orden'))
-
-    # 3. Mezclar parrafos e imagenes
     contenido_mezclado = []
     max_len = max(len(parrafos), len(imagenes))
 
@@ -343,7 +337,7 @@ def contacto(request):
                     background-color: #ffffff; border: 1px solid #ddd; border-radius: 10px;">
             <div style="text-align: center;">
                 <img src="https://contactototalmedia.com/img/Logo%20CT%20Media%20PNG.png"
-                     alt="Logo Contacto Total" style="max-width: 150px; margin-bottom: 20px;">
+                    alt="Logo Contacto Total" style="max-width: 150px; margin-bottom: 20px;">
                 <h2 style="color: #ff0000; margin-bottom: 5px;">📬 Mensaje de Contacto</h2>
                 <p style="margin-top: 0; color: #ff0000;">Revista Contacto Total</p>
                 <hr style="margin: 20px 0;">
