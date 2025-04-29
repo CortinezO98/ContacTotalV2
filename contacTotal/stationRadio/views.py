@@ -365,7 +365,7 @@ def contacto(request):
                 subject='📬 Contacto desde Revista Contacto Total',
                 body=html_contenido,
                 from_email=settings.EMAIL_HOST_USER,
-                to=['jcortinezosorio@gmail.com'],
+                to=['revistacontactototal@gmail.com'],
                 headers={'Reply-To': 'no-reply@revistacontactototal.com'}
             )
             email_message.content_subtype = 'html'
@@ -456,7 +456,7 @@ def anunciate(request):
                 subject='📢 Solicitud de publicidad desde Contacto Total Media',
                 body=html_contenido,
                 from_email=settings.EMAIL_HOST_USER,
-                to=['jcortinezosorio@gmail.com'],
+                to=['revistacontactototal@gmail.com'],
                 headers={'Reply-To': 'no-reply@contactototalmedia.com'}
             )
             email_message.content_subtype = 'html'
