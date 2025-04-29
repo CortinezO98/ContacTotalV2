@@ -133,7 +133,7 @@ def revista_detail(request, slug):
         'left_ads':    left_ads,
         'right_ads':   right_ads,
         'inline_ads':  inline_ads,
-        'logo_type':   'revista',
+        'logo_type':   'revistaa',
     }
 
     return render(request, 'revista_detail.html',context)
@@ -158,7 +158,7 @@ def articulo_detail(request, slug):
         'left_ads': Announcement.objects.filter(active=True, position='left')[:1],
         'right_ads': Announcement.objects.filter(active=True, position='right')[:1],
         'inline_ads': Announcement.objects.filter(active=True, position='inline')[:1],
-        'logo_type': 'revista',
+        'logo_type': 'revistaa',
     }
 
     return render(request, 'articulo_detail.html', context)
