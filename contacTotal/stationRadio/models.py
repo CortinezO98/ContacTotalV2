@@ -275,6 +275,7 @@ class Articulo(TimeStampedModel):
 class ImagenArticulo(models.Model):
     articulo = models.ForeignKey('Articulo', on_delete=models.CASCADE, related_name='imagenes')
     imagen = models.ImageField(upload_to='revistas/articulos/imagenes/')
+    contenido = models.TextField(blank=True,help_text="Texto o descripción que acompañará a esta imagen")
     pie_de_foto = models.CharField(max_length=255, blank=True, help_text="Texto descriptivo o pie de foto")
     credito = models.CharField(max_length=255, blank=True, help_text="Nombre del autor o fuente")
 

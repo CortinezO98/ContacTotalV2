@@ -157,7 +157,7 @@ def articulo_detail(request, slug):
         'contenido_mezclado': contenido_mezclado,
         'left_ads': Announcement.objects.filter(active=True, position='left')[:1],
         'right_ads': Announcement.objects.filter(active=True, position='right')[:1],
-        'inline_ads': Announcement.objects.filter(active=True, position='inline')[:2],
+        'inline_ads': Announcement.objects.filter(active=True, position='inline')[:1],
         'logo_type': 'revista',
     }
 

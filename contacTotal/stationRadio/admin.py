@@ -170,7 +170,7 @@ class EdicionRevistaAdmin(admin.ModelAdmin):
 
 class ImagenArticuloInline(SortableInlineAdminMixin, admin.TabularInline):
     model = ImagenArticulo
-    fields = ('imagen', 'imagen_preview', 'pie_de_foto', 'credito', 'orden')
+    fields = ('imagen','contenido', 'imagen_preview', 'pie_de_foto', 'credito', 'orden')
     readonly_fields = ('imagen_preview',)
     extra = 1
     ordering = ['orden']
