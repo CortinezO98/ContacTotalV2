@@ -6,11 +6,11 @@
           {{ ad.custom_script|safe }}
         {% elif ad.image %}
           {% if ad.link %}
-            <a href="{{ ad.link }}" target="_blank" rel="noopener noreferrer">
-              <img src="{{ ad.image.url }}" alt="{{ ad.title|default:'Anuncio' }}" class="img-fluid rounded shadow-sm">
+            <a href="{{ ad.link }}" target="_blank" rel="noopener noreferrer" class="d-inline-block">
+              <img src="{{ ad.image.url }}" alt="{{ ad.title|default:'Anuncio' }}" class="img-fluid rounded shadow-sm anuncio-horizontal">
             </a>
           {% else %}
-            <img src="{{ ad.image.url }}" alt="{{ ad.title|default:'Anuncio' }}" class="img-fluid rounded shadow-sm">
+            <img src="{{ ad.image.url }}" alt="{{ ad.title|default:'Anuncio' }}" class="img-fluid rounded shadow-sm anuncio-horizontal">
           {% endif %}
         {% else %}
           <small class="text-muted">Anuncio no disponible</small>

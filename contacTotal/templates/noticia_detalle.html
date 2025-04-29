@@ -19,7 +19,7 @@
       <article class="card shadow-sm border-0 p-4 bg-white">
         
         <!-- Título -->
-        <h1 class="text-center fw-bold mb-2">{{ news_item.title }}</h1>
+        <h1 class="text-center fw-bold text-danger">{{ news_item.title }}</h1>
 
         <!-- Autor y fecha -->
         <p class="text-center text-muted small mb-4">
@@ -27,7 +27,7 @@
           {{ news_item.publication_date|date:"d F Y" }}
         </p>
 
-        <!-- Imagen o video -->
+        <!-- Video o imagen -->
         {% if news_item.video or news_item.video_link %}
           <div class="ratio ratio-16x9 mb-4">
             <iframe src="{{ news_item.media_source }}" title="Video de la noticia" allowfullscreen></iframe>
@@ -36,31 +36,43 @@
           <div class="text-center mb-4">
             <img src="{{ news_item.image.url }}" alt="Imagen de la noticia" class="img-fluid rounded" style="max-height: 500px; object-fit: cover;">
           </div>
+
+          <!-- Pie de foto y crédito -->
+          {% if news_item.pie_de_foto or news_item.credit %}
+            <p class="text-center text-muted small fst-italic mb-4">
+              {% if news_item.pie_de_foto %}
+                {{ news_item.pie_de_foto }}
+              {% endif %}
+              {% if news_item.credit %}
+                <br><strong>Crédito:</strong> {{ news_item.credit }}
+              {% endif %}
+            </p>
+          {% endif %}
         {% endif %}
 
         <!-- Descripción -->
         <div class="news-content">
           {% if news_item.short_description %}
             <p class="lead">{{ news_item.short_description }}</p>
-          {% elif news_item.description %}
-            <p style="white-space: pre-wrap; text-align: justify;">{{ news_item.description }}</p>
           {% else %}
-            <p>No hay descripción disponible.</p>
+            <p style="white-space: pre-wrap; text-align: justify;">
+              {{ news_item.description }}
+            </p>
           {% endif %}
 
           <!-- Anuncio dentro del contenido -->
           {% if inline_ads %}
-          <div class="my-4">
-            {% include 'base/announcement_component.html' with announcements=inline_ads %}
-          </div>
+            <div class="my-4">
+              {% include 'base/announcement_component.html' with announcements=inline_ads %}
+            </div>
           {% endif %}
         </div>
 
-        <!-- Anuncio al final del artículo-->
+        <!-- Anuncio al final del artículo -->
         {% if bottom_ads %}
-        <div class="mt-5 text-center">
-          {% include 'base/announcement_component.html' with announcements=bottom_ads %}
-        </div>
+          <div class="mt-5 text-center">
+            {% include 'base/announcement_component.html' with announcements=bottom_ads %}
+          </div>
         {% endif %}
 
       </article>

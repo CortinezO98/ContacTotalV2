@@ -6,6 +6,9 @@ from django.utils.translation import gettext_lazy as _
 import os
 import mutagen
 from .models import *
+from adminsortable2.admin import SortableAdminBase, SortableInlineAdminMixin
+
+
 
 admin.site.site_header = "Administración Revista Contacto Total"
 admin.site.site_title = "Panel de Contacto Total"
@@ -164,27 +167,38 @@ class EdicionRevistaAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 
+
+class ImagenArticuloInline(SortableInlineAdminMixin, admin.TabularInline):
+    model = ImagenArticulo
+    fields = ('imagen', 'imagen_preview', 'pie_de_foto', 'credito', 'orden')
+    readonly_fields = ('imagen_preview',)
+    extra = 1
+    ordering = ['orden']
+
+    def imagen_preview(self, obj):
+        if obj.imagen:
+            return format_html(
+                '<img src="{}" width="100" style="border-radius:4px;"/>',
+                obj.imagen.url
+            )
+        return "Sin imagen"
+    imagen_preview.short_description = "Vista previa"
+
 @admin.register(Articulo)
-class ArticuloAdmin(admin.ModelAdmin):
-    list_display      = (
-        'titulo', 'edicion', 'es_principal',
-        'status', 'orden', 'view_count', 'external_url', 'portada_preview'
-    )
-    list_filter       = ('status', 'es_principal', 'edicion')
+class ArticuloAdmin(SortableAdminBase, admin.ModelAdmin):
+    list_display      = ('titulo', 'edicion', 'seccion_display', 'es_principal','status', 'orden', 'view_count', 'external_url', 'portada_preview')
+    list_filter       = ('status', 'es_principal', 'edicion', 'seccion')
     date_hierarchy    = 'fecha_publicado'
     search_fields     = ('titulo', 'descripcion_corta', 'contenido', 'autor')
     readonly_fields   = ('slug', 'fecha_publicado', 'created_at', 'updated_at', 'view_count', 'portada_preview')
     list_editable     = ('es_principal', 'orden', 'status')
     actions           = [make_published, make_draft]
     filter_horizontal = ('tags',)
+    inlines = [ImagenArticuloInline]
 
     fieldsets = (
         (None, {
-            'fields': (
-                'edicion', 'titulo', 'portada', 'portada_preview',
-                'descripcion_corta', 'contenido', 'autor',
-                'external_url', 'tags'
-            )
+            'fields': ('edicion', 'seccion', 'titulo', 'portada', 'portada_preview','portada_pie_de_foto', 'portada_credito','descripcion_corta', 'contenido', 'autor','external_url', 'tags')
         }),
         ('Opciones', {
             'fields': ('es_principal', 'orden', 'status')
@@ -195,9 +209,16 @@ class ArticuloAdmin(admin.ModelAdmin):
         }),
     )
 
+    @admin.display(description='Sección', ordering='seccion')
+    def seccion_display(self, obj):
+        return obj.get_seccion_display()
+
     def portada_preview(self, obj):
         if obj.portada:
-            return format_html('<img src="{}" width="100" style="border-radius: 4px;" />', obj.portada.url)
+            return format_html(
+                '<img src="{}" width="100" style="border-radius:4px;"/>',
+                obj.portada.url
+            )
         return "Sin imagen"
     portada_preview.short_description = "Vista previa"
 
@@ -285,33 +306,42 @@ class BannerAdmin(admin.ModelAdmin):
 @admin.register(Programa)
 class ProgramaAdmin(admin.ModelAdmin):
     list_display = (
-        'titulo', 'host', 'duracion', 'audio_file_player', 'fecha_creacion'
+        'titulo', 'host', 'duracion', 'nombre_archivo', 'peso_archivo', 'fecha_creacion', 'reproductor_audio'
+    )
+    readonly_fields = (
+        'duracion', 'nombre_archivo', 'peso_archivo', 'fecha_creacion', 'reproductor_audio'
     )
     search_fields = ('titulo', 'host')
     list_filter = ('host', 'fecha_creacion')
-    readonly_fields = ('fecha_creacion',)
     list_per_page = 25
 
     fieldsets = (
         ('Información del programa', {
             'fields': (
-                'titulo', 'host', 'duracion', 'url_reproducir', 'audio',
+                'titulo', 'host', 'audio', 'url_reproducir',
             ),
         }),
-        ('Metadatos', {
-            'fields': ('fecha_creacion',),
+        ('Metadatos automáticos', {
+            'fields': ('duracion', 'nombre_archivo', 'peso_archivo', 'fecha_creacion', 'reproductor_audio'),
             'classes': ('collapse',),
         }),
     )
 
-    def audio_file_player(self, obj):
+    def reproductor_audio(self, obj):
         if obj.audio:
             return format_html(
-                '<audio controls><source src="{}" type="audio/mpeg">Tu navegador no soporta audio.</audio>',
+                '<audio controls style="width: 100%;">'
+                '<source src="{}" type="audio/mpeg">'
+                'Tu navegador no soporta el elemento de audio.'
+                '</audio>',
                 obj.audio.url
             )
-        return "-"
-    audio_file_player.short_description = 'Reproductor de audio'
+        return "No hay audio"
+
+    reproductor_audio.short_description = "Reproductor"
+
+
+
 
 @admin.register(Programacion)
 class ProgramacionAdmin(admin.ModelAdmin):

@@ -185,7 +185,7 @@
                                 <div class="text-end">
                                     <span class="badge bg-danger rounded-pill me-2">{{ program.duracion }}</span>
                                     {% if program.url_reproducir %}
-                                        <a href="{{ program.url_reproducir }}" class="btn btn-sm btn-outline-danger" target="_blank">Escuchar</a>
+                                        <a href="{% url 'programas' %}" class="btn btn-sm btn-outline-danger" target="_blank">Escuchar</a>
                                     {% endif %}
                                 </div>
                             </li>

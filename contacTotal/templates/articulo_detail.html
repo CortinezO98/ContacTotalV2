@@ -1,5 +1,6 @@
 {% extends 'base/base.html' %}
 {% load static %}
+{% load myfilters %}
 
 {% block header %}
   {% include 'base/headerCompact.html' %}
@@ -19,11 +20,26 @@
     <!-- Contenido Principal -->
     <article class="col-12 col-md-8">
       <div class="card shadow-sm mb-4 border-0">
+        <!-- Portada -->
         <img src="{{ articulo.portada.url }}" class="card-img-top rounded-top img-fluid" alt="{{ articulo.titulo }}" style="object-fit: contain; max-height: 400px;">
+        {# Pie de foto y crédito de la portada #}
+        {% if articulo.portada_pie_de_foto or articulo.portada_credito %}
+          <p class="text-center text-muted small fst-italic mb-3">
+            {% if articulo.portada_pie_de_foto %}
+              {{ articulo.portada_pie_de_foto }}
+            {% endif %}
+            {% if articulo.portada_credito %}
+              <br><strong>Crédito:</strong> {{ articulo.portada_credito }}
+            {% endif %}
+          </p>
+        {% endif %}
+
         <div class="card-body">
           <h1 class="card-title display-6 mb-3">{{ articulo.titulo }}</h1>
           <p class="text-muted mb-3">
-            <i class="bi bi-person-circle"></i> Publicado por <strong>{{ articulo.autor }}</strong> el {{ articulo.fecha_publicado|date:"d M Y" }}
+            <i class="bi bi-person-circle"></i>
+            Publicado por <strong>{{ articulo.autor }}</strong>
+            el {{ articulo.fecha_publicado|date:"d M Y" }}
           </p>
 
           <!-- Estado y Tags -->
@@ -38,18 +54,43 @@
             {% endfor %}
           </div>
 
-          <!-- Contenido del artículo -->
+          <!-- Contenido del artículo con imágenes intercaladas -->
           <section class="article-content mb-5 lh-lg fs-6">
-            {{ articulo.contenido|safe|linebreaks }}
+            {% for item in contenido_mezclado %}
+              {% if item.tipo == 'parrafo' %}
+                <p>{{ item.contenido|linebreaksbr }}</p>
+              {% elif item.tipo == 'imagen' %}
+                <div class="text-center my-4">
+                  <img
+                    src="{{ item.contenido.imagen.url }}"
+                    class="img-fluid rounded shadow-sm mb-2"
+                    style="max-width: 100%; height: auto; max-height: 400px; object-fit: contain;"
+                    alt="{{ item.contenido.pie_de_foto|default_if_none:articulo.titulo }}"
+                  >
+                  {% if item.contenido.pie_de_foto or item.contenido.credito %}
+                    <p class="text-muted small fst-italic mb-0">
+                      {% if item.contenido.pie_de_foto %}{{ item.contenido.pie_de_foto }}{% endif %}
+                      {% if item.contenido.credito %}<br><strong>Crédito:</strong> {{ item.contenido.credito }}{% endif %}
+                    </p>
+                  {% endif %}
+                </div>
+              {% endif %}
+            {% endfor %}
           </section>
 
           <!-- Botón fuente externa -->
           {% if articulo.external_url %}
-          <div class="text-center mb-2">
-            <a href="{{ articulo.external_url }}" class="btn btn-outline-primary px-4" target="_blank" rel="noopener noreferrer">
-              <i class="bi bi-box-arrow-up-right me-2"></i>Leer en la fuente original
-            </a>
-          </div>
+            <div class="text-center mb-2">
+              <a
+                href="{{ articulo.external_url }}"
+                class="btn btn-outline-primary px-4"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <i class="bi bi-box-arrow-up-right me-2"></i>
+                Link relacionado con el articulo
+              </a>
+            </div>
           {% endif %}
 
           <!-- Contador de vistas -->
@@ -64,7 +105,10 @@
 
           <!-- Volver a la revista -->
           <div class="text-center">
-            <a href="{{ articulo.edicion.get_absolute_url }}" class="btn btn-outline-secondary">
+            <a
+              href="{{ articulo.edicion.get_absolute_url }}"
+              class="btn btn-outline-secondary"
+            >
               &larr; Volver a la revista: {{ articulo.edicion.titulo }}
             </a>
           </div>
@@ -82,4 +126,20 @@
 
   </div>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const images = document.querySelectorAll(".article-content img");
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("reveal");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    images.forEach(img => observer.observe(img));
+  });
+</script>
 {% endblock %}

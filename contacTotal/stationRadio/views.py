@@ -140,23 +140,36 @@ def revista_detail(request, slug):
 
 #ARTICULO
 def articulo_detail(request, slug):
-    """Detalle de un artículo específico"""
     articulo = get_object_or_404(Articulo, slug=slug)
 
-    left_ads   = Announcement.objects.filter(active=True, position='left')[:1]
-    right_ads  = Announcement.objects.filter(active=True, position='right')[:1]
-    inline_ads = Announcement.objects.filter(active=True, position='inline')[:2]
+    # 1. Dividir el contenido en párrafos
+    parrafos = articulo.contenido.split('\n\n')  # Separar por dobles saltos de línea
 
+    # 2. Obtener todas las imágenes
+    imagenes = list(articulo.imagenes.all().order_by('orden'))
+
+    # 3. Mezclar parrafos e imagenes
+    contenido_mezclado = []
+    max_len = max(len(parrafos), len(imagenes))
+
+    for i in range(max_len):
+        if i < len(parrafos):
+            contenido_mezclado.append({'tipo': 'parrafo', 'contenido': parrafos[i].strip()})
+        if i < len(imagenes):
+            contenido_mezclado.append({'tipo': 'imagen', 'contenido': imagenes[i]})
 
     context = {
-        'articulo':  articulo,
-        'left_ads':  left_ads,
-        'right_ads': right_ads,
-        'inline_ads': inline_ads,
+        'articulo': articulo,
+        'contenido_mezclado': contenido_mezclado,
+        'left_ads': Announcement.objects.filter(active=True, position='left')[:1],
+        'right_ads': Announcement.objects.filter(active=True, position='right')[:1],
+        'inline_ads': Announcement.objects.filter(active=True, position='inline')[:2],
         'logo_type': 'revista',
     }
 
-    return render(request, 'articulo_detail.html',context)
+    return render(request, 'articulo_detail.html', context)
+
+
 
 
 
