@@ -171,7 +171,9 @@
                     <!-- Programas Recientes -->
                     <div class="col-12 col-md-6 mb-4">
                         <div class="text-center mb-3">
-                            <img src="{% static 'img/radioLogo.png' %}" alt="Programas" class="img-fluid" style="max-width: 200px;">
+                            <a href="{% url 'programas' %}">
+                                <img src="{% static 'img/radioLogo.png' %}" alt="Programas" class="img-fluid" style="max-width: 200px;">
+                            </a>
                         </div>
                         <ul class="list-group">
                             {% for program in last_programs %}
@@ -183,13 +185,13 @@
                                 <div class="text-end">
                                     <span class="badge bg-danger rounded-pill me-2">{{ program.duracion }}</span>
                                     {% if program.url_reproducir %}
-                                        <a href="{{ program.url_reproducir }}" class="btn btn-sm btn-outline-danger" target="_blank">Escuchar</a>
+                                        <a href="{% url 'programas' %}" class="btn btn-sm btn-outline-danger" target="_blank">Escuchar</a>
                                     {% endif %}
                                 </div>
                             </li>
                             {% endfor %}
                         </ul>
-                    </div>
+                    </div>                    
 
                     <!-- Magazine -->
                     <div class="col-12 col-md-6 mb-4 d-flex justify-content-center">

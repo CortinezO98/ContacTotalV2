@@ -133,30 +133,37 @@ def revista_detail(request, slug):
         'left_ads':    left_ads,
         'right_ads':   right_ads,
         'inline_ads':  inline_ads,
-        'logo_type':   'revista',
+        'logo_type':   'revistaa',
     }
 
     return render(request, 'revista_detail.html',context)
 
 #ARTICULO
 def articulo_detail(request, slug):
-    """Detalle de un artículo específico"""
     articulo = get_object_or_404(Articulo, slug=slug)
+    parrafos = articulo.contenido.split('\n\n') 
+    imagenes = list(articulo.imagenes.all().order_by('orden'))
+    contenido_mezclado = []
+    max_len = max(len(parrafos), len(imagenes))
 
-    left_ads   = Announcement.objects.filter(active=True, position='left')[:1]
-    right_ads  = Announcement.objects.filter(active=True, position='right')[:1]
-    inline_ads = Announcement.objects.filter(active=True, position='inline')[:2]
-
+    for i in range(max_len):
+        if i < len(parrafos):
+            contenido_mezclado.append({'tipo': 'parrafo', 'contenido': parrafos[i].strip()})
+        if i < len(imagenes):
+            contenido_mezclado.append({'tipo': 'imagen', 'contenido': imagenes[i]})
 
     context = {
-        'articulo':  articulo,
-        'left_ads':  left_ads,
-        'right_ads': right_ads,
-        'inline_ads': inline_ads,
-        'logo_type': 'revista',
+        'articulo': articulo,
+        'contenido_mezclado': contenido_mezclado,
+        'left_ads': Announcement.objects.filter(active=True, position='left')[:1],
+        'right_ads': Announcement.objects.filter(active=True, position='right')[:1],
+        'inline_ads': Announcement.objects.filter(active=True, position='inline')[:1],
+        'logo_type': 'revistaa',
     }
 
-    return render(request, 'articulo_detail.html',context)
+    return render(request, 'articulo_detail.html', context)
+
+
 
 
 
@@ -330,7 +337,7 @@ def contacto(request):
                     background-color: #ffffff; border: 1px solid #ddd; border-radius: 10px;">
             <div style="text-align: center;">
                 <img src="https://contactototalmedia.com/img/Logo%20CT%20Media%20PNG.png"
-                     alt="Logo Contacto Total" style="max-width: 150px; margin-bottom: 20px;">
+                    alt="Logo Contacto Total" style="max-width: 150px; margin-bottom: 20px;">
                 <h2 style="color: #ff0000; margin-bottom: 5px;">📬 Mensaje de Contacto</h2>
                 <p style="margin-top: 0; color: #ff0000;">Revista Contacto Total</p>
                 <hr style="margin: 20px 0;">
@@ -358,7 +365,7 @@ def contacto(request):
                 subject='📬 Contacto desde Revista Contacto Total',
                 body=html_contenido,
                 from_email=settings.EMAIL_HOST_USER,
-                to=['jcortinezosorio@gmail.com'],
+                to=['revistacontactototal@gmail.com'],
                 headers={'Reply-To': 'no-reply@revistacontactototal.com'}
             )
             email_message.content_subtype = 'html'
@@ -449,7 +456,7 @@ def anunciate(request):
                 subject='📢 Solicitud de publicidad desde Contacto Total Media',
                 body=html_contenido,
                 from_email=settings.EMAIL_HOST_USER,
-                to=['jcortinezosorio@gmail.com'],
+                to=['revistacontactototal@gmail.com'],
                 headers={'Reply-To': 'no-reply@contactototalmedia.com'}
             )
             email_message.content_subtype = 'html'

@@ -6,6 +6,11 @@ from django.utils.text import slugify
 from django.utils import timezone
 from django.core.validators import FileExtensionValidator
 from django.urls import reverse
+from django.core.validators import FileExtensionValidator
+from mutagen import File as MutagenFile
+from mutagen.easyid3 import EasyID3
+from mutagen.mp4 import MP4
+import os
 
 
 # Podcast
@@ -151,6 +156,67 @@ class EdicionRevista(TimeStampedModel):
     def __str__(self):
         return self.titulo
 
+
+
+class SeccionChoices(models.TextChoices):
+    ACTUALIDAD_LOCAL           = 'actualidad_local',        'Actualidad local'
+    ACTUALIDAD_NACIONAL        = 'actualidad_nacional',     'Actualidad nacional'
+    ANIVERSARIO                = 'aniversario',             'Aniversario'
+    BUENA_VIDA                 = 'buena_vida',              'Buena vida'
+    CALENDARIO_DE_EVENTOS      = 'calendario_de_eventos',   'Calendario de eventos'
+    CAMINO_AL_EXITO            = 'camino_al_exito',         'Camino al éxito'
+    COMUNIDAD                  = 'comunidad',               'Comunidad'
+    CASOS_DE_FAMILIA           = 'casos_de_familia',        'Casos de familia'
+    CUIDE_SU_SALUD             = 'cuide_su_salud',          'Cuide su salud'
+    DE_COMPRAS                 = 'de_compras',              'De compras'
+    DE_NUESTROS_CONSULADOS     = 'de_nuestros_consulados',  'De nuestros consulados'
+    DE_SU_BOLSILLO             = 'de_su_bolsillo',          'De su bolsillo'
+    DE_SU_RONCO_PECHO          = 'de_su_ronco_pecho',       'De su ronco pecho'
+    DESTACADO                  = 'destacado',               'Destacado'
+    DESTINOS                   = 'destinos',                'Destinos'
+    DETRAS_DE_CAMARAS          = 'detras_de_camaras',       'Detrás de cámaras'
+    DIA_DEL_PADRE              = 'dia_del_padre',           'Día del padre'
+    DIA_DE_LA_MADRE            = 'dia_de_la_madre',         'Día de la madre'
+    ECHANDOLE_GANAS            = 'echandole_ganas',         'Echándole ganas'
+    EDITORIAL                  = 'editorial',               'Editorial'
+    ELECCIONES                 = 'elecciones',              'Elecciones'
+    EN_LA_JUGADA               = 'en_la_jugada',            'En la jugada'
+    EN_LA_MIRA                 = 'en_la_mira',              'En la mira'
+    EN_PANTALLA                = 'en_pantalla',             'En pantalla'
+    ENTERATE                   = 'enterate',                'Entérate'
+    ESPECIAL                   = 'especial',                'Especial'
+    EXCLUSIVO                  = 'exclusivo',               'Exclusivo'
+    ESTILO_Y_BELLEZA           = 'estilo_y_belleza',        'Estilo y belleza'
+    ESTRENOS                   = 'estrenos',                'Estrenos'
+    FAMOSOS_DE_AQUI_Y_ALLA     = 'famosos_de_aqui_y_alla',  'Famosos de aquí y allá'
+    GENTE_EN_CONTACTO_TOTAL    = 'gente_en_contacto_total', 'Gente en Contacto total'
+    INMIGRACION_AL_DIA         = 'inmigracion_al_dia',      'Inmigración al día'
+    HERENCIA_HISPANA           = 'herencia_hispana',        'Herencia Hispana'
+    MUNDO_EMPRESARIAL          = 'mundo_empresarial',       'Mundo empresarial'
+    MUY_PERSONAL               = 'muy_personal',            'Muy personal'
+    NUESTRA_MUSICA             = 'nuestra_musica',          'Nuestra música'
+    ORGULLO_HISPANO            = 'orgullo_hispano',         'Orgullo hispano'
+    PANORAMA_LOCAL             = 'panorama_local',          'Panorama local'
+    PANORAMA_MUNDIAL           = 'panorama_mundial',        'Panorama mundial'
+    PANORAMA_NACIONAL          = 'panorama_nacional',       'Panorama nacional'
+    PANTALLA_CHICA             = 'pantalla_chica',          'Pantalla chica'
+    PANTALLA_GRANDE            = 'pantalla_grande',         'Pantalla grande'
+    PARA_CHUPARSE_LOS_DEDOS    = 'para_chuparse_los_dedos', 'Para chuparse los dedos'
+    PRIMER_PLANO               = 'primer_plano',            'Primer plano'
+    PUNTO_DE_VISTA             = 'punto_de_vista',          'Punto de vista'
+    QUE_NO_LE_PASE_A_USTED     = 'que_no_le_pase_a_usted',  'Que no le pase a usted'
+    SALUD_Y_BELLEZA            = 'salud_y_belleza',         'Salud y belleza'
+    SI_SE_PUEDE                = 'si_se_puede',             'Sí se puede'
+    STREAMING                  = 'streaming',               'Streaming'
+    TALENTO_LOCAL              = 'talento_local',           'Talento local'
+    VIDA_DE_MASCOTA            = 'vida_de_mascota',         'Vida de mascota'
+    VIDA_DE_PAREJA             = 'vida_de_pareja',          'Vida de pareja'
+    VIDA_SEGURA                = 'vida_segura',             'Vida segura'
+    VOCES                      = 'voces',                   'Voces'
+    YO_RECOMIENDO              = 'yo_recomiendo',           'Yo recomiendo'
+    ZONA_DIGITAL               = 'zona_digital',            'Zona digital'
+
+
 class Articulo(TimeStampedModel):
     STATUS_CHOICES = [
         ('draft', 'Borrador'),
@@ -158,9 +224,12 @@ class Articulo(TimeStampedModel):
     ]
 
     edicion = models.ForeignKey(EdicionRevista, related_name='articulos', on_delete=models.CASCADE)
+    seccion = models.CharField('Sección', max_length=50, choices=SeccionChoices.choices, default=SeccionChoices.ACTUALIDAD_LOCAL)
     titulo = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True, blank=True, editable=False)
     portada = models.ImageField(upload_to='revistas/articulos/')
+    portada_pie_de_foto = models.CharField(max_length=255,blank=True,help_text="Pie de foto de la portada")
+    portada_credito = models.CharField(max_length=255,blank=True,help_text="Crédito de la imagen de portada")
     descripcion_corta = models.CharField(max_length=255, help_text="Resumen breve")
     contenido = models.TextField(help_text="Descripción completa")
     autor = models.CharField(max_length=100, blank=True, null=True)
@@ -203,7 +272,20 @@ class Articulo(TimeStampedModel):
     def __str__(self):
         return f"{self.titulo} ({self.edicion.titulo})"
 
+class ImagenArticulo(models.Model):
+    articulo = models.ForeignKey('Articulo', on_delete=models.CASCADE, related_name='imagenes')
+    imagen = models.ImageField(upload_to='revistas/articulos/imagenes/')
+    contenido = models.TextField(blank=True,help_text="Texto o descripción que acompañará a esta imagen")
+    pie_de_foto = models.CharField(max_length=255, blank=True, help_text="Texto descriptivo o pie de foto")
+    credito = models.CharField(max_length=255, blank=True, help_text="Nombre del autor o fuente")
 
+    orden = models.PositiveIntegerField(default=0, help_text="Orden de aparición en el contenido")
+
+    class Meta:
+        ordering = ['orden']
+
+    def __str__(self):
+        return f"Imagen para {self.articulo.titulo}"
 
 
     
@@ -238,6 +320,8 @@ class CarouselNews(models.Model):
     author = models.CharField(max_length=255)
     description = models.TextField()
     image = models.ImageField(upload_to='carousel_news/')
+    pie_de_foto       = models.CharField("Pie de foto",max_length=255,blank=True,help_text="Texto descriptivo o pie de foto de la imagen")
+    credit = models.CharField("Crédito de la imagen",max_length=255,blank=True,help_text="Autor o fuente de la imagen")
     slug = models.SlugField(unique=True, blank=True, editable=False)
 
     def save(self, *args, **kwargs):
@@ -255,6 +339,8 @@ class MainNews(models.Model):
     video = models.FileField(upload_to='main_news/videos/', blank=True, null=True, help_text="Sube un video (formato mp4 recomendado)")
     video_link = models.URLField(blank=True, null=True, help_text="O ingresa un link al video (por ejemplo, YouTube embed)")
     image = models.ImageField(upload_to='main_news/images/', blank=True, null=True, help_text="Usa esta imagen si no se proporciona un video")
+    pie_de_foto = models.CharField("Pie de foto",max_length=255,blank=True,help_text="Texto descriptivo o pie de foto ")
+    credit = models.CharField("Crédito de la imagen",max_length=255,blank=True,help_text="Autor o fuente de la imagen")
     author = models.CharField(max_length=255)
     publication_date = models.DateField()
     short_description = models.TextField(help_text="Descripción corta de la noticia")
@@ -316,18 +402,69 @@ class Banner(models.Model):
     
     def _str_(self):
         return f"{self.get_position_display()} - Orden {self.orden}"
+    
+    
 
 # Vista Programa
 class Programa(models.Model):
-    titulo = models.CharField(max_length=200)
-    host = models.CharField(max_length=200,blank=True,null=True)
-    duracion = models.CharField(max_length=10,blank=True,null=True,help_text="Ejemplo: 4:47")
-    url_reproducir = models.URLField(blank=True,null=True,help_text="URL externa de reproducción (opcional)")
-    audio = models.FileField(upload_to='programas/audios/',blank=True,null=True,validators=[FileExtensionValidator(allowed_extensions=['mp3', 'wav', 'ogg', 'm4a'])],help_text="Sube un archivo de audio (.mp3, .wav, .ogg, .m4a)")
+    titulo = models.CharField(max_length=200, blank=True, null=True)
+    host = models.CharField(max_length=200, blank=True, null=True)
+    duracion = models.CharField(max_length=10, blank=True, null=True, help_text="Ejemplo: 4:47")
+    nombre_archivo = models.CharField(max_length=255, blank=True, null=True)
+    peso_archivo = models.CharField(max_length=20, blank=True, null=True, help_text="Tamaño del audio (ej: 3.5 MB)")
+    url_reproducir = models.URLField(blank=True, null=True, help_text="URL externa de reproducción (opcional)")
+    audio = models.FileField(
+        upload_to='programas/audios/',
+        blank=True,
+        null=True,
+        validators=[FileExtensionValidator(allowed_extensions=['mp3', 'wav', 'ogg', 'm4a'])],
+        help_text="Sube un archivo de audio (.mp3, .wav, .ogg, .m4a)"
+    )
     fecha_creacion = models.DateField(auto_now_add=True)
 
+    def save(self, *args, **kwargs):
+        if self.audio:
+            try:
+                audio_path = self.audio.path
+                audio_file = MutagenFile(audio_path, easy=True)
+                full_file = MutagenFile(audio_path)
+
+                # Duración
+                if full_file and full_file.info.length:
+                    total_seconds = int(full_file.info.length)
+                    minutes = total_seconds // 60
+                    seconds = total_seconds % 60
+                    self.duracion = f"{minutes}:{seconds:02d}"
+
+                # Título desde metadata
+                if not self.titulo:
+                    if isinstance(audio_file, EasyID3):
+                        self.titulo = audio_file.get("title", [None])[0]
+                    elif isinstance(audio_file, MP4):
+                        self.titulo = audio_file.tags.get('\xa9nam', [None])[0]
+
+                # Nombre y tamaño del archivo
+                self.nombre_archivo = os.path.basename(audio_path)
+                file_size = os.path.getsize(audio_path) / (1024 * 1024)  # MB
+                self.peso_archivo = f"{file_size:.2f} MB"
+
+                # Fecha de creación desde metadata (si aplica)
+                if isinstance(full_file, MP4):
+                    creation_time = full_file.tags.get('©day', [None])[0]
+                    if creation_time:
+                        try:
+                            self.fecha_creacion = datetime.strptime(creation_time, "%Y-%m-%d").date()
+                        except:
+                            pass
+            except Exception as e:
+                print(f"Error extrayendo metadatos del audio: {e}")
+
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return self.titulo
+        return self.titulo or "Programa sin título"
+
+
 
 
 # Vista Programacion

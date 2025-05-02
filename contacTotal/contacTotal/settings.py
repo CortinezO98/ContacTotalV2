@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'stationRadio',
     'import_export',
+    'adminsortable2',
 ]
 
 MIDDLEWARE = [

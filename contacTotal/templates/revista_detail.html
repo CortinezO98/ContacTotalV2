@@ -39,8 +39,8 @@
         <div class="card-body text-center px-lg-5">
           <div class="d-flex justify-content-center mb-3">
             <span class="badge bg-danger text-white rounded-pill px-3">
-              {{ principal.categoria|default:"Destacado" }}
-            </span>
+              {{ principal.get_seccion_display|default:"Destacado" }}
+            </span>            
           </div>
           <h2 class="card-title display-6 fw-bold mb-3">{{ principal.titulo }}</h2>
           <p class="text-muted mb-4">
@@ -48,7 +48,7 @@
             <span>{{ principal.fecha_publicado|date:"d M Y" }}</span>
           </p>
           <p class="card-text lead mb-4">{{ principal.descripcion_corta }}</p>
-          <a href="{{ principal.get_absolute_url }}" class="btn btn-danger text-white px-4 ">
+          <a href="{{ principal.get_absolute_url }}" class="btn btn-sm btn-outline-danger text-white px-4 ">
             Leer artículo completo <i class="bi bi-arrow-right ms-2"></i>
           </a>
         </div>
@@ -65,8 +65,8 @@
             </div>
             <div class="card-body">
               <small class="fw-bold text-danger mb-2">
-                {{ art.categoria|default:"Artículo" }}
-              </small>
+                {{ art.get_seccion_display|default:"Artículo" }}
+              </small>              
               <h3 class="h5 card-title fw-bold">{{ art.titulo }}</h3>
               <p class="card-text text-muted small">
                 {{ art.descripcion_corta|truncatewords:20 }}
@@ -84,7 +84,7 @@
       </div>
 
       <!-- ANUNCIO HORIZONTAL -->
-      <div class="my-5 py-3">
+      <div class="my-5 py-3 text-center">
         {% include 'base/announcement_component.html' with announcements=inline_ads|slice:":1" %}
       </div>
 
@@ -100,8 +100,8 @@
               <div class="col-md-9">
                 <div class="card-body py-3">
                   <small class="fw-bold text-danger mb-2">
-                    {{ art.categoria|default:"Artículo" }}
-                  </small>
+                    {{ art.get_seccion_display|default:"Artículo" }}
+                  </small>                  
                   <h3 class="h5 fw-bold">{{ art.titulo }}</h3>
                   <p class="text-muted small mb-2">
                     Por {{ art.autor }} | {{ art.fecha_publicado|date:"d M Y" }}
@@ -121,7 +121,7 @@
       </div>
 
       <!-- SEGUNDO ANUNCIO HORIZONTAL -->
-      <div class="my-5 py-3">
+      <div class="my-5 py-3 text-center">
         {% include 'base/announcement_component.html' with announcements=inline_ads|slice:"1:2" %}
       </div>
 
@@ -135,8 +135,8 @@
             </div>
             <div class="card-body">
               <small class="fw-bold text-danger mb-2">
-                {{ art.categoria|default:"Artículo" }}
-              </small>
+                {{ art.get_seccion_display|default:"Artículo" }}
+              </small>              
               <h5 class="card-title fw-bold">{{ art.titulo }}</h5>
               <p class="text-muted small mb-2">
                 {{ art.autor }} | {{ art.fecha_publicado|date:"d M Y" }}
@@ -156,8 +156,8 @@
       </div>
 
       <!-- ANUNCIO ENTRE LOS TRES ARTICULOS FINALES Y LOS DOS ULTIMOS -->
-      <div class="my-5 py-3">
-        {% include 'base/announcement_component.html' with announcements=inline_ads|slice:"1:2" %}
+      <div class="my-5 py-3 text-center">
+        {% include 'base/announcement_component.html' with announcements=inline_ads|slice:"2:3" %}
       </div>
 
       <!-- ÚLTIMOS ARTÍCULOS (PORTADA A LA DERECHA) -->
@@ -169,9 +169,9 @@
               <img src="{{ art.portada.url }}" alt="{{ art.titulo }}" class="rounded object-fit-contain shadow-sm" style="width: 180px; height: 120px; object-fit: contain;">
             </div>
             <div class="flex-grow-1">
-              <small class="fw-bold d-block mb-1 text-danger">
-                {{ art.categoria|default:"Artículo" }}
-              </small>
+              <small class="fw-bold text-danger mb-2">
+                {{ art.get_seccion_display|default:"Artículo" }}
+              </small>              
               <h3 class="h5 fw-bold mb-2">{{ art.titulo }}</h3>
               <p class="mb-2 text-muted small fst-italic">
                 Por {{ art.autor }}
