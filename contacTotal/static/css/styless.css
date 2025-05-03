@@ -1227,6 +1227,19 @@ footer {
     max-width: 300px; /* mucho más pequeño en celulares */
   }
 }
+
+/* Media queries para dispositivos móviles pequeños y medianos */
+@media screen and (max-width: 375px) {
+  /* Para mobile S (320px) y mobile M (375px) */
+  .social-icon img {
+    width: 40px;
+    height: 40px;
+  }
+
+  main {
+    margin: 0 auto 0;
+  }
+}
 /* FIN  */
 
 /* ARTICULO DETALLE */

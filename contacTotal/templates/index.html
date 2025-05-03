@@ -183,7 +183,8 @@
                                     <small class="text-muted">{{ program.fecha_creacion|date:"d F Y" }}</small>
                                 </div>
                                 <div class="text-end">
-                                    <span class="badge bg-danger rounded-pill me-2">{{ program.duracion }}</span>
+                                    <a href="{% url 'programas' %}" class="btn btn-sm btn-outline-danger" target="_blank">Escuchar</a>
+                                    <!-- <span class="badge bg-danger rounded-pill me-2">Escuchar</span> -->
                                     {% if program.url_reproducir %}
                                         <a href="{% url 'programas' %}" class="btn btn-sm btn-outline-danger" target="_blank">Escuchar</a>
                                     {% endif %}

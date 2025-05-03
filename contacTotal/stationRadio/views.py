@@ -303,7 +303,7 @@ def contacto(request):
     if status:
         context.update({
             'status':    status,
-            'swal_title': "Éxito" if status == "success" else "Error",
+            'swal_title': "¡Muchas gracias por contactarnos!" if status == "success" else "Error",
             'msg':        urllib.parse.unquote(msg) if msg else "",
         })
 
@@ -371,7 +371,7 @@ def contacto(request):
             email_message.content_subtype = 'html'
             email_message.send(fail_silently=False)
 
-            success_msg = urllib.parse.quote("Tu mensaje fue enviado con éxito.")
+            success_msg = urllib.parse.quote("Hemos recibido su mensaje y le responderemos lo más pronto posible. Si necesita asistencia de manera urgente, por favor comuníquese al 602-751-2106.")
             return HttpResponseRedirect(f"{reverse('contacto')}?status=success&msg={success_msg}")
 
         except (BadHeaderError, smtplib.SMTPException, Exception) as e:

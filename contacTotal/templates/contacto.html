@@ -58,30 +58,33 @@
 </div>
 {% endblock %}
 
-{% if status %}
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    Swal.fire({
-      title: '{{ swal_title|escapejs }}',
-      text: '{{ msg|escapejs }}',
-      icon: '{{ status|escapejs }}',
-      confirmButtonText: 'Aceptar'
-    }).then((result) => {
-      if (result.isConfirmed && '{{ status }}' === 'success') {
-        const form = document.querySelector('form');
-        if (form) form.reset();
-      }
+{% block extra_scripts %}
+  <script>
+    const form = document.querySelector('form');
+    const btn = document.getElementById('btnEnviar');
+
+    if (form && btn) {
+      form.addEventListener('submit', function () {
+        btn.disabled = true;
+        btn.innerHTML = 'Enviando...';
+      });
+    }
+    
+    {% if status %}
+    document.addEventListener("DOMContentLoaded", function () {
+      console.log("Mostrando SweetAlert con status: {{ status }}");
+      Swal.fire({
+        title: '{{ swal_title|escapejs }}',
+        text: '{{ msg|escapejs }}',
+        icon: '{{ status|escapejs }}',
+        confirmButtonText: 'Aceptar'
+      }).then((result) => {
+        if (result.isConfirmed && '{{ status }}' === 'success') {
+          const form = document.querySelector('form');
+          if (form) form.reset();
+        }
+      });
     });
-  });
-</script>
-{% endif %}
-
-<script>
-  const form = document.querySelector('form');
-  const btn = document.getElementById('btnEnviar');
-
-  form.addEventListener('submit', function () {
-    btn.disabled = true;
-    btn.innerHTML = 'Enviando...';
-  });
-</script>
+    {% endif %}
+  </script>
+{% endblock %}
