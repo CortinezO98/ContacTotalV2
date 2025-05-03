@@ -74,6 +74,22 @@
       <div class="center-column">
         <section class="main-video">
           <div class="video-container">
+              {% if show_twitch %}
+                  <!-- Iframe de Twitch -->
+                  <iframe src="https://player.twitch.tv/?channel=laugeh17&parent=127.0.0.1&parent=127.0.0.1&autoplay=true" title="Twitch video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen> </iframe>
+              {% else %}
+                  <!-- Video subido -->
+                  {% if main_video %}
+                      {% if main_video.video_file %}
+                          <video controls>
+                              <source src="{{ main_video.video_source }}" type="video/mp4">
+                              Tu navegador no soporta el tag de video.
+                          </video>
+                      {% endif %}
+                  {% endif %}
+              {% endif %}
+          </div>
+          <!-- <div class="video-container">
               {% if main_video and main_video.video_source %}
                   {% if main_video.video_file %}
                       <video controls>
@@ -82,10 +98,10 @@
                       <iframe src="{{ main_video.video_source }}" title="Video principal" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen> </iframe>
                   {% endif %}
               {% else %}
-                  <!-- <iframe src="https://www.youtube.com/embed/RyewX_e5Blg?si=ppBcPOv8WzVBd_yB" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen> </iframe> -->
+                  <iframe src="https://www.youtube.com/embed/RyewX_e5Blg?si=ppBcPOv8WzVBd_yB" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen> </iframe>
                   <iframe src="https://player.twitch.tv/?channel=laugeh17&parent=127.0.0.1&parent=127.0.0.1&autoplay=true" title="Twitch video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen> </iframe>
               {% endif %}
-          </div>
+          </div> -->
       </section>
     
           
@@ -171,6 +187,30 @@
   </nav>
   <script>
       !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
+  </script>    
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      {% if next_change_ms %}
+        const currentMs = {{ current_ms }};
+        const nextChangeMs = {{ next_change_ms }};
+        
+        // Calcular milisegundos hasta el próximo cambio
+        let msUntilNextChange;
+        if (nextChangeMs > currentMs) {
+          msUntilNextChange = nextChangeMs - currentMs;
+        } else {
+          // El próximo cambio es mañana
+          msUntilNextChange = (24 * 60 * 60 * 1000) - currentMs + nextChangeMs;
+        }
+        
+        console.log(`Próximo cambio programado en ${msUntilNextChange / 1000} segundos`);
+        
+        // Programar actualización de la página
+        setTimeout(function() {
+          console.log('Actualizando página debido al cambio programado...');
+          location.reload();
+        }, msUntilNextChange);
+      {% endif %}
+    });
   </script>
-  
-  </header>
+</header>

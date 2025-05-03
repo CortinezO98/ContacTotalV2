@@ -311,6 +311,47 @@ class MainVideo(models.Model):
 
     def _str_(self):
         return self.title or "Main Video"
+    
+#Modelo para el horario de Twitch
+
+class TwitchSchedule(models.Model):
+    DAY_CHOICES = [
+        (0, 'Lunes'),
+        (1, 'Martes'),
+        (2, 'Miércoles'),
+        (3, 'Jueves'),
+        (4, 'Viernes'),
+        (5, 'Sábado'),
+        (6, 'Domingo'),
+    ]
+    
+    day_of_week = models.IntegerField(
+        choices=DAY_CHOICES,
+        verbose_name="Día de la semana"
+    )
+    start_time = models.TimeField(
+        verbose_name="Hora de inicio"
+    )
+    end_time = models.TimeField(
+        verbose_name="Hora de fin"
+    )
+    twitch_channel = models.CharField(
+        max_length=100, 
+        default='contactototal',
+        verbose_name="Canal de Twitch"
+    )
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name="Activo"
+    )
+    
+    class Meta:
+        verbose_name = "Horario de Twitch"
+        verbose_name_plural = "Horarios de Twitch"
+        ordering = ['day_of_week', 'start_time']
+    
+    def __str__(self):
+        return f"{self.get_day_of_week_display()} de {self.start_time.strftime('%H:%M')} a {self.end_time.strftime('%H:%M')}"
 
 
 # Carrusel de Noticias (Index)

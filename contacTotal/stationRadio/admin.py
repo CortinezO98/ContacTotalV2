@@ -14,6 +14,19 @@ admin.site.site_header = "Administración Revista Contacto Total"
 admin.site.site_title = "Panel de Contacto Total"
 admin.site.index_title = "Bienvenido al Panel de Administración"
 
+@admin.register(TwitchSchedule)
+class TwitchScheduleAdmin(admin.ModelAdmin):
+    list_display = ('get_day_display', 'start_time', 'end_time', 'twitch_channel', 'is_active')
+    list_filter = ('day_of_week', 'is_active')
+    search_fields = ('twitch_channel',)
+    list_editable = ('is_active',)
+    
+    def get_day_display(self, obj):
+        return obj.get_day_of_week_display()
+    get_day_display.short_description = 'Día de la semana'
+    get_day_display.admin_order_field = 'day_of_week'
+
+
 class PodcastAudioInline(admin.TabularInline):
     model = PodcastAudio
     extra = 1

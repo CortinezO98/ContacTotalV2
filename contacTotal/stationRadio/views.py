@@ -10,6 +10,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 import smtplib
 import urllib.parse
+from datetime import datetime, time
+import pytz
 
 
 def IndexView(request):
@@ -40,6 +42,67 @@ def IndexView(request):
         ).order_by('-date_created', '-id').first()
     else:
         latest_audio = None
+
+    # Nueva lógica para alternar entre video y Twitch según la hora
+    # Obtener la hora actual en Bogotá (o tu zona horaria preferida)
+    now = datetime.now(pytz.timezone('America/Bogota'))
+    #current_hour = now.hour
+    current_time = now.time()
+    
+    # Nueva lógica para verificar si hay que mostrar Twitch según los horarios configurados
+    # Obtener la hora y día actual
+    now = datetime.now(pytz.timezone('America/Bogota'))
+    current_day = now.weekday()  # 0 = Lunes, 6 = Domingo
+    current_time = now.time()
+    
+    # Verificar si hay una programación para mostrar Twitch ahora
+    twitch_schedule = TwitchSchedule.objects.filter(
+        day_of_week=current_day,
+        start_time__lte=current_time,
+        end_time__gt=current_time,
+        is_active=True
+    ).first()
+
+    # Obtener el próximo cambio programado
+    next_start_schedule = TwitchSchedule.objects.filter(
+        day_of_week=current_day,
+        start_time__gt=current_time,
+        is_active=True
+    ).order_by('start_time').first()
+
+    next_end_schedule = TwitchSchedule.objects.filter(
+        day_of_week=current_day,
+        end_time__gt=current_time,
+        is_active=True
+    ).order_by('end_time').first()
+    
+    # Determinar si mostrar Twitch basado en la programación:
+    # - Si hay un horario activo para ahora, mostrar Twitch
+    # - Si no hay video principal, mostrar Twitch
+    show_twitch = twitch_schedule is not None or main_video is None
+    
+    # Obtener el canal de Twitch (o usar uno por defecto)
+    twitch_channel = twitch_schedule.twitch_channel if twitch_schedule else 'contactototal'
+
+    # Preparar tiempos para JavaScript (en milisegundos desde medianoche)
+    current_ms = (current_time.hour * 3600 + current_time.minute * 60 + current_time.second) * 1000
+    next_change_ms = None
+
+    if next_start_schedule:
+        next_start_ms = (next_start_schedule.start_time.hour * 3600 + 
+                         next_start_schedule.start_time.minute * 60 + 
+                         next_start_schedule.start_time.second) * 1000
+        if next_end_schedule:
+            next_end_ms = (next_end_schedule.end_time.hour * 3600 + 
+                          next_end_schedule.end_time.minute * 60 + 
+                          next_end_schedule.end_time.second) * 1000
+            next_change_ms = min(next_start_ms, next_end_ms)
+        else:
+            next_change_ms = next_start_ms
+    elif next_end_schedule:
+        next_change_ms = (next_end_schedule.end_time.hour * 3600 + 
+                         next_end_schedule.end_time.minute * 60 + 
+                         next_end_schedule.end_time.second) * 1000
     
     context = {
         'latest_edicion': latest_edicion,
@@ -57,6 +120,10 @@ def IndexView(request):
         'banner_horizontal_after_main_news': banner_horizontal_after_main_news,
         'banner_horizontal_after_podcast': banner_horizontal_after_podcast,
         'banner_horizontal_after_programs': banner_horizontal_after_programs,
+        'show_twitch': show_twitch,
+        'twitch_channel': twitch_channel,
+        'current_ms': current_ms,
+        'next_change_ms': next_change_ms,
     }
     return render(request, "index.html", context)
 
