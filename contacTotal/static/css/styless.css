@@ -215,6 +215,98 @@ footer {
 .bar:nth-child(5) { animation-delay: 0.3s; height: 90%; }
 .bar:nth-child(6) { animation-delay: 0.6s; height: 50%; }
 
+/* Controles para audio radio */
+
+.controls {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.play-button {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #ff0000;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: none;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-right: 10px;
+}
+
+.play-button:hover {
+  background-color: rgba(255, 0, 0, 0.692);
+  transform: scale(1.05);
+}
+
+.play-button:active {
+  transform: scale(0.95);
+}
+
+.volume-control {
+  display: flex;
+  align-items: center;
+  border-radius: 30px;
+}
+
+.volume-icon {
+  color: #ff0000;
+  margin-right: 15px;
+  font-size: 20px;
+  width: 20px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.volume-icon:hover {
+  color: white;
+}
+
+.volume-slider {
+  flex-grow: 1;
+  -webkit-appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: #ddd;
+  outline: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ff0000;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.volume-slider::-webkit-slider-thumb:hover {
+  background: white;
+}
+
+.volume-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.volume-slider::-moz-range-thumb:hover {
+  background: white;
+}
+
 /* Magazine Section */
 .revista, .magazine-cover {
   width: 100%;
@@ -328,78 +420,6 @@ footer {
 
 .main-video {
   margin-bottom: 30px;
-}
-
-.play-button {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(255, 0, 0, 0.8);
-  color: white;
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 30px;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s;
-}
-
-.play-button:hover {
-  background-color: #ff0000;
-  transform: translate(-50%, -50%) scale(1.1);
-}
-
-.video-controls {
-  display: flex;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 10px;
-  border-radius: 0 0 5px 5px;
-}
-
-.video-controls button {
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  padding: 5px;
-  margin: 0 5px;
-}
-
-.progress-bar, .time-bar {
-  flex: 1;
-  height: 4px;
-  background-color: rgba(255, 255, 255, 0.3);
-  margin: 0 10px;
-  position: relative;
-  border-radius: 2px;
-}
-
-.time-bar {
-  height: 3px;
-  margin: 0 8px;
-}
-
-.progress, .time-progress {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  border-radius: 2px;
-}
-
-.progress {
-  background-color: #ff0000;
-  width: 30%;
-}
-
-.time-progress {
-  background-color: white;
-  width: 40%;
 }
 
 /* Social Section */

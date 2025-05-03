@@ -54,7 +54,7 @@
           <section class="article-content mb-5 lh-lg fs-6">
             {% for item in contenido_mezclado %}
               {% if item.tipo == 'parrafo' %}
-                <p>{{ item.contenido|linebreaksbr }}</p>
+                <p>{{ item.contenido|safe|linebreaksbr }}</p>
               {% elif item.tipo == 'imagen' %}
                 {# Anuncio antes de la imagen #}
                 <div class="mb-5">
@@ -79,7 +79,7 @@
                 {# Texto asociado a la imagen #}
                 {% if item.contenido.contenido %}
                   <div class="mb-5 lh-lg fs-6">
-                    <p>{{ item.contenido.contenido|linebreaksbr }}</p>
+                    <p>{{ item.contenido.contenido|safe|linebreaksbr }}</p>
                   </div>
                 {% endif %}
               {% endif %}
