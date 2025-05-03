@@ -16,13 +16,13 @@
           {% include 'base/announcement_component.html' with announcements=left_ads %}
         </div>
       </aside>
-
+      
       <!-- Formulario principal -->
       <div class="col-12 col-lg-8">
         <div class="card shadow-sm border-0 p-4">
           <h2 class="fw-bold text-center mb-3">Anúnciate con nosotros<span class="text-danger d-block">/Advertise with us</span></h2>
           <p class="text-center mb-4">En Contacto Total Media te ofrecemos diferentes opciones publicitarias. Ponte en contacto hoy mismo para empezar a trabajar con nosotros y anunciar tu marca a través de nuestra plataforma multimedia.</p>
-
+          
           <form method="POST">
             {% csrf_token %}
             <div class="mb-3">
@@ -55,21 +55,31 @@
           </form>
         </div>
       </div>
-
+      
       <!-- Anuncios derecha -->
       <aside class="col-lg-2 d-none d-lg-block">
         <div class="sticky-top pt-4">
           {% include 'base/announcement_component.html' with announcements=right_ads %}
         </div>
       </aside>
-
     </div>
   </div>
 </div>
 {% endblock %}
 
-{% if status %}
+{% block extra_scripts %}
 <script>
+  const form = document.querySelector('form');
+  const btn = document.getElementById('btnEnviar');
+
+  if (form && btn) {
+    form.addEventListener('submit', function () {
+      btn.disabled = true;
+      btn.innerHTML = 'Enviando...';
+    });
+  }
+  
+  {% if status %}
   document.addEventListener("DOMContentLoaded", function () {
     console.log("Mostrando SweetAlert con status: {{ status }}");
     Swal.fire({
@@ -84,9 +94,6 @@
       }
     });
   });
+  {% endif %}
 </script>
-{% endif %}
-
-
-
-
+{% endblock %}
