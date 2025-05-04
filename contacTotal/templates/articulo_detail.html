@@ -3,34 +3,35 @@
 {% load myfilters %}
 
 {% block header %}
-  {% include 'base/headerCompact.html' %}
+{% include 'base/headerCompact.html' %}
 {% endblock %}
 
 {% block main %}
 <div class="container py-5">
   <div class="row gx-4">
 
-    <!-- Anuncios Izquierda -->
+    <!-- Anuncios Izquierda: sólo en ≥lg -->
     <aside class="col-lg-2 d-none d-lg-block">
       <div class="sticky-top pt-4">
         {% include 'base/announcement_component.html' with announcements=left_ads %}
       </div>
     </aside>
 
-    <!-- Contenido Principal -->
-    <article class="col-12 col-md-8">
+    <!-- Contenido Principal: 100% ancho en <lg, 8/12 en ≥lg -->
+    <article class="col-12 col-lg-8">
       <div class="card shadow-sm mb-4 border-0">
         <!-- Portada -->
-        <img src="{{ articulo.portada.url }}" class="card-img-top rounded-top img-fluid" alt="{{ articulo.titulo }}" style="object-fit: contain; max-height: 400px;">
+        <img src="{{ articulo.portada.url }}" class="card-img-top rounded-top img-fluid" alt="{{ articulo.titulo }}"
+          style="object-fit: contain; max-height: 400px;">
         {% if articulo.portada_pie_de_foto or articulo.portada_credito %}
-          <p class="text-center text-muted small fst-italic mb-3">
-            {% if articulo.portada_pie_de_foto %}
-              {{ articulo.portada_pie_de_foto }}
-            {% endif %}
-            {% if articulo.portada_credito %}
-              <br><strong>Crédito:</strong> {{ articulo.portada_credito }}
-            {% endif %}
-          </p>
+        <p class="text-center text-muted small fst-italic mb-3">
+          {% if articulo.portada_pie_de_foto %}
+          {{ articulo.portada_pie_de_foto }}
+          {% endif %}
+          {% if articulo.portada_credito %}
+          <br><strong>Crédito:</strong> {{ articulo.portada_credito }}
+          {% endif %}
+        </p>
         {% endif %}
         <div class="card-body">
           <h1 class="card-title display-6 mb-3">{{ articulo.titulo }}</h1>
@@ -39,68 +40,67 @@
             Publicado por <strong>{{ articulo.autor }}</strong>
             el {{ articulo.fecha_publicado|date:"d M Y" }}
           </p>
+
           <!-- Estado y Tags -->
           <div class="mb-4">
             {% if articulo.status == 'published' %}
-              <span class="badge bg-success me-1">{{ articulo.get_status_display }}</span>
+            <span class="badge bg-success me-1">{{ articulo.get_status_display }}</span>
             {% else %}
-              <span class="badge bg-secondary me-1">{{ articulo.get_status_display }}</span>
+            <span class="badge bg-secondary me-1">{{ articulo.get_status_display }}</span>
             {% endif %}
             {% for tag in articulo.tags.all %}
-              <span class="badge bg-info text-dark me-1">#{{ tag.name }}</span>
+            <span class="badge bg-info text-dark me-1">#{{ tag.name }}</span>
             {% endfor %}
           </div>
-          <!-- Contenido del artículo con imágenes y anuncios intercalados -->
+
+          <!-- Contenido con anuncios intercalados (ocultos en <lg) -->
           <section class="article-content mb-5 lh-lg fs-6">
             {% for item in contenido_mezclado %}
-              {% if item.tipo == 'parrafo' %}
-                <p>{{ item.contenido|safe|linebreaksbr }}</p>
-              {% elif item.tipo == 'imagen' %}
-                {# Anuncio antes de la imagen #}
-                <div class="mb-5">
-                  {% include 'base/announcement_component.html' with announcements=inline_ads %}
-                </div>
-                <div class="text-center my-4">
-                  <img
-                    src="{{ item.contenido.imagen.url }}"
-                    class="img-fluid rounded shadow-sm mb-2"
-                    style="max-width: 100%; height: auto; max-height: 400px; object-fit: contain;"
-                    alt="{{ item.contenido.pie_de_foto|default:articulo.titulo }}"
-                  >
-                  {% if item.contenido.pie_de_foto or item.contenido.credito %}
-                    <p class="text-muted small fst-italic mb-0">
-                      {% if item.contenido.pie_de_foto %}{{ item.contenido.pie_de_foto }}{% endif %}
-                      {% if item.contenido.credito %}
-                        <br><strong>Crédito:</strong> {{ item.contenido.credito }}
-                      {% endif %}
-                    </p>
-                  {% endif %}
-                </div>
-                {# Texto asociado a la imagen #}
-                {% if item.contenido.contenido %}
-                  <div class="mb-5 lh-lg fs-6">
-                    <p>{{ item.contenido.contenido|safe|linebreaksbr }}</p>
-                  </div>
+            {% if item.tipo == 'parrafo' %}
+            <p>{{ item.contenido|safe|linebreaksbr }}</p>
+            {% elif item.tipo == 'imagen' %}
+            <!-- anuncio antes de la imagen -->
+            <div class="mb-5 d-none d-lg-block">
+              {% include 'base/announcement_component.html' with announcements=inline_ads %}
+            </div>
+            <div class="text-center my-4">
+              <img src="{{ item.contenido.imagen.url }}" class="img-fluid rounded shadow-sm mb-2"
+                alt="{{ item.contenido.pie_de_foto|default:articulo.titulo }}"
+                style="max-width: 100%; height: auto; max-height: 400px; object-fit: contain;">
+              {% if item.contenido.pie_de_foto or item.contenido.credito %}
+              <p class="text-muted small fst-italic mb-0">
+                {% if item.contenido.pie_de_foto %}{{ item.contenido.pie_de_foto }}{% endif %}
+                {% if item.contenido.credito %}
+                <br><strong>Crédito:</strong> {{ item.contenido.credito }}
                 {% endif %}
+              </p>
               {% endif %}
+            </div>
+            {% if item.contenido.contenido %}
+            <div class="mb-5 lh-lg fs-6">
+              <p>{{ item.contenido.contenido|safe|linebreaksbr }}</p>
+            </div>
+            {% endif %}
+            {% endif %}
             {% endfor %}
           </section>
 
           {% if articulo.external_url %}
-            <div class="text-center mb-2">
-              <a href="{{ articulo.external_url }}" class="btn btn-outline-primary px-4" target="_blank" rel="noopener noreferrer">
-                <i class="bi bi-box-arrow-up-right me-2"></i>
-                Link relacionado con el artículo
-              </a>
-            </div>
+          <div class="text-center mb-2">
+            <a href="{{ articulo.external_url }}" class="btn btn-outline-primary px-4" target="_blank"
+              rel="noopener noreferrer">
+              <i class="bi bi-box-arrow-up-right me-2"></i>
+              Link relacionado con el artículo
+            </a>
+          </div>
           {% endif %}
 
-          <!-- Contador de vistas -->
+          <!-- Vistas -->
           <p class="text-center text-muted mb-3">
             <small><i class="bi bi-eye"></i> Vistas: {{ articulo.view_count }}</small>
           </p>
 
-          <!-- Volver a la revista -->
+          <!-- Volver atrás -->
           <div class="text-center">
             <a href="{{ articulo.edicion.get_absolute_url }}" class="btn btn-outline-secondary">
               &larr; Volver a la revista: {{ articulo.edicion.titulo }}
@@ -110,13 +110,13 @@
       </div>
     </article>
 
-    <!-- Anuncios Derecha -->
+    <!-- Anuncios Derecha: sólo en ≥lg -->
     <aside class="col-lg-2 d-none d-lg-block">
       <div class="sticky-top pt-4">
         {% include 'base/announcement_component.html' with announcements=right_ads %}
       </div>
     </aside>
-    
+
   </div>
 </div>
 
