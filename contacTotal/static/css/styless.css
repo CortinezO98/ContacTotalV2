@@ -1267,3 +1267,52 @@ footer {
   transform: translateY(0);
 }
 /* FIN */
+
+
+
+
+
+
+/* RESPONSIVE INDEX */
+
+@media (max-width: 767.98px) {
+  .ad-bar {
+    display: none !important;
+  }
+
+  .banner-row,
+  .row.my-4 > .col-12 > *[href^="http"], 
+  .row.my-4 > .col-12 > *[class*="banner"] {
+    display: none !important;
+  }
+
+  .side-news-item {
+    display: none !important;
+  }
+}
+/* FIN */
+
+
+/* DETALLE NOTICIA */
+
+.news-content {
+  text-align: justify;
+}
+
+/* FIN */
+
+
+/* RESPONSIVE PODCAST */
+  /* En móvil desactiva la altura fija de la lista de audios */
+
+  @media (max-width: 767.98px) {
+    .audio-list { max-height: none !important; overflow: visible !important; }
+  }
+  /* Ajuste de flechas en carousel móvil */
+  #podcastCarouselMobile .carousel-control-prev { left: -1.5rem; }
+  #podcastCarouselMobile .carousel-control-next { right: -1.5rem; }
+
+
+
+
+

@@ -22,11 +22,11 @@
         <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
           <h2 class="mb-3 mb-md-0">Programas Anteriores</h2>
           <form class="input-group" method="GET" action="" style="max-width: 300px;">
+            <input type="text" name="q" class="form-control border-secondary" placeholder="Buscar Programas"
+              aria-label="Buscar Programas" aria-describedby="search-icon" value="{{ query|default_if_none:'' }}">
             <span class="input-group-text bg-secondary text-light border-0" id="search-icon">
               <i class="bi bi-search"></i>
             </span>
-            <input type="text" name="q" class="form-control border-secondary" placeholder="Buscar Programas"
-              aria-label="Buscar Programas" aria-describedby="search-icon" value="{{ query|default_if_none:'' }}">
           </form>
         </div>
 

@@ -3,10 +3,8 @@
     <nav class="navbar navbar-expand-lg py-2">
         <div class="container">
             <!-- LOGO PARA MÓVIL -->
-            <a class="navbar-brand d-lg-none" href="#">
+            <a class="navbar-brand d-lg-none" href="{% url 'index' %}">
                 {% if logo_type %}
-                    <img src="{% static 'img/'|add:logo_type|add:'_logo.png' %}" alt="Logo {{ logo_type }}" width="120">
-                {% else %}
                     <img src="{% static 'img/logomedia.png' %}" alt="Logo Contacto Total" width="120">
                 {% endif %}
             </a>

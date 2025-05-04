@@ -25,6 +25,8 @@ def IndexView(request):
     last_podcasts = PodcastSection.objects.order_by('-date_created')[:6]
     last_programs = Programa.objects.order_by('-fecha_creacion', '-id')[:3]
     latest_podcast_section = PodcastSection.objects.order_by('-date_created', '-id').first()
+    noticias_flat = list(CarouselNews.objects.all().order_by('-publication_date')[:6])
+    podcasts_flat = list(PodcastSection.objects.order_by('-date_created')[:6])
     
     # Banners verticales
     banners_left = Banner.objects.filter(activo=True, position='vertical_left').order_by('orden')
@@ -114,6 +116,8 @@ def IndexView(request):
         'last_programs': last_programs,
         'latest_podcast_section': latest_podcast_section,
         'latest_audio': latest_audio,
+        'noticias_flat': noticias_flat,
+        'podcasts_flat': podcasts_flat,
         'banners_left': banners_left,
         'banners_right': banners_right,
         'banner_horizontal_after_carousel': banner_horizontal_after_carousel,

@@ -18,11 +18,11 @@
         <div class="col-12 col-lg-8 main-content">
             <!-- Sección: Carrusel de noticias -->
             <h2 id="ColorTitulo1" class="text-center mb-4">¡Lo que está pasando!</h2>
-            <div id="noticiasCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+            <div id="noticiasCarousel" class="carousel slide d-none d-md-block" data-bs-ride="carousel" data-bs-interval="5000">
                 <div class="carousel-inner">
                     {% for group in carousel_news %}
                         <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                            <div class="row">
+                            <div class="row g-3">
                                 {% for noticia in group %}
                                     <div class="col-md-4">
                                         <div class="card">
@@ -30,7 +30,7 @@
                                                 <img src="{{ noticia.image.url }}" class="card-img-top" alt="{{ noticia.title }}">
                                                 <div class="card-body">
                                                     <h5 class="card-title">{{ noticia.title }}</h5>
-                                                    <p class="card-text">
+                                                    <p class="card-text small text-muted">
                                                     {{ noticia.publication_date|date:"d F Y" }} - {{ noticia.author }}
                                                     </p>
                                                     <p class="card-text">{{ noticia.description|truncatewords:20 }}</p>
@@ -52,9 +52,42 @@
                     <span class="visually-hidden">Siguiente</span>
                 </button>
             </div>
+
+            <div id="noticiasCarouselMobile" class="carousel slide d-block d-md-none" data-bs-ride="carousel"
+                data-bs-interval="5000">
+                <div class="carousel-inner">
+                    {% for group in carousel_news %}
+                    {% for noticia in group %}
+                    <div class="carousel-item {% if forloop.parentloop.first and forloop.first %}active{% endif %}">
+                        <div class="card mx-auto" style="max-width: 90%;">
+                            <a href="{% url 'noticia_detalle' noticia.slug %}" class="text-decoration-none text-dark">
+                                <img src="{{ noticia.image.url }}" class="card-img-top" style="height: 400px; object-fit: cover;"
+                                    alt="{{ noticia.title }}">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ noticia.title }}</h5>
+                                    <p class="card-text small text-muted">
+                                        {{ noticia.publication_date|date:"d F Y" }} – {{ noticia.author }}
+                                    </p>
+                                    <p class="card-text">{{ noticia.description|truncatewords:15 }}</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% endfor %}
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#noticiasCarouselMobile" data-bs-slide="prev" style="left: -8px; width: auto;">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#noticiasCarouselMobile" data-bs-slide="next" style="right: -8px; width: auto;">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                </button>
+            </div>
             
             <!-- Banner Horizontal: Después del Carrusel -->
-            <div class="row my-4">
+            <div class="row my-4 banner-row">
                 <div class="col-12 d-flex justify-content-center">
                     {% for banner in banner_horizontal_after_carousel %}
                         {{ banner.script|safe }}
@@ -68,7 +101,7 @@
             <div class="row mt-4">
                 <div class="col-md-8">
                 {% if main_news %}
-                    <div class="main-article">
+                    <div class="main-article text-center">
                         <a href="{% url 'noticia_detalle' main_news.slug %}" style="text-decoration: none; color: inherit;">
                             <h3>{{ main_news.title }}</h3>
                             {% if main_news.video or main_news.video_link %}
@@ -80,10 +113,9 @@
                             {% endif %}
                         </a>
                         <p>
-                            <strong>Por:</strong> {{ main_news.author }}<br>
-                            <strong>Fecha:</strong> {{ main_news.publication_date|date:"d F Y" }}
+                            {{ main_news.author }} | {{ main_news.publication_date|date:"d F Y" }}
                         </p>
-                        <p>{{ main_news.short_description }}</p>
+                        <p>{{ main_news.short_description|truncatewords:30  }}</p>
                     </div>
                 {% endif %}
                 </div>
@@ -100,7 +132,7 @@
             </div>
             
             <!-- Banner Horizontal: Después de la Noticia Principal -->
-            <div class="row my-4">
+            <div class="row my-4 banner-row">
                 <div class="col-12 d-flex justify-content-center">
                     {% for banner in banner_horizontal_after_main_news %}
                         {{ banner.script|safe }}
@@ -114,48 +146,87 @@
             <div id="index-podcast" class="podcast-section text-center">
                 <h4>Podcast</h4>
                 <p>Disfruta de nuestro podcast con las últimas noticias, entrevistas y análisis.</p>
-                <div id="podcastCarousel" class="carousel slide" data-bs-ride="carousel">
+            
+                {# Escritorio: 3 por slide #}
+                <div id="podcastCarouselDesktop" class="carousel slide d-none d-md-block" data-bs-ride="carousel">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
                             <div class="row justify-content-center">
                                 {% for p in last_podcasts|slice:"0:3" %}
-                                    <div class="col-12 col-md-4 mb-4">
-                                        <a href="{% url 'podcast_detail' p.slug %}">
-                                        <img src="{{ p.cover_image.url }}" alt="{{ p.title }}" class="img-fluid rounded-circle" style="width:150px; height:150px; object-fit:cover;">
-                                        </a>
-                                        <h5 class="mt-2">{{ p.title }}</h5>
-                                        <p>{{ p.date_created|date:"d F Y" }}</p>
-                                    </div>
+                                <div class="col-md-4 text-center mb-4">
+                                    <a href="{% url 'podcast_detail' p.slug %}">
+                                        <img src="{{ p.cover_image.url }}" alt="{{ p.title }}"
+                                            class="img-fluid rounded-circle mx-auto"
+                                            style="width:150px; height:150px; object-fit:cover;">
+                                    </a>
+                                    <h5 class="mt-2">{{ p.title }}</h5>
+                                    <p class="small text-muted">{{ p.date_created|date:"d F Y" }}</p>
+                                </div>
                                 {% endfor %}
                             </div>
                         </div>
+                        {% if last_podcasts|length > 3 %}
                         <div class="carousel-item">
                             <div class="row justify-content-center">
                                 {% for p in last_podcasts|slice:"3:6" %}
-                                    <div class="col-12 col-md-4 mb-4">
-                                        <a href="{% url 'podcast_detail' p.slug %}">
-                                            <img src="{{ p.cover_image.url }}" alt="{{ p.title }}" class="img-fluid rounded-circle" style="width:150px; height:150px; object-fit:cover;">
-                                        </a>
-                                        <h5 class="mt-2">{{ p.title }}</h5>
-                                        <p>{{ p.date_created|date:"d F Y" }}</p>
-                                    </div>
+                                <div class="col-md-4 text-center mb-4">
+                                    <a href="{% url 'podcast_detail' p.slug %}">
+                                        <img src="{{ p.cover_image.url }}" alt="{{ p.title }}"
+                                            class="img-fluid rounded-circle mx-auto"
+                                            style="width:150px; height:150px; object-fit:cover;">
+                                    </a>
+                                    <h5 class="mt-2">{{ p.title }}</h5>
+                                    <p class="small text-muted">{{ p.date_created|date:"d F Y" }}</p>
+                                </div>
                                 {% endfor %}
                             </div>
                         </div>
+                        {% endif %}
                     </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#podcastCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#podcastCarouselDesktop"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
                         <span class="visually-hidden">Anterior</span>
                     </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#podcastCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <button class="carousel-control-next" type="button" data-bs-target="#podcastCarouselDesktop"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                        <span class="visually-hidden">Siguiente</span>
+                    </button>
+                </div>
+            
+                {# Móvil: 1 por slide #}
+                <div id="podcastCarouselMobile" class="carousel slide d-block d-md-none" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for p in last_podcasts %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            <div class="text-center py-3">
+                                <a href="{% url 'podcast_detail' p.slug %}">
+                                    <img src="{{ p.cover_image.url }}" alt="{{ p.title }}" class="img-fluid rounded-circle mx-auto"
+                                        style="width:120px; height:120px; object-fit:cover;">
+                                </a>
+                                <h5 class="mt-2">{{ p.title }}</h5>
+                                <p class="small text-muted">{{ p.date_created|date:"d F Y" }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#podcastCarouselMobile"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                        <span class="visually-hidden">Anterior</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#podcastCarouselMobile"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon"></span>
                         <span class="visually-hidden">Siguiente</span>
                     </button>
                 </div>
             </div>
+
             
             <!-- Banner Horizontal: Después de la sección de Podcast -->
-            <div class="row my-4">
+            <div class="row my-4 banner-row">
                 <div class="col-12 d-flex justify-content-center">
                     {% for banner in banner_horizontal_after_podcast %}
                         {{ banner.script|safe }}
@@ -184,9 +255,7 @@
                                 </div>
                                 <div class="text-end">
                                     <a href="{% url 'programas' %}" class="btn btn-sm btn-outline-danger" target="_blank">Escuchar</a>
-                                    <!-- <span class="badge bg-danger rounded-pill me-2">Escuchar</span> -->
                                     {% if program.url_reproducir %}
-                                        <a href="{% url 'programas' %}" class="btn btn-sm btn-outline-danger" target="_blank">Escuchar</a>
                                     {% endif %}
                                 </div>
                             </li>
@@ -212,7 +281,7 @@
 
             
             <!-- Banner Horizontal: Después de la sección de Programas -->
-            <div class="row my-4">
+            <div class="row my-4 banner-row">
                 <div class="col-12 d-flex justify-content-center">
                 {% for banner in banner_horizontal_after_programs %}
                     {{ banner.script|safe }}

@@ -23,7 +23,7 @@
                 {% for edicion in page_obj %}
                 <div class="col">
                     <div class="card h-100 shadow-sm">
-                        <img src="{{ edicion.imagen.url }}" class="card-img-top" alt="{{ edicion.titulo }}" style="object-fit: cover; height: 200px;">
+                        <img src="{{ edicion.imagen.url }}" class="card-img-top" alt="{{ edicion.titulo }}" style="object-fit: cover; height: 400px;">
                         <div class="card-body">
                             <p class="text-muted mb-1">
                                 {{ edicion.fecha_publicacion|date:"d M Y" }} | {{ edicion.articulos.count }} Artículos

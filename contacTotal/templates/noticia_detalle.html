@@ -2,84 +2,82 @@
 {% load static %}
 
 {% block header %}
-  {% include 'base/headerCompact.html' %}
+{% include 'base/headerCompact.html' %}
 {% endblock %}
 
 {% block main %}
 <div class="container-xl mt-5 bg-light px-3">
   <div class="row">
 
-    <!-- Anuncios izquierda -->
-    <div class="col-lg-2 d-none d-lg-block">
+    <!-- Anuncios izquierda (solo md+) -->
+    <div class="col-md-2 d-none d-md-block">
       {% include 'base/announcement_component.html' with announcements=left_ads %}
     </div>
 
-    <!-- Contenido principal de la noticia -->
-    <div class="col-12 col-lg-8">
+    <!-- Contenido principal -->
+    <div class="col-12 col-md-8">
       <article class="card shadow-sm border-0 p-4 bg-white">
-        
+
         <!-- Título -->
         <h1 class="text-center fw-bold text-danger">{{ news_item.title }}</h1>
 
         <!-- Autor y fecha -->
         <p class="text-center text-muted small mb-4">
-          Por: <strong>{{ news_item.author }}</strong> &nbsp; | &nbsp; 
+          Por: <strong>{{ news_item.author }}</strong> &nbsp; | &nbsp;
           {{ news_item.publication_date|date:"d F Y" }}
         </p>
 
         <!-- Video o imagen -->
         {% if news_item.video or news_item.video_link %}
-          <div class="ratio ratio-16x9 mb-4">
-            <iframe src="{{ news_item.media_source }}" title="Video de la noticia" allowfullscreen></iframe>
-          </div>
+        <div class="ratio ratio-16x9 mb-4">
+          <iframe src="{{ news_item.media_source }}" title="Video de la noticia" allowfullscreen></iframe>
+        </div>
         {% elif news_item.image %}
-          <div class="text-center mb-4">
-            <img src="{{ news_item.image.url }}" alt="Imagen de la noticia" class="img-fluid rounded" style="max-height: 500px; object-fit: cover;">
-          </div>
+        <div class="text-center mb-4">
+          <img src="{{ news_item.image.url }}" alt="Imagen de la noticia" class="img-fluid rounded"
+            style="max-height: 500px; object-fit: cover;">
+        </div>
 
-          <!-- Pie de foto y crédito -->
-          {% if news_item.pie_de_foto or news_item.credit %}
-            <p class="text-center text-muted small fst-italic mb-4">
-              {% if news_item.pie_de_foto %}
-                {{ news_item.pie_de_foto }}
-              {% endif %}
-              {% if news_item.credit %}
-                <br><strong>Crédito:</strong> {{ news_item.credit }}
-              {% endif %}
-            </p>
+        {% if news_item.pie_de_foto or news_item.credit %}
+        <p class="text-center text-muted small fst-italic mb-4">
+          {% if news_item.pie_de_foto %}{{ news_item.pie_de_foto }}{% endif %}
+          {% if news_item.credit %}
+          <br><strong>Crédito:</strong> {{ news_item.credit }}
           {% endif %}
+        </p>
+        {% endif %}
         {% endif %}
 
         <!-- Descripción -->
-        <div class="news-content">
+        <div class="news-content mb-4">
           {% if news_item.short_description %}
-            <p class="lead">{{ news_item.short_description }}</p>
+          <p class="lead">{{ news_item.short_description }}</p>
           {% else %}
-            <p style="white-space: pre-wrap; text-align: justify;">
-              {{ news_item.description }}
-            </p>
+          <p style="white-space: pre-wrap;">
+            {{ news_item.description }}
+          </p>
           {% endif %}
 
-          <!-- Anuncio dentro del contenido -->
+          <!-- Anuncio inline (solo md+) -->
           {% if inline_ads %}
-            <div class="my-4">
-              {% include 'base/announcement_component.html' with announcements=inline_ads %}
-            </div>
+          <div class="my-4 d-none d-md-block">
+            {% include 'base/announcement_component.html' with announcements=inline_ads %}
+          </div>
           {% endif %}
         </div>
 
-        <!-- Anuncio al final del artículo -->
+        <!-- Anuncio al final (solo md+) -->
         {% if bottom_ads %}
-          <div class="mt-5 text-center">
-            {% include 'base/announcement_component.html' with announcements=bottom_ads %}
-          </div>
+        <div class="mt-5 text-center d-none d-md-block">
+          {% include 'base/announcement_component.html' with announcements=bottom_ads %}
+        </div>
         {% endif %}
 
       </article>
     </div>
 
-    <!-- Anuncios derecha -->
-    <div class="col-lg-2 d-none d-lg-block">
+    <!-- Anuncios derecha (solo md+) -->
+    <div class="col-md-2 d-none d-md-block">
       {% include 'base/announcement_component.html' with announcements=right_ads %}
     </div>
 

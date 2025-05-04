@@ -2,45 +2,47 @@
 {% load static %}
 
 {% block header %}
-  {% include 'base/headerCompact.html' %}
+{% include 'base/headerCompact.html' %}
 {% endblock %}
 
 {% block main %}
-<main class="container-fluid py-4 bg-light">
+<main class="container py-4 bg-light">
   <div class="row gx-lg-4">
 
-    <!-- ANUNCIOS IZQUIERDA -->
+    <!-- ANUNCIOS IZQUIERDA: oculto en pantallas < lg -->
     <aside class="col-lg-2 d-none d-lg-block">
       <div class="sticky-top pt-3">
         {% include 'base/announcement_component.html' with announcements=left_ads %}
       </div>
     </aside>
 
-
+    <!-- CONTENIDO PRINCIPAL: full-width en móviles -->
     <section class="col-12 col-lg-8">
       <header class="text-center py-4 border-bottom">
         <h1 class="display-5 fw-bold text-danger">{{ edicion.titulo }}</h1>
         {% if edicion.descripcion %}
-          <p class="lead text-muted">{{ edicion.descripcion }}</p>
+        <p class="lead text-muted">{{ edicion.descripcion }}</p>
         {% endif %}
         {% if edicion.pdf and not edicion.articulos.exists %}
-          <a href="{{ edicion.pdf.url }}" class="btn btn-danger text-white mt-3 px-4" target="_blank" aria-label="Descargar PDF de la revista">
-            <i class="bi bi-file-earmark-pdf me-2"></i>
-            Descargar PDF completo
-          </a>
+        <a href="{{ edicion.pdf.url }}" class="btn btn-danger text-white mt-3 px-4" target="_blank">
+          <i class="bi bi-file-earmark-pdf me-2"></i>
+          Descargar PDF completo
+        </a>
         {% endif %}
       </header>
+
       <!-- ARTÍCULO PRINCIPAL -->
       {% if principal %}
       <article class="card mb-5 border-0 shadow-lg">
         <div class="ratio ratio-16x9 bg-light">
-          <img src="{{ principal.portada.url }}" class="card-img-top img-fluid object-fit-contain p-3" alt="{{ principal.titulo }}">
+          <img src="{{ principal.portada.url }}" class="card-img-top img-fluid object-fit-contain p-3"
+            alt="{{ principal.titulo }}">
         </div>
         <div class="card-body text-center px-lg-5">
           <div class="d-flex justify-content-center mb-3">
             <span class="badge bg-danger text-white rounded-pill px-3">
               {{ principal.get_seccion_display|default:"Destacado" }}
-            </span>            
+            </span>
           </div>
           <h2 class="card-title display-6 fw-bold mb-3">{{ principal.titulo }}</h2>
           <p class="text-muted mb-4">
@@ -48,25 +50,25 @@
             <span>{{ principal.fecha_publicado|date:"d M Y" }}</span>
           </p>
           <p class="card-text lead mb-4">{{ principal.descripcion_corta }}</p>
-          <a href="{{ principal.get_absolute_url }}" class="btn btn-sm btn-outline-danger text-white px-4 ">
+          <a href="{{ principal.get_absolute_url }}" class="btn btn-sm btn-outline-danger text-white px-4">
             Leer artículo completo <i class="bi bi-arrow-right ms-2"></i>
           </a>
         </div>
       </article>
       {% endif %}
 
-      <!-- TRES ARTÍCULOS SECUNDARIOS -->
+      <!-- PRIMER BLOQUE DE 3 ARTÍCULOS: móviles 1 col, md+ 3 cols -->
       <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
         {% for art in secundarios|slice:":3" %}
         <div class="col">
-          <article class="card h-100 border-0 shadow-sm transition-all hover-shadow">
+          <article class="card h-100 border-0 shadow-sm hover-shadow">
             <div class="ratio ratio-16x9 bg-light">
               <img src="{{ art.portada.url }}" class="card-img-top object-fit-contain p-2" alt="{{ art.titulo }}">
             </div>
             <div class="card-body">
               <small class="fw-bold text-danger mb-2">
                 {{ art.get_seccion_display|default:"Artículo" }}
-              </small>              
+              </small>
               <h3 class="h5 card-title fw-bold">{{ art.titulo }}</h3>
               <p class="card-text text-muted small">
                 {{ art.descripcion_corta|truncatewords:20 }}
@@ -83,60 +85,56 @@
         {% endfor %}
       </div>
 
-      <!-- ANUNCIO HORIZONTAL -->
-      <div class="my-5 py-3 text-center">
+      <!-- INLINE ADS: oculto en pantallas < lg -->
+      <div class="my-5 py-3 text-center d-none d-lg-block">
         {% include 'base/announcement_component.html' with announcements=inline_ads|slice:":1" %}
       </div>
 
-      <!-- SIGUIENTES TRES ARTÍCULOS (PORTADA A LA DERECHA) -->
-      <div class="row row-cols-1 g-4 mb-5">
+      <!-- SEGUNDO BLOQUE DE 3 ARTÍCULOS -->
+      <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
         {% for art in secundarios|slice:"3:6" %}
         <div class="col">
-          <article class="card border-0 shadow-sm">
-            <div class="row g-0 align-items-center flex-md-row-reverse">
-              <div class="col-md-3 d-none d-md-block">
-                <img src="{{ art.portada.url }}" class="img-fluid rounded-start object-fit-contain p-2" alt="{{ art.titulo }}" style="height: 140px; width: 100%;">
-              </div>
-              <div class="col-md-9">
-                <div class="card-body py-3">
-                  <small class="fw-bold text-danger mb-2">
-                    {{ art.get_seccion_display|default:"Artículo" }}
-                  </small>                  
-                  <h3 class="h5 fw-bold">{{ art.titulo }}</h3>
-                  <p class="text-muted small mb-2">
-                    Por {{ art.autor }} | {{ art.fecha_publicado|date:"d M Y" }}
-                  </p>
-                  <p class="card-text text-muted">
-                    {{ art.descripcion_corta|truncatewords:25 }}
-                  </p>
-                  <a href="{{ art.get_absolute_url }}" class="btn btn-sm btn-outline-danger rounded-pill">
-                    Leer más <i class="bi bi-chevron-right"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </article>
-        </div>
-        {% endfor %}
-      </div>
-
-      <!-- SEGUNDO ANUNCIO HORIZONTAL -->
-      <div class="my-5 py-3 text-center">
-        {% include 'base/announcement_component.html' with announcements=inline_ads|slice:"1:2" %}
-      </div>
-
-      <!-- CINCO ARTÍCULOS FINALES -->
-      <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
-        {% for art in secundarios|slice:"6:9" %}
-        <div class="col">
-          <article class="card h-100 border-0 shadow-sm">
+          <article class="card h-100 border-0 shadow-sm hover-shadow">
             <div class="ratio ratio-16x9 bg-light">
               <img src="{{ art.portada.url }}" class="card-img-top object-fit-contain p-2" alt="{{ art.titulo }}">
             </div>
             <div class="card-body">
               <small class="fw-bold text-danger mb-2">
                 {{ art.get_seccion_display|default:"Artículo" }}
-              </small>              
+              </small>
+              <h3 class="h5 card-title fw-bold">{{ art.titulo }}</h3>
+              <p class="card-text text-muted small">
+                {{ art.descripcion_corta|truncatewords:20 }}
+              </p>
+            </div>
+            <div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center pt-0">
+              <small class="text-muted">{{ art.fecha_publicado|date:"d M Y" }}</small>
+              <a href="{{ art.get_absolute_url }}" class="btn btn-sm btn-outline-danger rounded-pill">
+                Ver <i class="bi bi-chevron-right"></i>
+              </a>
+            </div>
+          </article>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- SEGUNDO INLINE ADS: oculto en pantallas < lg -->
+      <div class="my-5 py-3 text-center d-none d-lg-block">
+        {% include 'base/announcement_component.html' with announcements=inline_ads|slice:"1:2" %}
+      </div>
+
+      <!-- TERCER BLOQUE DE 3 ARTÍCULOS -->
+      <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+        {% for art in secundarios|slice:"6:9" %}
+        <div class="col">
+          <article class="card h-100 border-0 shadow-sm hover-shadow">
+            <div class="ratio ratio-16x9 bg-light">
+              <img src="{{ art.portada.url }}" class="card-img-top object-fit-contain p-2" alt="{{ art.titulo }}">
+            </div>
+            <div class="card-body">
+              <small class="fw-bold text-danger mb-2">
+                {{ art.get_seccion_display|default:"Artículo" }}
+              </small>
               <h5 class="card-title fw-bold">{{ art.titulo }}</h5>
               <p class="text-muted small mb-2">
                 {{ art.autor }} | {{ art.fecha_publicado|date:"d M Y" }}
@@ -155,23 +153,24 @@
         {% endfor %}
       </div>
 
-      <!-- ANUNCIO ENTRE LOS TRES ARTICULOS FINALES Y LOS DOS ULTIMOS -->
-      <div class="my-5 py-3 text-center">
+      <!-- TERCER INLINE ADS: oculto en pantallas < lg -->
+      <div class="my-5 py-3 text-center d-none d-lg-block">
         {% include 'base/announcement_component.html' with announcements=inline_ads|slice:"2:3" %}
       </div>
 
-      <!-- ÚLTIMOS ARTÍCULOS (PORTADA A LA DERECHA) -->
+      <!-- ÚLTIMOS ARTÍCULOS (del 9 al 11) -->
       <div class="row row-cols-1 g-4">
         {% for art in secundarios|slice:"9:11" %}
         <div class="col">
           <article class="d-flex flex-row-reverse gap-3 align-items-start border-bottom pb-4">
             <div class="flex-shrink-0">
-              <img src="{{ art.portada.url }}" alt="{{ art.titulo }}" class="rounded object-fit-contain shadow-sm" style="width: 180px; height: 120px; object-fit: contain;">
+              <img src="{{ art.portada.url }}" alt="{{ art.titulo }}" class="rounded object-fit-contain shadow-sm"
+                style="width: 180px; height: 120px;">
             </div>
             <div class="flex-grow-1">
               <small class="fw-bold text-danger mb-2">
                 {{ art.get_seccion_display|default:"Artículo" }}
-              </small>              
+              </small>
               <h3 class="h5 fw-bold mb-2">{{ art.titulo }}</h3>
               <p class="mb-2 text-muted small fst-italic">
                 Por {{ art.autor }}
@@ -190,7 +189,7 @@
 
     </section>
 
-    <!-- ANUNCIOS DERECHA -->
+    <!-- ANUNCIOS DERECHA: oculto en pantallas < lg -->
     <aside class="col-lg-2 d-none d-lg-block">
       <div class="sticky-top pt-3">
         {% include 'base/announcement_component.html' with announcements=right_ads %}

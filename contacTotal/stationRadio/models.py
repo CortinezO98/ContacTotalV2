@@ -22,12 +22,17 @@ class PodcastSection(models.Model):
     slug = models.SlugField(unique=True, blank=True, editable=False)
     featured = models.BooleanField(default=False)
 
+    class Meta:
+        verbose_name = 'Sección de Podcast'
+        verbose_name_plural = 'Secciones de Podcast'
+        ordering = ['-date_created']
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
         super(PodcastSection, self).save(*args, **kwargs)
 
-    def _str_(self):
+    def __str__(self):
         return self.title
 
 class PodcastAudio(models.Model):
@@ -38,8 +43,12 @@ class PodcastAudio(models.Model):
     duration = models.CharField(max_length=20, blank=True, null=True)
     date_created = models.DateField(auto_now_add=True)
     
+    class Meta:
+        verbose_name = 'Audio de Podcast'
+        verbose_name_plural = 'Audios de Podcast'
+        ordering = ['-date_created']
 
-    def _str_(self):
+    def __str__(self):
         return self.title
 
 class PodcastVideo(models.Model):
@@ -49,7 +58,12 @@ class PodcastVideo(models.Model):
     cover_image = models.ImageField(upload_to='podcasts_video_covers/', blank=True, null=True)
     date_created = models.DateField(auto_now_add=True)
 
-    def _str_(self):
+    class Meta:
+        verbose_name = 'Video de Podcast'
+        verbose_name_plural = 'Videos de Podcast'
+        ordering = ['-date_created']
+
+    def __str__(self):
         return self.title
 
 
