@@ -51,7 +51,7 @@
         <!-- Descripción -->
         <div class="news-content mb-4">
           {% if news_item.short_description %}
-          <p class="lead">{{ news_item.short_description }}</p>
+          <p class="lead notice" style="white-space: pre-wrap;">{{ news_item.short_description }}</p>
           {% else %}
           <p style="white-space: pre-wrap;">
             {{ news_item.description }}

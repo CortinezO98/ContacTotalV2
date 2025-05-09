@@ -33,14 +33,14 @@
             <div id="sectionCarousel" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <div class="row justify-content-center">
+                        <div class="row justify-content-center text-center">
                             {% for section in sections|slice:"0:3" %}
                             <div class="col-12 col-md-4 mb-4">
-                                <a href="{% url 'podcast_detail' section.slug %}">
+                                <a href="{% url 'podcast_detail' section.slug %}" class="d-block">
                                 {% if section.cover_image %}
-                                <img src="{{ section.cover_image.url }}" alt="{{ section.title }}" class="img-fluid rounded-circle" style="width:150px; height:120px; object-fit:cover;">
+                                <img src="{{ section.cover_image.url }}" alt="{{ section.title }}" class="img-fluid rounded-circle mx-auto d-block" style="width:150px; height:120px; object-fit:cover;">
                                 {% else %}
-                                <img src="{% static 'img/default-podcast.png' %}" alt="{{ section.title }}" class="img-fluid rounded-circle" style="width:150px; height:120px; object-fit:cover;">
+                                <img src="{% static 'img/default-podcast.png' %}" alt="{{ section.title }}" class="img-fluid rounded-circle mx-auto d-block" style="width:150px; height:120px; object-fit:cover;">
                                 {% endif %}
                                 </a>
                                 <h5 class="mt-2">{{ section.title }}</h5>
@@ -52,12 +52,12 @@
                     <div class="carousel-item">
                         <div class="row justify-content-center">
                             {% for section in sections|slice:"3:6" %}
-                            <div class="col-12 col-md-4 mb-4">
-                                <a href="{% url 'podcast_detail' section.slug %}">
+                            <div class="col-12 col-md-4 mb-4 text-center">
+                                <a href="{% url 'podcast_detail' section.slug %}" class="d-block">
                                 {% if section.cover_image %}
-                                <img src="{{ section.cover_image.url }}" alt="{{ section.title }}" class="img-fluid rounded-circle" style="width:150px; height:150px; object-fit:cover;">
+                                <img src="{{ section.cover_image.url }}" alt="{{ section.title }}" class="img-fluid rounded-circle mx-auto d-block" style="width:150px; height:150px; object-fit:cover;">
                                 {% else %}
-                                <img src="{% static 'img/default-podcast.png' %}" alt="{{ section.title }}" class="img-fluid rounded-circle" style="width:150px; height:150px; object-fit:cover;">
+                                <img src="{% static 'img/default-podcast.png' %}" alt="{{ section.title }}" class="img-fluid rounded-circle mx-auto d-block" style="width:150px; height:150px; object-fit:cover;">
                                 {% endif %}
                                 </a>
                                 <h5 class="mt-2">{{ section.title }}</h5>
@@ -68,11 +68,11 @@
                     </div>
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#sectionCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="carousel-control-prev-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
                     <span class="visually-hidden">Anterior</span>
                 </button>
                 <button class="carousel-control-next" type="button" data-bs-target="#sectionCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="carousel-control-next-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
                     <span class="visually-hidden">Siguiente</span>
                 </button>
             </div>
