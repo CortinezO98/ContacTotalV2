@@ -428,7 +428,8 @@ class MainNews(models.Model):
 class Anuncio(models.Model):
     imagen = models.ImageField(upload_to='anuncios/')
     titulo = models.CharField(max_length=255, blank=True, null=True, help_text="Opcional: Título o descripción breve del anuncio.")
-
+    link = models.URLField(blank=True, null=True,help_text="A dónde redirige el anuncio al hacer clic sobre la imagen")
+    
     def _str_(self):
         return self.titulo or "Anuncio"
 
