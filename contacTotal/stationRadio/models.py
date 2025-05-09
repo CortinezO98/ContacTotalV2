@@ -11,7 +11,7 @@ from mutagen import File as MutagenFile
 from mutagen.easyid3 import EasyID3
 from mutagen.mp4 import MP4
 import os
-
+from dirtyfields import DirtyFieldsMixin
 
 # Podcast
 class PodcastSection(models.Model):
@@ -35,14 +35,23 @@ class PodcastSection(models.Model):
     def __str__(self):
         return self.title
 
+
+
+
+
 class PodcastAudio(models.Model):
-    podcast_section = models.ForeignKey(PodcastSection, related_name='audios', on_delete=models.CASCADE)
+    podcast_section = models.ForeignKey(
+        PodcastSection, related_name='audios', on_delete=models.CASCADE
+    )
     title = models.CharField(max_length=200)
     audio_file = models.FileField(upload_to='podcasts_audio/')
-    audio_link = models.URLField(blank=True, null=True, help_text="Enlace embed de YouTube, por ejemplo")
+    audio_link = models.URLField(
+        blank=True, null=True,
+        help_text="Enlace embed de YouTube, por ejemplo"
+    )
     duration = models.CharField(max_length=20, blank=True, null=True)
     date_created = models.DateField(auto_now_add=True)
-    
+
     class Meta:
         verbose_name = 'Audio de Podcast'
         verbose_name_plural = 'Audios de Podcast'
@@ -50,6 +59,37 @@ class PodcastAudio(models.Model):
 
     def __str__(self):
         return self.title
+
+    def extract_metadata(self):
+        """Extrae duración (y opcionalmente título, nombre/tamaño)."""
+        if not self.audio_file:
+            return
+
+        audio_path = self.audio_file.path
+        easy = MutagenFile(audio_path, easy=True)
+        full = MutagenFile(audio_path)
+
+        if full and getattr(full.info, 'length', None):
+            total = int(full.info.length)
+            self.duration = f"{total//60}:{total%60:02d}"
+
+        if not self.title:
+            if isinstance(easy, EasyID3):
+                self.title = easy.get('title', [None])[0] or self.title
+            elif isinstance(full, MP4):
+                self.title = full.tags.get('\xa9nam', [None])[0] or self.title
+
+
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
+        if is_new or ('audio_file' in (kwargs.get('update_fields') or []) or getattr(self, '_audio_changed', False)):
+            self.extract_metadata()
+            self.save(update_fields=['duration', 'title'])
+
+
+
+
 
 class PodcastVideo(models.Model):
     podcast_section = models.ForeignKey(PodcastSection, related_name='videos', on_delete=models.CASCADE)
@@ -462,7 +502,7 @@ class Banner(models.Model):
     
 
 # Vista Programa
-class Programa(models.Model):
+class Programa(DirtyFieldsMixin, models.Model):
     titulo = models.CharField(max_length=200, blank=True, null=True)
     host = models.CharField(max_length=200, blank=True, null=True)
     duracion = models.CharField(max_length=10, blank=True, null=True, help_text="Ejemplo: 4:47")
@@ -478,47 +518,62 @@ class Programa(models.Model):
     )
     fecha_creacion = models.DateField(auto_now_add=True)
 
-    def save(self, *args, **kwargs):
-        if self.audio:
-            try:
-                audio_path = self.audio.path
-                audio_file = MutagenFile(audio_path, easy=True)
-                full_file = MutagenFile(audio_path)
-
-                # Duración
-                if full_file and full_file.info.length:
-                    total_seconds = int(full_file.info.length)
-                    minutes = total_seconds // 60
-                    seconds = total_seconds % 60
-                    self.duracion = f"{minutes}:{seconds:02d}"
-
-                # Título desde metadata
-                if not self.titulo:
-                    if isinstance(audio_file, EasyID3):
-                        self.titulo = audio_file.get("title", [None])[0]
-                    elif isinstance(audio_file, MP4):
-                        self.titulo = audio_file.tags.get('\xa9nam', [None])[0]
-
-                # Nombre y tamaño del archivo
-                self.nombre_archivo = os.path.basename(audio_path)
-                file_size = os.path.getsize(audio_path) / (1024 * 1024)  # MB
-                self.peso_archivo = f"{file_size:.2f} MB"
-
-                # Fecha de creación desde metadata (si aplica)
-                if isinstance(full_file, MP4):
-                    creation_time = full_file.tags.get('©day', [None])[0]
-                    if creation_time:
-                        try:
-                            self.fecha_creacion = datetime.strptime(creation_time, "%Y-%m-%d").date()
-                        except:
-                            pass
-            except Exception as e:
-                print(f"Error extrayendo metadatos del audio: {e}")
-
-        super().save(*args, **kwargs)
-
     def __str__(self):
         return self.titulo or "Programa sin título"
+
+    def extract_metadata(self):
+        """
+        Extrae duración, título, nombre y peso de archivo y, si es MP4, fecha de creación.
+        """
+        if not self.audio:
+            return
+
+        try:
+            audio_path = self.audio.path
+            easy = MutagenFile(audio_path, easy=True)
+            full  = MutagenFile(audio_path)
+
+            # Duración
+            if full and full.info.length:
+                total = int(full.info.length)
+                self.duracion = f"{total//60}:{total%60:02d}"
+
+            # Título desde metadata si no hay uno manual
+            if not self.titulo:
+                if isinstance(easy, EasyID3):
+                    self.titulo = easy.get("title", [None])[0]
+                elif isinstance(full, MP4):
+                    self.titulo = full.tags.get('\xa9nam', [None])[0]
+
+            # Nombre y tamaño
+            self.nombre_archivo = os.path.basename(audio_path)
+            size_mb = os.path.getsize(audio_path) / (1024*1024)
+            self.peso_archivo  = f"{size_mb:.2f} MB"
+
+            # Fecha de creación en MP4
+            if isinstance(full, MP4):
+                ct = full.tags.get('©day', [None])[0]
+                if ct:
+                    try:
+                        self.fecha_creacion = datetime.strptime(ct, "%Y-%m-%d").date()
+                    except ValueError:
+                        pass
+
+        except Exception as e:
+            print(f"Error metadatos audio: {e}")
+
+    def save(self, *args, **kwargs):
+        # 1) Guarda el objeto (y el archivo) primero
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
+
+        # 2) Extrae metadatos **solo** al crear o si cambió el campo audio
+        if is_new or 'audio' in self.get_dirty_fields():
+            self.extract_metadata()
+            self.save(update_fields=[
+                'titulo', 'duracion', 'nombre_archivo',
+                'peso_archivo', 'fecha_creacion'
+            ])
 
 
 

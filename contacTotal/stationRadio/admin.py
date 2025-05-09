@@ -59,6 +59,8 @@ class PodcastSectionAdmin(admin.ModelAdmin):
         return "—"
     cover_image_preview.short_description = "Vista previa de portada"
 
+
+
 @admin.register(PodcastAudio)
 class PodcastAudioAdmin(admin.ModelAdmin):
     list_display = ('title', 'podcast_section', 'duration', 'date_created')
@@ -67,18 +69,8 @@ class PodcastAudioAdmin(admin.ModelAdmin):
     autocomplete_fields = ['podcast_section']
     list_per_page = 25
 
-    def save_model(self, request, obj, form, change):
-        if obj.audio_file:
-            try:
-                audio = mutagen.File(obj.audio_file, easy=True)
-                if audio and audio.info:
-                    duration_sec = int(audio.info.length)
-                    minutes = duration_sec // 60
-                    seconds = duration_sec % 60
-                    obj.duration = f"{minutes}:{seconds:02}"
-            except Exception as e:
-                print(f"Error al calcular duración del audio: {e}")
-        super().save_model(request, obj, form, change)
+
+
 
 @admin.register(PodcastVideo)
 class PodcastVideoAdmin(admin.ModelAdmin):
