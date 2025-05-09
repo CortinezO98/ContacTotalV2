@@ -399,7 +399,7 @@ class MainNews(models.Model):
     author = models.CharField(max_length=255)
     publication_date = models.DateField()
     short_description = models.TextField(help_text="Descripción corta de la noticia")
-    slug = models.SlugField(unique=True, blank=True)
+    slug = models.SlugField(unique=True, blank=True, editable=False)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -428,7 +428,8 @@ class MainNews(models.Model):
 class Anuncio(models.Model):
     imagen = models.ImageField(upload_to='anuncios/')
     titulo = models.CharField(max_length=255, blank=True, null=True, help_text="Opcional: Título o descripción breve del anuncio.")
-
+    link = models.URLField(blank=True, null=True,help_text="A dónde redirige el anuncio al hacer clic sobre la imagen")
+    
     def _str_(self):
         return self.titulo or "Anuncio"
 

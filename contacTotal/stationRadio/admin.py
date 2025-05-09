@@ -272,9 +272,28 @@ class MainNewsAdmin(admin.ModelAdmin):
 
 @admin.register(Anuncio)
 class AnuncioAdmin(admin.ModelAdmin):
-    list_display = ('titulo',)
-    search_fields = ('titulo',)
+    list_display = ('titulo', 'link', 'imagen_preview', 'enlace_destino')
+    search_fields = ('titulo', 'link')
     list_per_page = 25
+    readonly_fields = ('imagen_preview',)
+
+    def imagen_preview(self, obj):
+        if obj.imagen:
+            return format_html(
+                '<img src="{}" width="100" style="border-radius:4px;" />',
+                obj.imagen.url
+            )
+        return "—"
+    imagen_preview.short_description = "Vista previa"
+
+    def enlace_destino(self, obj):
+        if obj.link:
+            return format_html(
+                '<a href="{}" target="_blank">Abrir enlace</a>',
+                obj.link
+            )
+        return "—"
+    enlace_destino.short_description = "Enlace"
 
 @admin.register(Announcement)
 class AnnouncementAdmin(admin.ModelAdmin):
