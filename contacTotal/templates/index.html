@@ -122,11 +122,13 @@
                 <div class="col-md-4 mt-4 mt-md-0">
                     <h4>Anuncios</h4>
                     {% for anuncio in anuncios %}
-                        <div class="side-news-item mb-3">
-                        <img src="{{ anuncio.imagen.url }}" alt="{{ anuncio.titulo }}" class="img-fluid">
-                        </div>
-                    {% empty %}
-                        <p>No hay anuncios disponibles.</p>
+                        <a href="{{ anuncio.link }}" target="_blank" style="text-decoration: none; color: inherit;">
+                            <div class="side-news-item mb-3">
+                                <img src="{{ anuncio.imagen.url }}" alt="{{ anuncio.titulo }}" class="img-fluid">
+                                <h5>{{ anuncio.titulo }}</h5>
+                                <p>{{ anuncio.descripcion }}</p>
+                            </div>
+                        </a>
                     {% endfor %}
                 </div>
             </div>
