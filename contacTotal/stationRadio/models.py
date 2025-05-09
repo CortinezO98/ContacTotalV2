@@ -399,7 +399,7 @@ class MainNews(models.Model):
     author = models.CharField(max_length=255)
     publication_date = models.DateField()
     short_description = models.TextField(help_text="Descripción corta de la noticia")
-    slug = models.SlugField(unique=True, blank=True)
+    slug = models.SlugField(unique=True, blank=True, editable=False)
 
     def save(self, *args, **kwargs):
         if not self.slug:
