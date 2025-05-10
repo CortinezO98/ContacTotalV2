@@ -6,7 +6,7 @@
         <!-- Columna lateral izquierda: Banner vertical izquierdo -->
         <div class="col-2 ad-bar d-none d-md-flex flex-column justify-content-start align-items-center">
             {% for banner in banners_left %}
-                <div class="mb-5 w-100">
+                <div class="mb-5">
                     {{ banner.script|safe }}
                 </div>
             {% empty %}
@@ -296,7 +296,7 @@
         <!-- Columna lateral derecha: Banner vertical derecho -->
         <div class="col-2 ad-bar d-none d-md-flex flex-column justify-content-start align-items-center">
             {% for banner in banners_right %}
-            <div class="mb-5 w-100">
+            <div class="mb-5">
                 {{ banner.script|safe }}
             </div>
             {% empty %}
