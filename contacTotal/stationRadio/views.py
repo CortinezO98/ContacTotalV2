@@ -536,7 +536,7 @@ def anunciate(request):
             context.update({
                 'status': 'success',
                 'swal_title': '¡Muchas gracias por contactarnos!',
-                'msg': 'Hemos recibido su mensaje y le responderemos lo más pronto posible. Si necesita asistencia de manera urgente, por favor comuníquese al 602-751-2106.'
+                'msg': 'Hemos recibido tu mensaje y te responderemos lo más pronto posible. Si necesitas asistencia de manera urgente, por favor comunícate al 602-751-2106.'
             })
 
         except (BadHeaderError, smtplib.SMTPException, Exception) as e:

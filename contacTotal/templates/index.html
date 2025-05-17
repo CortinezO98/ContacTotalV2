@@ -146,7 +146,7 @@
             <div id="index-podcast" class="podcast-section text-center">
                 <h4>Podcast</h4>
                 <p>Disfruta de nuestro podcast con las últimas noticias, entrevistas y análisis.</p>
-            
+
                 {# Escritorio: 3 por slide #}
                 <div id="podcastCarouselDesktop" class="carousel slide d-none d-md-block" data-bs-ride="carousel">
                     <div class="carousel-inner">
@@ -184,17 +184,17 @@
                         {% endif %}
                     </div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#podcastCarouselDesktop"
-                        data-bs-slide="prev">
+                        data-bs-slide="prev" style="left: -47px; width: auto;">
                         <span class="carousel-control-prev-icon"></span>
                         <span class="visually-hidden">Anterior</span>
                     </button>
                     <button class="carousel-control-next" type="button" data-bs-target="#podcastCarouselDesktop"
-                        data-bs-slide="next">
+                        data-bs-slide="next" style="right: -47px; width: auto;">
                         <span class="carousel-control-next-icon"></span>
                         <span class="visually-hidden">Siguiente</span>
                     </button>
                 </div>
-            
+
                 {# Móvil: 1 por slide #}
                 <div id="podcastCarouselMobile" class="carousel slide d-block d-md-none" data-bs-ride="carousel">
                     <div class="carousel-inner">
@@ -212,12 +212,12 @@
                         {% endfor %}
                     </div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#podcastCarouselMobile"
-                        data-bs-slide="prev">
+                        data-bs-slide="prev" style="left: -8px; width: auto;">
                         <span class="carousel-control-prev-icon"></span>
                         <span class="visually-hidden">Anterior</span>
                     </button>
                     <button class="carousel-control-next" type="button" data-bs-target="#podcastCarouselMobile"
-                        data-bs-slide="next">
+                        data-bs-slide="next" style="right: -8px; width: auto;">
                         <span class="carousel-control-next-icon"></span>
                         <span class="visually-hidden">Siguiente</span>
                     </button>
@@ -242,8 +242,9 @@
                     <!-- Programas Recientes -->
                     <div class="col-12 col-md-6 mb-4">
                         <div class="text-center mb-3">
-                            <a href="{% url 'programas' %}">
-                                <img src="{% static 'img/radioLogo.png' %}" alt="Programas" class="img-fluid" style="max-width: 200px;">
+                            <h4>Contacto Total Radio</h4>
+                            <a href="{% url 'programas' %}" class="text-decoration-none">
+                                <!-- <img src="{% static 'img/radioLogo.png' %}" alt="Programas" class="img-fluid" style="max-width: 200px;"> -->
                             </a>
                         </div>
                         <ul class="list-group">

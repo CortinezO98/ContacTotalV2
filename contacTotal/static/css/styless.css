@@ -419,7 +419,11 @@ footer {
 }
 
 .main-video {
-  margin-bottom: 30px;
+  margin-bottom: 40px;
+}
+
+h4 {
+  color: #ff0000 !important;
 }
 
 /* Social Section */
@@ -429,6 +433,7 @@ footer {
 
 .social-section h3 {
   font-size: 1.4rem;
+  font-weight: bold;
   margin-bottom: 15px;
   color: #ff0000;
   position: relative;
@@ -492,11 +497,12 @@ footer {
   padding: 5px;
   margin: 0;
   font-size: 14px;
+  font-weight: bold;
 }
 
 .podcast p {
   margin: 0;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .podcast img {
