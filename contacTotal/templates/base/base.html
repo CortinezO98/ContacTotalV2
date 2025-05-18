@@ -18,10 +18,8 @@
         {% block header %}
             {% include 'base/header.html' %}
         {% endblock %}
-        <main class="flex-grow-1">
-            <div class="container mt-0">
-                {% block main %}{% endblock %}
-            </div>
+        <main class="flex-fill">
+            {% block main %}{% endblock %}
         </main>
         {% block footer %}
             {% include 'base/footer.html' %}
@@ -30,7 +28,7 @@
 
     <!-- Botón flotante -->
     <a href="{% url 'anunciate' %}" class="floating-logo" title="Anúnciate con nosotros" aria-label="Anúnciate con nosotros">
-        <img src="{% static 'img/anunciate2.png' %}" alt="Botón Anúnciate">
+        <img src="{% static 'img/anunciate2.jpg' %}" alt="Botón Anúnciate">
     </a>
 
     <script src="{% static 'js/scripts.js' %}"></script>
