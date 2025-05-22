@@ -642,6 +642,14 @@ h4 {
   border-radius: 10px;
 }
 
+.weather-default {
+    display: block;
+}
+
+.weather-medium {
+    display: none;
+}
+
 /* News Carousel */
 #noticiasCarousel .card {
   height: 400px;
@@ -1085,7 +1093,6 @@ h4 {
   height: 100%;
 }
 
-
 @media (max-width: 992px) {
   main {
     flex-direction: column;
@@ -1179,7 +1186,6 @@ h4 {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px;
   transition: transform 0.3s ease;
 }
 
@@ -1222,6 +1228,17 @@ h4 {
   height: auto;
   margin: 0 auto;
   display: block;
+}
+
+/* Solo en el rango 1024px - 1430px cambiar al widget compacto */
+@media (min-width: 990px) and (max-width: 1430px) {
+    .weather-default {
+        display: none !important;
+    }
+    
+    .weather-medium {
+        display: block !important;
+    }
 }
 
 /* Ajustar en tablets */
