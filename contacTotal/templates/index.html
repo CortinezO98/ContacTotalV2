@@ -146,7 +146,7 @@
             <div id="index-podcast" class="podcast-section text-center">
                 <h4>Podcast</h4>
                 <p>Disfruta de nuestro podcast con las últimas noticias, entrevistas y análisis.</p>
-
+            
                 {# Escritorio: 3 por slide #}
                 <div id="podcastCarouselDesktop" class="carousel slide d-none d-md-block" data-bs-ride="carousel">
                     <div class="carousel-inner">
@@ -184,17 +184,17 @@
                         {% endif %}
                     </div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#podcastCarouselDesktop"
-                        data-bs-slide="prev" style="left: -47px; width: auto;">
+                        data-bs-slide="prev">
                         <span class="carousel-control-prev-icon"></span>
                         <span class="visually-hidden">Anterior</span>
                     </button>
                     <button class="carousel-control-next" type="button" data-bs-target="#podcastCarouselDesktop"
-                        data-bs-slide="next" style="right: -47px; width: auto;">
+                        data-bs-slide="next">
                         <span class="carousel-control-next-icon"></span>
                         <span class="visually-hidden">Siguiente</span>
                     </button>
                 </div>
-
+            
                 {# Móvil: 1 por slide #}
                 <div id="podcastCarouselMobile" class="carousel slide d-block d-md-none" data-bs-ride="carousel">
                     <div class="carousel-inner">
@@ -212,12 +212,12 @@
                         {% endfor %}
                     </div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#podcastCarouselMobile"
-                        data-bs-slide="prev" style="left: -8px; width: auto;">
+                        data-bs-slide="prev">
                         <span class="carousel-control-prev-icon"></span>
                         <span class="visually-hidden">Anterior</span>
                     </button>
                     <button class="carousel-control-next" type="button" data-bs-target="#podcastCarouselMobile"
-                        data-bs-slide="next" style="right: -8px; width: auto;">
+                        data-bs-slide="next">
                         <span class="carousel-control-next-icon"></span>
                         <span class="visually-hidden">Siguiente</span>
                     </button>
@@ -238,42 +238,57 @@
             
             <!-- Sección combinada: Programas Recientes y Magazine -->
             <div class="container my-5">
-                <div class="row align-items-center">
+                <div class="row align-items-start">
                     <!-- Programas Recientes -->
                     <div class="col-12 col-md-6 mb-4">
-                        <div class="text-center mb-3">
-                            <h4>Contacto Total Radio</h4>
-                            <a href="{% url 'programas' %}" class="text-decoration-none">
-                                <!-- <img src="{% static 'img/radioLogo.png' %}" alt="Programas" class="img-fluid" style="max-width: 200px;"> -->
-                            </a>
+                        <div class="h-100 d-flex flex-column">
+                            <!-- Título con altura fija -->
+                            <div class="text-center mb-4" style="min-height: 80px; display: flex; flex-direction: column; justify-content: center;">
+                                <h4 class="mb-1">Contacto Total</h4>
+                                <h4 class="mb-0">Radio</h4>
+                            </div>
+                            
+                            <!-- Contenido que crece -->
+                            <div class="flex-grow-1">
+                                <!-- Lista de programas -->
+                                <ul class="list-group">
+                                    {% for program in last_programs %}
+                                    <li class="list-group-item d-flex justify-content-between align-items-center py-3 px-4 mb-2">
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-2 fw-bold">{{ program.titulo }}</h6>
+                                            <small class="text-muted">{{ program.fecha_creacion|date:"d F Y" }}</small>
+                                        </div>
+                                        <div class="text-end ms-3">
+                                            <a href="{% url 'programas' %}" class="btn btn-sm btn-outline-danger px-3" target="_blank">
+                                                Escuchar
+                                            </a>
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
                         </div>
-                        <ul class="list-group">
-                            {% for program in last_programs %}
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">{{ program.titulo }}</h6>
-                                    <small class="text-muted">{{ program.fecha_creacion|date:"d F Y" }}</small>
-                                </div>
-                                <div class="text-end">
-                                    <a href="{% url 'programas' %}" class="btn btn-sm btn-outline-danger" target="_blank">Escuchar</a>
-                                    {% if program.url_reproducir %}
-                                    {% endif %}
-                                </div>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </div>                    
-
+                    </div>
+                    
                     <!-- Magazine -->
-                    <div class="col-12 col-md-6 mb-4 d-flex justify-content-center">
-                        <div class="text-center">
-                            <h4>Contacto Total Magazine</h4>
-                            <a href="{% url 'revista' %}" class="text-decoration-none d-block">
-                                <div class="magazine-cover mt-3">
-                                    <img src="{% static 'img/revista.jpeg' %}" alt="Magazine" class="img-fluid rounded mx-auto d-block" style="max-height: 300px;">
-                                    <h5 class="mt-3 text-primary">Ver Ediciones Anteriores</h5>
+                    <div class="col-12 col-md-6 mb-4">
+                        <div class="h-100 d-flex flex-column">
+                            <!-- Título con la misma altura fija -->
+                            <div class="text-center mb-4" style="min-height: 80px; display: flex; flex-direction: column; justify-content: center;">
+                                <h4 class="mb-1">Contacto Total,</h4>
+                                <h4 class="mb-0">la revista que habla</h4>
+                            </div>
+                            
+                            <!-- Contenido que crece -->
+                            <div class="flex-grow-1 d-flex flex-column justify-content-center">
+                                <!-- Contenido de la revista -->
+                                <div class="text-center">
+                                    <a href="{% url 'revista' %}" class="text-decoration-none d-block">
+                                        <img src="{% static 'img/revista.jpeg' %}" alt="Magazine" class="img-fluid rounded mx-auto d-block" style="max-height: 300px; object-fit: cover;">
+                                        <h5 class="mt-3 text-primary mb-0">Ver Ediciones Anteriores</h5>
+                                    </a>
                                 </div>
-                            </a>
+                            </div>
                         </div>
                     </div>
                 </div>
