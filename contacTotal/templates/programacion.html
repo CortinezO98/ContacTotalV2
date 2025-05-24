@@ -10,8 +10,8 @@
   <div class="row">
     
     <!-- Anuncios Izquierda -->
-    <aside class="col-lg-2 d-none d-lg-block">
-      <div class="sticky-top pt-4">
+    <aside class="col-2 d-none d-md-flex flex-column justify-content-start align-items-center">
+      <div class="sticky-top">
         {% include 'base/announcement_component.html' with announcements=left_ads %}
       </div>
     </aside>
@@ -20,6 +20,9 @@
     <div class="col-12 col-lg-8">
       <div class="text-center">
         <h1 class="fw-bold">Programación</h1>
+        <p class="text-muted mb-0">
+          En esta sección encontrarás la programación de nuestra radio, los últimos episodios de nuestro podcast, las noticias más relevantes y, cuando haya novedades, todo lo nuevo al instante.
+        </p>
       </div>
       <div class="program-box border border-danger p-4 mt-3 rounded">
         <ul class="nav nav-pills justify-content-center mt-3">
@@ -65,8 +68,8 @@
     </div>
     
     <!-- Anuncios Derecha-->
-    <aside class="col-lg-2 d-none d-lg-block">
-      <div class="sticky-top pt-4">
+    <aside class="col-2 d-none d-md-flex flex-column justify-content-start align-items-center">
+      <div class="sticky-top">
         {% include 'base/announcement_component.html' with announcements=right_ads %}
       </div>
     </aside>

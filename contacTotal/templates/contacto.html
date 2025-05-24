@@ -11,8 +11,8 @@
     <div class="row justify-content-center align-items-start g-4">
 
       <!-- Anuncios izquierda -->
-      <aside class="col-lg-2 d-none d-lg-block">
-        <div class="sticky-top pt-4">
+      <aside class="col-2 d-none d-md-flex flex-column justify-content-start align-items-center">
+        <div class="sticky-top">
           {% include 'base/announcement_component.html' with announcements=left_ads %}
         </div>
       </aside>
@@ -48,8 +48,8 @@
       </div>
 
       <!-- Anuncios derecha -->
-      <aside class="col-lg-2 d-none d-lg-block">
-        <div class="sticky-top pt-4">
+      <aside class="col-2 d-none d-md-flex flex-column justify-content-start align-items-center">
+        <div class="sticky-top">
           {% include 'base/announcement_component.html' with announcements=right_ads %}
         </div>
       </aside>
