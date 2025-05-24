@@ -751,6 +751,7 @@ h4 {
   background-color: white;
   min-height: 100vh;
   text-align: center;
+  padding-top: unset;
 }
 
 .ad-bar img {
