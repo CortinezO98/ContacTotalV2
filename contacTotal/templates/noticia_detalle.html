@@ -51,13 +51,13 @@
         <button id="tts-control" class="btn btn-outline-primary btn-sm mb-2"><i class="bi bi-volume-up-fill"></i>Escuchar Noticia</button>
 
         <!-- Descripción -->
-        <div class="news-content mb-4">
+        <div id="article-body" class="news-content mb-4">
           {% if news_item.short_description %}
-          <p class="lead notice" style="white-space: pre-wrap;">{{ news_item.short_description }}</p>
+            <p class="lead notice" style="white-space: pre-wrap;">{{ news_item.short_description }}</p>
           {% else %}
-          <p style="white-space: pre-wrap;">
-            {{ news_item.description }}
-          </p>
+            <p style="white-space: pre-wrap;">
+              {{ news_item.description }}
+            </p>
           {% endif %}
 
           <!-- Anuncio inline (solo md+) -->
@@ -87,16 +87,21 @@
 </div>
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    const btn = document.getElementById('tts-control');
-    const text = document.getElementById('article-body').innerText.trim();
+    const btn   = document.getElementById('tts-control');
+    const body  = document.getElementById('article-body');
+    if (!body) {
+      console.error('No existe #article-body');
+      return;
+    }
+    const text  = body.innerText.trim();
     let utter, state = 'stopped';
 
     function updateButton() {
       if (state === 'stopped') {
-        btn.innerHTML = '<i class="bi bi-volume-up-fill"></i> Escuchar artículo';
+        btn.innerHTML = '<i class="bi bi-volume-up-fill"></i> Escuchar Noticia';
       } else if (state === 'playing') {
         btn.innerHTML = '<i class="bi bi-pause-fill"></i> Pausar';
-      } else if (state === 'paused') {
+      } else {
         btn.innerHTML = '<i class="bi bi-play-fill"></i> Reanudar';
       }
     }
@@ -105,6 +110,9 @@
       if (!utter) {
         utter = new SpeechSynthesisUtterance(text);
         utter.rate = 1; utter.pitch = 1;
+        // Opcional: seleccionar voz en español
+        const voices = speechSynthesis.getVoices();
+        utter.voice = voices.find(v => v.lang.startsWith('es')) || voices[0];
         utter.onend = () => {
           state = 'stopped';
           updateButton();
@@ -115,24 +123,12 @@
       } else if (state === 'playing') {
         speechSynthesis.pause();
         state = 'paused';
-      } else if (state === 'paused') {
+      } else {
         speechSynthesis.resume();
         state = 'playing';
       }
       updateButton();
     });
-
-    // reveal lazy-load de imágenes
-    const images = document.querySelectorAll(".article-content img");
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add("reveal");
-          observer.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.1 });
-    images.forEach(img => observer.observe(img));
   });
 </script>
 {% endblock %}
