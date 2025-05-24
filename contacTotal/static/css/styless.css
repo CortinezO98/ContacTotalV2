@@ -1178,8 +1178,8 @@ h4 {
   bottom: 20px;
   right: 20px;
   z-index: 1050;
-  width: 70px;
-  height: 70px;
+  width: 90px;
+  height: 90px;
   background-color: #ffffff;
   border-radius: 50%;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -1190,7 +1190,7 @@ h4 {
 }
 
 .floating-logo:hover {
-  transform: scale(1.1);
+  transform: scale(1.2);
 }
 
 .floating-logo img {
