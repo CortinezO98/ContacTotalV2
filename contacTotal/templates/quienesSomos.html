@@ -9,7 +9,7 @@
 <div class="container mt-5">
   <div class="row">
     <!-- Columna de Anuncios Izquierda-->
-    <aside class="col-2 ad-bar d-none d-md-flex flex-column justify-content-start align-items-center">
+    <aside class="col-2 d-none d-md-flex flex-column justify-content-start align-items-center">
       <div class="sticky-top">
         {% include 'base/announcement_component.html' with announcements=left_ads %}
       </div>
@@ -37,7 +37,7 @@
     </div>
 
     <!-- Columna de Anuncios Derecha  -->
-    <aside class="col-2 ad-bar d-none d-md-flex flex-column justify-content-start align-items-center">
+    <aside class="col-2 d-none d-md-flex flex-column justify-content-start align-items-center">
       <div class="sticky-top">
         {% include 'base/announcement_component.html' with announcements=right_ads %}
       </div>
