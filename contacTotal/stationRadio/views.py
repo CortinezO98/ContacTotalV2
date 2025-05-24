@@ -338,21 +338,33 @@ def quienesSomos(request):
 
 #HORARIO DE PROGRAMACION
 def programacion(request):
-    programacion_list = Programacion.objects.all()
-    left_ads  = Announcement.objects.filter(active=True, position='left')[:2]
-    right_ads = Announcement.objects.filter(active=True, position='right')[:2]
+    programas = Programacion.objects.all()
+    day_labels = dict(DAYS_OF_WEEK)           
+    programs_by_day = { key: [] for key in day_labels.keys() }
 
-    for item in programacion_list:
-        item.hora_bogota = item.get_otra_zona_horaria('America/Bogota')  
-        item.hora_mexico = item.get_otra_zona_horaria('America/Mexico_City')  
-        item.hora_argentina = item.get_otra_zona_horaria('America/Argentina/Buenos_Aires')  
-        item.hora_eeuu = item.get_otra_zona_horaria('America/New_York') 
+    for prog in programas:
+        prog.hora_inicio_bogota = prog.get_otra_zona_horaria('America/Bogota', prog.hora_inicio)
+        prog.hora_fin_bogota    = prog.get_otra_zona_horaria('America/Bogota', prog.hora_fin)
+        for d in prog.dias_semana:
+            if d in programs_by_day:
+                programs_by_day[d].append(prog)
+
+    # Nueva estructura: lista de diccionarios con day_key, day_label y programs
+    programs_list = []
+    for day_key, day_label in day_labels.items():
+        programs = programs_by_day.get(day_key, [])
+        programs_list.append({
+            'day_key': day_key,
+            'day_label': day_label,
+            'programs': programs
+        })
 
     context = {
-        'programacion': programacion_list,
-        'left_ads': left_ads,
-        'right_ads': right_ads,
-        'logo_type': 'programacion'
+        'day_labels': day_labels,
+        'programs_list': programs_list,  # Cambiamos programs_by_day por programs_list
+        'left_ads': Announcement.objects.filter(active=True, position='left')[:2],
+        'right_ads': Announcement.objects.filter(active=True, position='right')[:2],
+        'logo_type': 'programacion',
     }
     return render(request, 'programacion.html', context)
 
