@@ -5,6 +5,7 @@ from import_export import resources
 from django.utils.translation import gettext_lazy as _
 import os
 import mutagen
+from django import forms
 from .models import *
 from adminsortable2.admin import SortableAdminBase, SortableInlineAdminMixin
 
@@ -365,28 +366,64 @@ class ProgramaAdmin(admin.ModelAdmin):
     reproductor_audio.short_description = "Reproductor"
 
 
-
+class ProgramacionAdminForm(forms.ModelForm):
+    DAYS_CHOICES = [
+        ('mon', 'Lunes'),
+        ('tue', 'Martes'),
+        ('wed', 'Miércoles'),
+        ('thu', 'Jueves'),  
+        ('fri', 'Viernes'),
+        ('sat', 'Sábado'),
+        ('sun', 'Domingo'),
+    ]
+    
+    dias_semana = forms.MultipleChoiceField(
+        choices=DAYS_CHOICES,
+        widget=forms.CheckboxSelectMultiple,
+        required=True,
+        label='Días de la semana'
+    )
+    
+    class Meta:
+        model = Programacion
+        fields = '__all__'
 
 @admin.register(Programacion)
 class ProgramacionAdmin(admin.ModelAdmin):
-    list_display = ('dia', 'programa', 'hora', 'zona_horaria_usuario', 'hora_mexico', 'hora_argentina', 'hora_eeuu', 'hora_bogota')
+    form = ProgramacionAdminForm  # Agregar esta línea
+    
+    list_display = (
+        'programa',
+        'get_dias',
+        'hora_inicio',
+        'hora_fin',
+        'zona_horaria_usuario',
+        'hora_mexico',
+        'hora_argentina',
+        'hora_bogota',
+        'hora_eeuu',
+    )
     list_per_page = 25
 
+    def get_dias(self, obj):
+        return obj.dias_as_texto()
+    get_dias.short_description = 'Días'
+
     def hora_mexico(self, obj):
-        return obj.get_otra_zona_horaria('America/Mexico_City')
-    hora_mexico.short_description = 'Hora México'
+        return obj.get_otra_zona_horaria('America/Mexico_City', obj.hora_inicio)
+    hora_mexico.short_description = 'Inicio (México)'
 
     def hora_argentina(self, obj):
-        return obj.get_otra_zona_horaria('America/Argentina/Buenos_Aires')
-    hora_argentina.short_description = 'Hora Argentina'
+        return obj.get_otra_zona_horaria('America/Argentina/Buenos_Aires', obj.hora_inicio)
+    hora_argentina.short_description = 'Inicio (Argentina)'
 
     def hora_bogota(self, obj):
-        return obj.get_otra_zona_horaria('America/Bogota')
-    hora_bogota.short_description = 'Hora Bogotá'
+        return obj.get_otra_zona_horaria('America/Bogota', obj.hora_inicio)
+    hora_bogota.short_description = 'Inicio (Bogotá)'
 
     def hora_eeuu(self, obj):
-        return obj.get_otra_zona_horaria('America/New_York')
-    hora_eeuu.short_description = 'Hora EE.UU.'
+        return obj.get_otra_zona_horaria('America/New_York', obj.hora_inicio)
+    hora_eeuu.short_description = 'Inicio (EE.UU.)'
 
 class PublicidadContactoResource(resources.ModelResource):
     class Meta:
