@@ -1,7 +1,7 @@
 from django.db import models
 from pytz import timezone
 import pytz
-from datetime import datetime
+from datetime import date, datetime
 from django.utils.text import slugify
 from django.utils import timezone
 from django.core.validators import FileExtensionValidator
@@ -579,41 +579,74 @@ class Programa(DirtyFieldsMixin, models.Model):
 
 
 # Vista Programacion
+DAYS_OF_WEEK = [
+    ('mon', 'Lunes'),
+    ('tue', 'Martes'),
+    ('wed', 'Miércoles'),
+    ('thu', 'Jueves'),
+    ('fri', 'Viernes'),
+    ('sat', 'Sábado'),
+    ('sun', 'Domingo'),
+]
+
+TIMEZONE_CHOICES = [
+    ('America/Mexico_City', 'México'),
+    ('America/Bogota',      'Bogotá'),
+    ('America/Argentina/Buenos_Aires', 'Argentina'),
+    ('America/New_York',    'EEUU'),
+]
+
 class Programacion(models.Model):
-    dia = models.DateField()  
+    dias_semana = models.JSONField(
+        default=list,
+        verbose_name="Días de la semana",
+        help_text="Lista de días de emisión (usar claves: 'mon','tue',...,'sun')"
+    )
     programa = models.CharField(max_length=200)
     imagen = models.ImageField(upload_to='programacion_imagenes/')
-    hora = models.TimeField()  # Hora almacenada como TimeField
+    hora_inicio = models.TimeField(
+        verbose_name="Hora de inicio",
+        help_text="Hora local de inicio de la transmisión"
+    )
+    hora_fin = models.TimeField(
+        verbose_name="Hora de fin",
+        help_text="Hora local de finalización de la transmisión"
+    )
     zona_horaria_usuario = models.CharField(
         max_length=50,
-        choices=[('America/Mexico_City', 'Mexico'),
-                ('America/Bogota', 'Bogota'),
-                ('America/Argentina/Buenos_Aires', 'Argentina'),
-                ('America/New_York', 'EEUU')]
+        choices=TIMEZONE_CHOICES,
+        default='America/Bogota',
+        verbose_name="Zona horaria base",
     )
 
-    def get_otra_zona_horaria(self, zona_horaria_destino):
-        """Convierte la hora de la zona horaria del usuario a otra zona horaria."""
-        user_tz = timezone(self.zona_horaria_usuario)
+    def get_otra_zona_horaria(self, zona_destino, hora=None):
+        """
+        Convierte la hora (por defecto hora_inicio) de la zona base a la zona_destino.
+        """
+        if hora is None:
+            hora = self.hora_inicio
 
-        user_time = self.hora
+        user_tz = pytz.timezone(self.zona_horaria_usuario)
+        local_dt = datetime.combine(date.today(), hora)
+        local_dt = user_tz.localize(local_dt)
 
-        localized_time = user_tz.localize(datetime.combine(datetime.today(), user_time))
+        target_tz = pytz.timezone(zona_destino)
+        target_dt = local_dt.astimezone(target_tz)
+        return target_dt.strftime('%H:%M')
 
-        target_tz = timezone(zona_horaria_destino)
-        converted_time = localized_time.astimezone(target_tz)
-
-        return converted_time.strftime('%H:%M:%S')
-
-    @property
-    def dia_semana(self):
-        """Devuelve el día de la semana en formato textual, como 'Lunes', 'Martes', etc."""
-        return self.dia.strftime('%A')
+    def dias_as_texto(self):
+        """Devuelve los días seleccionados como texto legible."""
+        mapping = dict(DAYS_OF_WEEK)
+        return ', '.join(mapping[d] for d in self.dias_semana if d in mapping)
 
     def _str_(self):
-        return f'{self.dia_semana} - {self.programa}'
-    
+        return (
+            f"{self.programa} "
+            f"({self.dias_as_texto()} "
+            f"{self.hora_inicio.strftime('%H:%M')}-{self.hora_fin.strftime('%H:%M')})"
+        )
 
+    
 
 # Anunciate con nosotros
 

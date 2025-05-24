@@ -8,72 +8,191 @@
 {% block main %}
 <div class="container-fluid mt-4">
   <div class="row">
-    
     <!-- Anuncios Izquierda -->
     <aside class="col-2 d-none d-md-flex flex-column justify-content-start align-items-center">
       <div class="sticky-top">
         {% include 'base/announcement_component.html' with announcements=left_ads %}
       </div>
     </aside>
-    
+
     <!-- Contenido Principal -->
     <div class="col-12 col-lg-8">
-      <div class="text-center">
-        <h1 class="fw-bold">Programación</h1>
-        <p class="text-muted mb-0">
+      <div class="text-center mb-4">
+        <h1 class="fw-bold mb-3">Programación</h1>
+        <p class="text-muted mb-0 px-3">
           En esta sección encontrarás la programación de nuestra radio, los últimos episodios de nuestro podcast, las noticias más relevantes y, cuando haya novedades, todo lo nuevo al instante.
         </p>
       </div>
-      <div class="program-box border border-danger p-4 mt-3 rounded">
-        <ul class="nav nav-pills justify-content-center mt-3">
-          {% for programacion_item in programacion %}
-            {% with programacion_item.dia|lower|slugify as dia_id %}
-              <li class="nav-item">
-                <a class="nav-link {% if forloop.first %}active{% endif %}" data-bs-toggle="pill" href="#{{ dia_id }}">
-                  {{ programacion_item.dia }}
+
+      <div class="program-box border border-danger p-3 p-md-4 mt-3 rounded shadow-sm">
+        <!-- Nav pills con días - Usando programs_list -->
+        <div class="d-flex justify-content-center mb-4">
+          <ul class="nav nav-pills flex-wrap justify-content-center" role="tablist">
+            {% for day_data in programs_list %}
+              <li class="nav-item" role="presentation">
+                <a class="nav-link {% if forloop.first %}active{% endif %} px-3 rounded-pill border-0 fw-semibold"
+                   id="{{ day_data.day_key }}-tab"
+                   data-bs-toggle="pill"
+                   data-bs-target="#{{ day_data.day_key }}"
+                   type="button"
+                   role="tab"
+                   aria-controls="{{ day_data.day_key }}"
+                   aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                   style="min-width: 80px; font-size: 0.9rem;">
+                  <span class="d-none d-sm-inline">{{ day_data.day_label }}</span>
+                  <span class="d-inline d-sm-none">
+                    {% if day_data.day_key == 'mon' %}Lun{% endif %}
+                    {% if day_data.day_key == 'tue' %}Mar{% endif %}
+                    {% if day_data.day_key == 'wed' %}Mie{% endif %}
+                    {% if day_data.day_key == 'thu' %}Jue{% endif %}
+                    {% if day_data.day_key == 'fri' %}Vie{% endif %}
+                    {% if day_data.day_key == 'sat' %}Sab{% endif %}
+                    {% if day_data.day_key == 'sun' %}Dom{% endif %}
+                  </span>
                 </a>
               </li>
-            {% endwith %}
-          {% endfor %}
-        </ul>
-        
-        <div class="tab-content mt-4">
-          {% for programacion_item in programacion %}
-            {% with programacion_item.dia|lower|slugify as dia_id %}
-              <div id="{{ dia_id }}" class="tab-pane fade {% if forloop.first %}show active{% endif %}">
-                <div class="row justify-content-center">
-                  <div class="col-md-6">
-                    <div class="program-card shadow-sm border rounded-3 p-3">
-                      <img src="{{ programacion_item.imagen.url }}" alt="{{ programacion_item.programa }}" class="img-fluid rounded-top">
-                      <div class="program-info bg-light p-3 rounded-bottom">
-                        <h5 class="fw-bold">{{ programacion_item.programa }}</h5>
-                        <p class="text-muted">
-                          <strong>Hora (México):</strong> {{ programacion_item.hora_mexico }}
-                        </p>
-                        <p class="text-muted">
-                          <strong>Hora (Argentina):</strong> {{ programacion_item.hora_argentina }}
-                        </p>
-                        <p class="text-muted">
-                          <strong>Hora (EEUU):</strong> {{ programacion_item.hora_eeuu }}
-                        </p>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <!-- Contenido de cada día - Usando programs_list -->
+        <div class="tab-content">
+          {% for day_data in programs_list %}
+            <div class="tab-pane fade {% if forloop.first %}show active{% endif %}"
+                 id="{{ day_data.day_key }}"
+                 role="tabpanel"
+                 aria-labelledby="{{ day_data.day_key }}-tab">
+
+              {% if day_data.programs %}
+                <div class="row g-3 justify-content-center">
+                  {% for prog in day_data.programs %}
+                    <div class="col-12 col-sm-6 col-lg-6 col-xl-4">
+                      <div class="program-card h-100 shadow-sm border-0 rounded-3 overflow-hidden transition-all">
+                        <div class="position-relative">
+                          {% if prog.imagen %}
+                          <img src="{{ prog.imagen.url }}"
+                               alt="{{ prog.programa }}"
+                               class="img-fluid w-100"
+                               style="height: 200px; object-fit: cover;">
+                          {% else %}
+                          <div class="bg-secondary d-flex align-items-center justify-content-center text-white"
+                               style="height: 200px;">
+                            <i class="fas fa-microphone fa-3x opacity-50"></i>
+                          </div>
+                          {% endif %}
+                          
+                          <div class="position-absolute top-0 end-0 m-2">
+                            <span class="badge bg-danger bg-opacity-90 px-2 py-1 rounded-pill">
+                              <i class="fas fa-clock me-1"></i>
+                              {{ prog.hora_inicio_bogota }}
+                            </span>
+                          </div>
+                        </div>
+                        
+                        <div class="program-info bg-white p-3">
+                          <h5 class="fw-bold mb-2 text-dark">{{ prog.programa }}</h5>
+                          <div class="d-flex align-items-center text-muted mb-2">
+                            <i class="fas fa-clock me-2 text-danger"></i>
+                            <small>
+                              <strong>Horario (Bogotá):</strong><br>
+                              {{ prog.hora_inicio_bogota }} – {{ prog.hora_fin_bogota }}
+                            </small>
+                          </div>
+                          
+                          <div class="d-flex align-items-center text-muted mb-2">
+                            <i class="fas fa-calendar me-2 text-primary"></i>
+                            <small>{{ prog.dias_as_texto }}</small>
+                          </div>
+                          
+                          <div class="d-flex align-items-center text-muted">
+                            <i class="fas fa-globe me-2 text-success"></i>
+                            <small>Zona base: {{ prog.get_zona_horaria_usuario_display }}</small>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  {% endfor %}
                 </div>
-              </div>
-            {% endwith %}
+              {% else %}
+                <div class="text-center text-muted py-5">
+                  <i class="fas fa-calendar-times fa-3x mb-3 opacity-50"></i>
+                  <h5 class="mb-2">No hay programación</h5>
+                  <p class="mb-0">No hay programas programados para {{ day_data.day_label }}.</p>
+                </div>
+              {% endif %}
+
+            </div>
           {% endfor %}
         </div>
       </div>
     </div>
-    
-    <!-- Anuncios Derecha-->
+
+    <!-- Anuncios Derecha -->
     <aside class="col-2 d-none d-md-flex flex-column justify-content-start align-items-center">
       <div class="sticky-top">
         {% include 'base/announcement_component.html' with announcements=right_ads %}
       </div>
     </aside>
-    
   </div>
 </div>
+
+<!-- CSS adicional para mejoras visuales -->
+<style>
+.nav-pills .nav-link {
+  background-color: #f8f9fa;
+  color: #6c757d;
+  border: 1px solid #dee2e6;
+  transition: all 0.3s ease;
+  margin: 2px;
+}
+
+.nav-pills .nav-link:hover {
+  background-color: #e9ecef;
+  color: #495057;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.nav-pills .nav-link.active {
+  background-color: #dc3545;
+  color: white;
+  border-color: #dc3545;
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+.program-card {
+  transition: all 0.3s ease;
+  border: 1px solid #e9ecef !important;
+}
+
+.program-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+}
+
+.program-box {
+  background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+}
+
+@media (max-width: 576px) {
+  .nav-pills {
+    gap: 1px !important;
+  }
+  
+  .nav-pills .nav-link {
+    font-size: 0.8rem !important;
+    min-width: 50px !important;
+  }
+  
+  .program-info h5 {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .program-box {
+    padding: 1rem !important;
+  }
+}
+</style>
 {% endblock %}
