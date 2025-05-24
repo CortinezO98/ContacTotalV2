@@ -48,6 +48,10 @@
         {% endif %}
         {% endif %}
 
+        <button id="tts-control" class="btn btn-outline-primary mb-4">
+          <i class="bi bi-volume-up-fill"></i> Escuchar artículo
+        </button>
+
         <!-- Descripción -->
         <div class="news-content mb-4">
           {% if news_item.short_description %}
@@ -83,4 +87,54 @@
 
   </div>
 </div>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById('tts-control');
+    const text = document.getElementById('article-body').innerText.trim();
+    let utter, state = 'stopped';
+
+    function updateButton() {
+      if (state === 'stopped') {
+        btn.innerHTML = '<i class="bi bi-volume-up-fill"></i> Escuchar artículo';
+      } else if (state === 'playing') {
+        btn.innerHTML = '<i class="bi bi-pause-fill"></i> Pausar';
+      } else if (state === 'paused') {
+        btn.innerHTML = '<i class="bi bi-play-fill"></i> Reanudar';
+      }
+    }
+
+    btn.addEventListener('click', () => {
+      if (!utter) {
+        utter = new SpeechSynthesisUtterance(text);
+        utter.rate = 1; utter.pitch = 1;
+        utter.onend = () => {
+          state = 'stopped';
+          updateButton();
+          utter = null;
+        };
+        speechSynthesis.speak(utter);
+        state = 'playing';
+      } else if (state === 'playing') {
+        speechSynthesis.pause();
+        state = 'paused';
+      } else if (state === 'paused') {
+        speechSynthesis.resume();
+        state = 'playing';
+      }
+      updateButton();
+    });
+
+    // reveal lazy-load de imágenes
+    const images = document.querySelectorAll(".article-content img");
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add("reveal");
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    images.forEach(img => observer.observe(img));
+  });
+</script>
 {% endblock %}
