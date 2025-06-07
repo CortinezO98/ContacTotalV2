@@ -107,7 +107,7 @@ main {
 
 /* Colors and Common Elements */
 #ColorTitulo1 {
-  color: #848482;
+  color: #ff0000;
 }
 
 .read-more-btn {
@@ -1142,7 +1142,6 @@ h4 {
   
   .live-indicator {
     max-width: 140px;
-    height: 50px;
     font-size: 2em;
     line-height: 50px;
   }
@@ -1246,6 +1245,17 @@ h4 {
   .anuncio-horizontal {
     max-width: 500px; /* más pequeño en tablets */
   }
+
+  main {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mobile-order-1 { order: 1; } /* Video */
+    .mobile-order-2 { order: 2; } /* Radio */
+    .mobile-order-3 { order: 3; } /* Revista */
+    .mobile-order-4 { order: 4; } /* Podcast */
+    .mobile-order-5 { order: 5; } /* Weather */
 }
 
 /* Ajustar en móviles */

@@ -38,7 +38,7 @@
   </div>
 
   <main>
-      <div class="left-column">
+      <div class="left-column mobile-order-2">
           <div class="left-content">
               <section class="live-radio">
                   <h2>Contacto Total Radio</h2>
@@ -66,7 +66,7 @@
                   </div>
               </section>
               
-              <section class="revista">
+              <section class="revista mobile-order-3">
                 {% if latest_edicion %}
                   <a href="{{ latest_edicion.get_absolute_url }}">
                     <img src="{{ latest_edicion.imagen.url }}" alt="{{ latest_edicion.titulo }}" class="img-fluid">
@@ -78,7 +78,7 @@
           </div>
       </div>
       
-      <div class="center-column">
+      <div class="center-column mobile-order-1">
         <section class="main-video">
           <div class="video-container">
               {% if show_twitch %}
@@ -115,16 +115,16 @@
           <section class="social-section mt-0">
               <h3>Sigue nuestras transmisiones EN VIVO en estas plataformas:</h3>
               <div class="social-media-icons">
-                  <a href="#" class="social-icon"><img src="{% static 'img/facebook.svg' %}" alt="live-facebook"></a>
-                  <a href="#" class="social-icon"><img src="{% static 'img/instagram.svg' %}" alt="live-instagram"></a>
-                  <a href="#" class="social-icon"><img src="{% static 'img/youtube.svg' %}" alt="live-youtube"></a>
-                  <a href="#" class="social-icon"><img src="{% static 'img/twitch.svg' %}" alt="live-twitch"></a>
-                  <a href="#" class="social-icon"><img src="{% static 'img/tik-tok.svg' %}" alt="live-tiktok"></a>
+                  <a href="https://www.facebook.com/profile.php?id=61573790453540" class="social-icon"><img src="{% static 'img/facebook.svg' %}" alt="live-facebook"></a>
+                  <a href="https://www.instagram.com/contactototalmedia/" class="social-icon"><img src="{% static 'img/instagram.svg' %}" alt="live-instagram"></a>
+                  <a href="https://www.youtube.com/@CTMEDIOS" class="social-icon"><img src="{% static 'img/youtube.svg' %}" alt="live-youtube"></a>
+                  <a href="https://www.twitch.tv/contactototalmedia" class="social-icon"><img src="{% static 'img/twitch.svg' %}" alt="live-twitch"></a>
+                  <a href="https://www.tiktok.com/@contacto.total.me" class="social-icon"><img src="{% static 'img/tik-tok.svg' %}" alt="live-tiktok"></a>
               </div>
           </section>
       </div>
       
-      <div class="right-column">
+      <div class="right-column mobile-order-4">
           <div class="right-content">
               {% if latest_podcast_section %}
                 <section class="podcast text-center py-4">
@@ -174,11 +174,11 @@
                   </div>
                 </section>
               {% endif %}
-              <section class="weather weather-default">
-                  <a class="weatherwidget-io" href="https://forecast7.com/es/33d45n112d07/phoenix/" data-label_1="PHOENIX" data-label_2="WEATHER" data-font="Verdana" data-icons="Climacons Animated" data-days="5" data-theme="weather_one">PHOENIX WEATHER</a>
+              <section class="weather weather-default mobile-order-5">
+                  <a class="weatherwidget-io" href="https://forecast7.com/en/33d45n112d07/phoenix/?unit=us" data-label_1="PHOENIX" data-label_2="WEATHER" data-font="Roboto" data-icons="Climacons Animated" data-days="5" data-theme="weather_one" >PHOENIX WEATHER</a>
               </section>
               <section class="weather weather-medium d-none">
-                  <a class="weatherwidget-io" href="https://forecast7.com/es/33d45n112d07/phoenix/" data-label_1="PHOENIX" data-label_2="WEATHER" data-font="Roboto" data-icons="Climacons Animated" data-mode="Current" data-days="3" data-theme="weather_one">PHOENIX WEATHER</a>
+                  <a class="weatherwidget-io" href="https://forecast7.com/en/33d45n112d07/phoenix/?unit=us" data-label_1="PHOENIX" data-label_2="WEATHER" data-font="Roboto" data-icons="Climacons Animated" data-mode="Current" data-days="3" data-theme="weather_one" >PHOENIX WEATHER</a>
               </section>
           </div>
       </div>
@@ -198,8 +198,15 @@
       <div class="collapse navbar-collapse justify-content-center" id="navbarNavCompact">
         <ul class="navbar-nav">
           <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Inicio</a></li>
-          <li class="nav-item"><a href="{% url 'revista' %}" class="nav-link">Revista</a></li>
-          <li class="nav-item"><a href="{% url 'programas' %}" class="nav-link">Programas</a></li>
+          <!-- <li class="nav-item"><a href="{% url 'revista' %}" class="nav-link">Revista</a></li> -->
+          <li class="nav-item">
+            {% if latest_edicion %}
+              <a href="{{ latest_edicion.get_absolute_url }}" class="nav-link">Revista</a>
+            {% else %}
+              <a href="{% url 'revista' %}" class="nav-link">Revista</a>
+            {% endif %}
+          </li>
+          <li class="nav-item"><a href="{% url 'programas' %}" class="nav-link">Radio</a></li>
           <li class="nav-item"><a href="{% url 'podcast' %}" class="nav-link">Podcast</a></li>
           <li class="nav-item"><a href="{% url 'quienesSomos' %}" class="nav-link">Quienes Somos</a></li>
           <li class="nav-item"><a href="{% url 'programacion' %}" class="nav-link">Programación</a></li>
