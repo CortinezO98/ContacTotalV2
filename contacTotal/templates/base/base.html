@@ -14,6 +14,30 @@
     <link rel="stylesheet" href="{% static 'css/styless.css'  %}">
 </head>
 <body>
+    <script>
+    (function () {
+      try {
+        var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+        if (!tz) return;
+
+        var cookieName = "user_tz";
+        var current = document.cookie.split("; ").find(function(r){ return r.startsWith(cookieName + "="); });
+        var currentVal = current ? decodeURIComponent(current.split("=")[1]) : "";
+
+        if (currentVal !== tz) {
+          var maxAge = 60 * 60 * 24 * 180;
+          var secure = (location.protocol === "https:") ? "; Secure" : "";
+          document.cookie = cookieName + "=" + encodeURIComponent(tz)
+            + "; Path=/; Max-Age=" + maxAge + "; SameSite=Lax" + secure;
+          if (!sessionStorage.getItem("tz_reload_done")) {
+            sessionStorage.setItem("tz_reload_done", "1");
+            location.reload();
+          }
+        }
+      } catch (e) { /* no-op */ }
+    })();
+    </script>
+
     <div class="d-flex flex-column min-vh-100">
         {% block header %}
             {% include 'base/header.html' %}
@@ -36,6 +60,5 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     {% block extra_scripts %}{% endblock %}
-    
 </body>
 </html>
