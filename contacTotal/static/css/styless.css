@@ -107,7 +107,7 @@ main {
 
 /* Colors and Common Elements */
 #ColorTitulo1 {
-  color: #848482;
+  color: #ff0000;
 }
 
 .read-more-btn {
@@ -1142,7 +1142,6 @@ h4 {
   
   .live-indicator {
     max-width: 140px;
-    height: 50px;
     font-size: 2em;
     line-height: 50px;
   }
@@ -1199,6 +1198,39 @@ h4 {
   object-fit: contain;
 }
 
+@keyframes bounceRainbow {
+    0% { 
+        transform: translateY(0) rotate(0deg); 
+        background: linear-gradient(45deg, #ffffff, #ffffff);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    15% { 
+        transform: translateY(-25px) rotate(3deg); 
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+        box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+    }
+    45% { 
+        transform: translateY(-40px) rotate(4deg); 
+        background: linear-gradient(45deg, #45b7d1, #f7dc6f);
+        box-shadow: 0 15px 30px rgba(69, 183, 209, 0.4);
+    }
+    100% { 
+        transform: translateY(0) rotate(0deg); 
+        background: #ffffff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+}
+
+.bounce-rainbow {
+    animation: bounceRainbow 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.weatherwidget-io {
+    pointer-events: none !important;
+}
+.weatherwidget-io * {
+    pointer-events: none !important;
+}
 
 
 /* FIN BTN FLOTANTE */
@@ -1246,6 +1278,17 @@ h4 {
   .anuncio-horizontal {
     max-width: 500px; /* más pequeño en tablets */
   }
+
+  main {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mobile-order-1 { order: 1; } /* Video */
+    .mobile-order-2 { order: 2; } /* Radio */
+    .mobile-order-3 { order: 3; } /* Revista */
+    .mobile-order-4 { order: 4; } /* Podcast */
+    .mobile-order-5 { order: 5; } /* Weather */
 }
 
 /* Ajustar en móviles */
