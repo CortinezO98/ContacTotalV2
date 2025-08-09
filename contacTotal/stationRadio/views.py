@@ -11,6 +11,7 @@ from django.conf.urls.static import static
 import smtplib
 import urllib.parse
 from datetime import datetime, time
+from math import ceil
 import pytz
 
 
@@ -338,96 +339,122 @@ def quienesSomos(request):
 
 # PROGRAMACION
 
-SLOT_START_HOUR = 8     
-SLOT_END_HOUR   = 22   
-SLOT_STEP_MIN   = 120  
+
+START_HOUR   = 8         
+END_HOUR     = 22         
+SLOT_MINUTES = 30      
 
 PY_WEEKDAY_TO_KEY = {0: 'mon', 1: 'tue', 2: 'wed', 3: 'thu', 4: 'fri', 5: 'sat', 6: 'sun'}
 
-
 def programacion(request):
     """
-    Parrilla semanal con eje fijo de 2 horas (08:00, 10:00, 12:00, ...).
-    La parrilla se posiciona en la zona horaria del usuario (detectada por cookie 'user_tz'),
-    y si no existe, usa settings.TIME_ZONE.
+    Parrilla semanal (08:00–22:00) con CSS Grid (30 min por fila).
+    - Sin posiciones absolutas para eventos.
+    - Carriles por día con grid-column (no hay solapamientos).
     """
-    programas = Programacion.objects.all()
-    day_labels = dict(DAYS_OF_WEEK)
-    day_order = [k for k, _ in DAYS_OF_WEEK]
     base_tz = getattr(request, 'user_timezone', None) or settings.TIME_ZONE
     base_tz_label = base_tz.split('/')[-1].replace('_', ' ')
-    min_start = SLOT_START_HOUR * 60
-    max_end = SLOT_END_HOUR * 60
+
+    min_start = START_HOUR * 60
+    max_end   = END_HOUR   * 60
     total_minutes = max_end - min_start
-    if total_minutes <= 0:
-        max_end = min_start + 60
-        total_minutes = 60
+    rows = total_minutes // SLOT_MINUTES 
 
     def to_minutes(hhmm: str) -> int:
         h, m = hhmm.split(':')
         return int(h) * 60 + int(m)
 
+    day_labels = dict(DAYS_OF_WEEK)
+    day_order  = [k for k, _ in DAYS_OF_WEEK]
     events_by_day = {k: [] for k in day_order}
-
-    for p in programas:
-        start_local = p.get_otra_zona_horaria(base_tz, p.hora_inicio)  
+    for p in Programacion.objects.all():
+        start_local = p.get_otra_zona_horaria(base_tz, p.hora_inicio)  # 'HH:MM'
         end_local   = p.get_otra_zona_horaria(base_tz, p.hora_fin)
 
         s = to_minutes(start_local)
         e = to_minutes(end_local)
-
-        if e <= s:
+        if e <= s: 
             e += 24 * 60
-        visible_start = max(s, min_start)
-        visible_end   = min(e, max_end)
-        visible_duration = max(0, visible_end - visible_start)
-        if visible_duration == 0:
-            pass
-        else:
-            ev = {
-                'title': p.programa,
-                'image_url': p.imagen.url if p.imagen else None,
-                'start_label': start_local,
-                'end_label': end_local,
-                'top_pct':  (visible_start - min_start) * 100.0 / total_minutes,
-                'height_pct': visible_duration * 100.0 / total_minutes,
-            }
 
-            for d in p.dias_semana:
-                if d in events_by_day:
-                    events_by_day[d].append(ev)
+        vs = max(s, min_start)
+        ve = min(e, max_end)
+        if ve <= vs:
+            continue
 
-    hours = []
-    h = min_start
-    while h <= max_end:
-        top = (h - min_start) * 100.0 / total_minutes
-        if top < 0:
-            top = 0.0
-        elif top > 100:
-            top = 100.0
-        hours.append({
-            'min': h,
-            'label': f"{(h // 60):02d}:00",
-            'top_pct': top
+        base_ev = {
+            'title': p.programa,
+            'image_url': p.imagen.url if p.imagen else None,
+            'start_label': start_local,
+            'end_label': end_local,
+            's': vs, 'e': ve,
+        }
+        for d in p.dias_semana:
+            if d in events_by_day:
+                events_by_day[d].append(dict(base_ev))
+
+    columns = []
+    for k in day_order:
+        events = events_by_day[k]
+        events.sort(key=lambda ev: (ev['s'], ev['e']))
+        clusters, cur, cur_end = [], [], -1
+        for ev in events:
+            if not cur:
+                cur = [ev]; cur_end = ev['e']
+            elif ev['s'] < cur_end:  
+                cur.append(ev); cur_end = max(cur_end, ev['e'])
+            else:
+                clusters.append(cur); cur = [ev]; cur_end = ev['e']
+        if cur: clusters.append(cur)
+
+        max_lanes = 1
+        for cluster in clusters:
+            lanes = []  
+            for ev in cluster:
+                placed = False
+                for i, lane_end in enumerate(lanes):
+                    if ev['s'] >= lane_end:
+                        lanes[i] = ev['e']
+                        ev['lane'] = i
+                        placed = True
+                        break
+                if not placed:
+                    ev['lane'] = len(lanes)
+                    lanes.append(ev['e'])
+                row_start = (ev['s'] - min_start) // SLOT_MINUTES + 1
+                row_end   = int(ceil((ev['e'] - min_start) / SLOT_MINUTES)) + 1
+                if row_end <= row_start:
+                    row_end = row_start + 1  
+
+                ev['row_start'] = max(1, row_start)
+                ev['row_end']   = min(rows + 1, row_end)
+
+            max_lanes = max(max_lanes, len(lanes))
+
+        columns.append({
+            'key': k,
+            'label': day_labels[k],
+            'events': events,
+            'lanes': max(1, max_lanes),  
         })
-        h += SLOT_STEP_MIN
-
     now = datetime.now(pytz.timezone(base_tz))
     today_key = PY_WEEKDAY_TO_KEY[now.weekday()]
     now_min = now.hour * 60 + now.minute
     show_now_line = (min_start <= now_min <= max_end)
-    now_top_pct = (now_min - min_start) * 100.0 / total_minutes if show_now_line else None
+    now_top_pct = ((now_min - min_start) * 100.0 / total_minutes) if show_now_line else None
 
-    columns = [{
-        'key': k,
-        'label': day_labels[k],
-        'events': events_by_day[k],
-        'is_today': (k == today_key),
-    } for k in day_order]
+    hours, h = [], min_start
+    while h <= max_end:
+        hours.append({'label': f"{h//60:02d}:00",
+                      'top_pct': (h - min_start) * 100.0 / total_minutes})
+        h += 60
+
+    for col in columns:
+        col['is_today'] = (col['key'] == today_key)
 
     context = {
         'columns': columns,
-        'hours': hours,
+        'rows': rows,                
+        'hours': hours,            
         'show_now_line': show_now_line,
         'now_top_pct': now_top_pct,
         'base_tz_label': base_tz_label,
