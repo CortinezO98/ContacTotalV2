@@ -6,193 +6,210 @@
 {% endblock %}
 
 {% block main %}
-<div class="container-fluid mt-4">
+<main class="container-fluid mt-4" id="programacion" aria-labelledby="programacion-title">
   <div class="row">
     <!-- Anuncios Izquierda -->
-    <aside class="col-2 d-none d-md-flex flex-column justify-content-start align-items-center">
+    <aside class="col-2 d-none d-md-flex flex-column justify-content-start align-items-center" aria-label="Anuncios laterales izquierda">
       <div class="sticky-top">
         {% include 'base/announcement_component.html' with announcements=left_ads %}
       </div>
     </aside>
 
-    <!-- Contenido Principal -->
-    <div class="col-12 col-lg-8">
-      <div class="text-center mb-4">
-        <h1 class="fw-bold mb-3">Programación</h1>
-        <p class="text-muted mb-0 px-3">
+    <section class="col-12 col-lg-8">
+      <header class="text-center mb-3">
+        <h1 id="programacion-title" class="fw-bold mb-1">Programación</h1>
+        <p class="text-muted mb-1">
           En esta sección encontrarás la programación de nuestra radio, los últimos episodios de nuestro podcast, las noticias más relevantes y, cuando haya novedades, todo lo nuevo al instante.
         </p>
-      </div>
+        <p class="text-muted mb-0">Horarios mostrados según tu zona: <strong>{{ base_tz_label }}</strong>.</p>
+        <noscript>
+          <small class="text-warning d-block mt-1">Activa JavaScript para detectar tu zona horaria automáticamente.</small>
+        </noscript>
+      </header>
 
-      <div class="program-box border border-danger p-3 p-md-4 mt-3 rounded shadow-sm">
-        <!-- Nav pills con días - Usando programs_list -->
-        <div class="d-flex justify-content-center mb-4">
-          <ul class="nav nav-pills flex-wrap justify-content-center" role="tablist">
-            {% for day_data in programs_list %}
-              <li class="nav-item" role="presentation">
-                <a class="nav-link {% if forloop.first %}active{% endif %} px-3 rounded-pill border-0 fw-semibold"
-                   id="{{ day_data.day_key }}-tab"
-                   data-bs-toggle="pill"
-                   data-bs-target="#{{ day_data.day_key }}"
-                   type="button"
-                   role="tab"
-                   aria-controls="{{ day_data.day_key }}"
-                   aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
-                   style="min-width: 80px; font-size: 0.9rem;">
-                  <span class="d-none d-sm-inline">{{ day_data.day_label }}</span>
-                  <span class="d-inline d-sm-none">
-                    {% if day_data.day_key == 'mon' %}Lun{% endif %}
-                    {% if day_data.day_key == 'tue' %}Mar{% endif %}
-                    {% if day_data.day_key == 'wed' %}Mie{% endif %}
-                    {% if day_data.day_key == 'thu' %}Jue{% endif %}
-                    {% if day_data.day_key == 'fri' %}Vie{% endif %}
-                    {% if day_data.day_key == 'sat' %}Sab{% endif %}
-                    {% if day_data.day_key == 'sun' %}Dom{% endif %}
-                  </span>
-                </a>
-              </li>
+      <div class="schedule border rounded shadow-sm" role="table" aria-label="Parrilla semanal de programación">
+        <div class="schedule__scroll" tabindex="0" aria-describedby="schedule-help">
+          <div class="schedule__header" role="rowgroup">
+            {% for col in columns %}
+              <div class="schedule__dayHead {% if col.is_today %}is-today{% endif %}"
+                   role="columnheader"
+                   aria-label="{{ col.label }}{% if col.is_today %} (hoy){% endif %}">
+                {{ col.label }}
+              </div>
             {% endfor %}
-          </ul>
-        </div>
+          </div>
 
-        <!-- Contenido de cada día - Usando programs_list -->
-        <div class="tab-content">
-          {% for day_data in programs_list %}
-            <div class="tab-pane fade {% if forloop.first %}show active{% endif %}"
-                 id="{{ day_data.day_key }}"
-                 role="tabpanel"
-                 aria-labelledby="{{ day_data.day_key }}-tab">
-
-              {% if day_data.programs %}
-                <div class="row g-3 justify-content-center">
-                  {% for prog in day_data.programs %}
-                    <div class="col-12 col-sm-6 col-lg-6 col-xl-4">
-                      <div class="program-card h-100 shadow-sm border-0 rounded-3 overflow-hidden transition-all">
-                        <div class="position-relative">
-                          {% if prog.imagen %}
-                          <img src="{{ prog.imagen.url }}"
-                               alt="{{ prog.programa }}"
-                               class="img-fluid w-100"
-                               style="height: 200px; object-fit: cover;">
-                          {% else %}
-                          <div class="bg-secondary d-flex align-items-center justify-content-center text-white"
-                               style="height: 200px;">
-                            <i class="fas fa-microphone fa-3x opacity-50"></i>
-                          </div>
-                          {% endif %}
-                          
-                          <div class="position-absolute top-0 end-0 m-2">
-                            <span class="badge bg-danger bg-opacity-90 px-2 py-1 rounded-pill">
-                              <i class="fas fa-clock me-1"></i>
-                              {{ prog.hora_inicio_bogota }}
-                            </span>
-                          </div>
+          <div class="schedule__grid" role="rowgroup">
+            {% for col in columns %}
+              <div class="schedule__dayCol {% if col.is_today %}is-today{% endif %}" role="row" aria-label="Columna {{ col.label }}">
+                {% for h in hours %}
+                  <div class="schedule__hourLine" style="top: {{ h.top_pct }}%;"></div>
+                {% endfor %}
+                {% if col.is_today and show_now_line %}
+                  <div class="schedule__nowLine" style="top: {{ now_top_pct }}%;" aria-label="Hora actual"></div>
+                {% endif %}
+                {% for ev in col.events %}
+                  <article class="schedule__event"
+                           style="top: {{ ev.top_pct }}%; height: {{ ev.height_pct }}%;"
+                           aria-label="Programa: {{ ev.title }} de {{ ev.start_label|default:'--:--' }} a {{ ev.end_label|default:'--:--' }} ({{ col.label }})">
+                    {% if ev.image_url %}
+                      <div class="schedule__eventBg" style="background-image:url('{{ ev.image_url }}');" aria-hidden="true"></div>
+                    {% endif %}
+                    <div class="schedule__eventBody">
+                      <h3 class="schedule__eventTitle">{{ ev.title }}</h3>
+                      <p class="schedule__eventTime mb-0">
+                        {% if ev.start_label and ev.end_label %}
+                          {{ ev.start_label }} – {{ ev.end_label }}
+                        {% else %}
+                          <span aria-hidden="true">Horario no disponible</span>
+                        {% endif %}
+                      </p>
+                      {% if ev.times %}
+                        <div class="schedule__tzRow" aria-label="Horarios en otras zonas">
+                          {% for t in ev.times %}
+                            <span class="schedule__tzChip">{{ t.label }}: {{ t.start }}–{{ t.end }}</span>
+                          {% endfor %}
                         </div>
-                        
-                        <div class="program-info bg-white p-3">
-                          <h5 class="fw-bold mb-2 text-dark">{{ prog.programa }}</h5>
-                          <div class="d-flex align-items-center text-muted mb-2">
-                            <i class="fas fa-clock me-2 text-danger"></i>
-                            <small>
-                              <strong>Horario (Bogotá):</strong><br>
-                              {{ prog.hora_inicio_bogota }} – {{ prog.hora_fin_bogota }}
-                            </small>
-                          </div>
-                          
-                          <div class="d-flex align-items-center text-muted mb-2">
-                            <i class="fas fa-calendar me-2 text-primary"></i>
-                            <small>{{ prog.dias_as_texto }}</small>
-                          </div>
-                          
-                          <div class="d-flex align-items-center text-muted">
-                            <i class="fas fa-globe me-2 text-success"></i>
-                            <small>Zona base: {{ prog.get_zona_horaria_usuario_display }}</small>
-                          </div>
-                        </div>
-                      </div>
+                      {% endif %}
                     </div>
-                  {% endfor %}
-                </div>
-              {% else %}
-                <div class="text-center text-muted py-5">
-                  <i class="fas fa-calendar-times fa-3x mb-3 opacity-50"></i>
-                  <h5 class="mb-2">No hay programación</h5>
-                  <p class="mb-0">No hay programas programados para {{ day_data.day_label }}.</p>
-                </div>
-              {% endif %}
-
-            </div>
-          {% endfor %}
+                  </article>
+                {% endfor %}
+              </div>
+            {% endfor %}
+          </div>
         </div>
+        <p id="schedule-help" class="visually-hidden">Usa desplazamiento horizontal para ver todos los días en pantallas pequeñas.</p>
       </div>
-    </div>
+    </section>
 
     <!-- Anuncios Derecha -->
-    <aside class="col-2 d-none d-md-flex flex-column justify-content-start align-items-center">
+    <aside class="col-2 d-none d-md-flex flex-column justify-content-start align-items-center" aria-label="Anuncios laterales derecha">
       <div class="sticky-top">
         {% include 'base/announcement_component.html' with announcements=right_ads %}
       </div>
     </aside>
   </div>
-</div>
+</main>
 
-<!-- CSS adicional para mejoras visuales -->
 <style>
-.nav-pills .nav-link {
-  background-color: #f8f9fa;
-  color: #6c757d;
-  border: 1px solid #dee2e6;
-  transition: all 0.3s ease;
-  margin: 2px;
+/* Accesibilidad */
+.visually-hidden {
+  position: absolute !important; width: 1px !important; height: 1px !important;
+  padding: 0 !important; margin: -1px !important; overflow: hidden !important;
+  clip: rect(0,0,0,0) !important; white-space: nowrap !important; border: 0 !important;
 }
 
-.nav-pills .nav-link:hover {
-  background-color: #e9ecef;
-  color: #495057;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.nav-pills .nav-link.active {
-  background-color: #dc3545;
-  color: white;
-  border-color: #dc3545;
-  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
-}
-
-.program-card {
-  transition: all 0.3s ease;
-  border: 1px solid #e9ecef !important;
-}
-
-.program-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
-}
-
-.program-box {
+/* ====== Parrilla (sin columna de hora) ====== */
+.schedule {
+  --day-min-w: 120px;       /* ancho mínimo por día (móvil) */
+  --grid-min-h: 540px;      /* altura mínima compacta */
+  --event-radius: .6rem;
+  --event-pad-y: .45rem;
+  --event-pad-x: .55rem;
   background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
 }
 
-@media (max-width: 576px) {
-  .nav-pills {
-    gap: 1px !important;
-  }
-  
-  .nav-pills .nav-link {
-    font-size: 0.8rem !important;
-    min-width: 50px !important;
-  }
-  
-  .program-info h5 {
-    font-size: 1rem;
-  }
+.schedule__scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; outline: none; }
+
+/* Header: solo 7 columnas (días) */
+.schedule__header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0;
+  border-bottom: 1px solid #e9ecef;
+  background: #fff;
+  min-width: calc(7 * var(--day-min-w));
+}
+.schedule__dayHead {
+  padding: .5rem .25rem;
+  text-align: center;
+  font-weight: 700;
+  border-right: 1px solid #e9ecef;
+  white-space: nowrap;
+  font-size: .95rem;
+}
+.schedule__dayHead:last-child { border-right: 0; }
+.schedule__dayHead.is-today { color: #dc3545; }
+
+/* Grid: solo 7 columnas (días) */
+.schedule__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  position: relative;
+  min-height: var(--grid-min-h);
+  min-width: calc(7 * var(--day-min-w));
 }
 
-@media (max-width: 768px) {
-  .program-box {
-    padding: 1rem !important;
-  }
+/* Columnas de día */
+.schedule__dayCol {
+  position: relative;
+  border-right: 1px solid #f1f3f5;
+  background: #fff;
+  min-height: var(--grid-min-h);
+}
+.schedule__dayCol:last-child { border-right: 0; }
+.schedule__dayCol.is-today { background: #fff7f8; }
+
+/* Líneas guía por hora */
+.schedule__hourLine {
+  position: absolute; left: 0; right: 0; height: 0;
+  border-top: 1px dashed #e9ecef;
+}
+
+/* Línea "ahora" */
+.schedule__nowLine {
+  position: absolute; left: 0; right: 0; height: 0;
+  border-top: 2px solid #dc3545; z-index: 20;
+}
+
+/* Evento */
+.schedule__event {
+  position: absolute; left: 3%; right: 3%;
+  border-radius: var(--event-radius);
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,.08);
+  border: 1px solid #f1f3f5;
+  background: #dc3545; color: #fff;
+}
+.schedule__eventBg {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  filter: brightness(.75);
+}
+.schedule__eventBody { position: relative; z-index: 1; padding: var(--event-pad-y) var(--event-pad-x); }
+.schedule__eventTitle { font-weight: 700; font-size: .9rem; line-height: 1.15; margin-bottom: .25rem; }
+.schedule__eventTime { font-size: .8rem; opacity: .92; }
+
+/* Chips multi-zona (si existen ev.times) */
+.schedule__tzRow { display: flex; flex-wrap: wrap; gap: .25rem .35rem; margin-top: .35rem; }
+.schedule__tzChip {
+  display: inline-block; font-size: .74rem; line-height: 1;
+  background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25);
+  padding: .18rem .35rem; border-radius: .5rem; backdrop-filter: saturate(1.2);
+}
+
+/* Móvil */
+@media (max-width: 576px) {
+  .schedule { --day-min-w: 220px; }
+  .schedule__dayHead { font-size: .9rem; }
+  .schedule__eventTitle { font-size: .85rem; }
+  .schedule__tzChip { font-size: .7rem; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .schedule__scroll { scroll-behavior: auto; }
 }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const scroller = document.querySelector('.schedule__scroll');
+  const todayCol = document.querySelector('.schedule__dayCol.is-today');
+  if (scroller && todayCol) {
+    const left = todayCol.offsetLeft - (scroller.clientWidth / 2) + (todayCol.clientWidth / 2);
+    scroller.scrollLeft = Math.max(0, left);
+  }
+});
+</script>
 {% endblock %}
