@@ -1,4 +1,3 @@
-{# templates/base/banner_component.html #}
 <div class="banner-component">
   {% if banners %}
     {% for b in banners %}
@@ -10,12 +9,9 @@
             {% if mobile or tablet or desktop %}
               {% if b.link %}<a href="{{ b.link }}" target="_blank" rel="noopener noreferrer" class="d-inline-block">{% endif %}
                 <picture>
-                  {# Los <source> también se protegen con .name #}
                   {% if mobile and mobile.name %}<source media="(max-width: 576px)" srcset="{{ mobile.url }}">{% endif %}
                   {% if tablet and tablet.name %}<source media="(max-width: 992px)" srcset="{{ tablet.url }}">{% endif %}
                   {% if desktop and desktop.name %}<source media="(min-width: 993px)" srcset="{{ desktop.url }}">{% endif %}
-
-                  {# Fallback seguro: primero desktop, luego tablet, luego mobile #}
                   {% if desktop and desktop.name %}
                     <img src="{{ desktop.url }}" alt="Banner publicitario" class="img-fluid rounded shadow-sm">
                   {% elif tablet and tablet.name %}
