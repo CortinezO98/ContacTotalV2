@@ -2,329 +2,317 @@
 {% load static %}
 {% block main %}
 <div class="container">
-    <div class="row">
-        <!-- Columna lateral izquierda: Banner vertical izquierdo -->
-        <div class="col-2 ad-bar d-none d-md-flex flex-column justify-content-start align-items-center">
-        {% for banner in banners_left %}
-            <div class="mb-5">
-            {{ banner.script|safe }}
-            </div>
-        {% empty %}
-            <p>No hay banner izquierdo activo.</p>
-        {% endfor %}
-        </div>
-        
-        <!-- Contenido principal -->
-        <div class="col-12 col-lg-8 main-content">
-            <!-- Sección: Carrusel de noticias -->
-            <h2 id="ColorTitulo1" class="text-center mb-4">¡Lo que está pasando!</h2>
-            <div id="noticiasCarousel" class="carousel slide d-none d-md-block" data-bs-ride="carousel" data-bs-interval="5000">
-                <div class="carousel-inner">
-                    {% for group in carousel_news %}
-                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                            <div class="row g-3">
-                                {% for noticia in group %}
-                                    <div class="col-md-4">
-                                        <div class="card">
-                                            <a href="{% url 'noticia_detalle' noticia.slug %}" class="text-decoration-none text-dark">
-                                                <img src="{{ noticia.image.url }}" class="card-img-top" alt="{{ noticia.title }}">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">{{ noticia.title }}</h5>
-                                                    <p class="card-text small text-muted">
-                                                    {{ noticia.publication_date|date:"d F Y" }} - {{ noticia.author }}
-                                                    </p>
-                                                    <p class="card-text">{{ noticia.description|truncatewords:20 }}</p>
-                                                </div>
-                                            </a>    
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#noticiasCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Anterior</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#noticiasCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Siguiente</span>
-                </button>
-            </div>
+  <div class="row">
 
-            <div id="noticiasCarouselMobile" class="carousel slide d-block d-md-none" data-bs-ride="carousel"
-                data-bs-interval="5000">
-                <div class="carousel-inner">
-                    {% for group in carousel_news %}
-                    {% for noticia in group %}
-                    <div class="carousel-item {% if forloop.parentloop.first and forloop.first %}active{% endif %}">
-                        <div class="card mx-auto" style="max-width: 90%;">
-                            <a href="{% url 'noticia_detalle' noticia.slug %}" class="text-decoration-none text-dark">
-                                <img src="{{ noticia.image.url }}" class="card-img-top" style="height: 400px; object-fit: cover;"
-                                    alt="{{ noticia.title }}">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ noticia.title }}</h5>
-                                    <p class="card-text small text-muted">
-                                        {{ noticia.publication_date|date:"d F Y" }} – {{ noticia.author }}
-                                    </p>
-                                    <p class="card-text">{{ noticia.description|truncatewords:15 }}</p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    {% endfor %}
-                    {% endfor %}
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#noticiasCarouselMobile" data-bs-slide="prev" style="left: -8px; width: auto;">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Anterior</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#noticiasCarouselMobile" data-bs-slide="next" style="right: -8px; width: auto;">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Siguiente</span>
-                </button>
-            </div>
-            
-            <!-- Banner Horizontal: Después del Carrusel -->
-            <div class="row my-4 banner-row">
-                <div class="col-12 d-flex justify-content-center">
-                    {% for banner in banner_horizontal_after_carousel %}
-                        {{ banner.script|safe }}
-                    {% empty %}
-                        <p>No hay banner horizontal después del carrusel.</p>
-                    {% endfor %}
-                </div>
-            </div>
-            
-            <!-- Sección: Noticias principal y anuncios -->
-            <div class="row mt-4">
-                <div class="col-md-8">
-                {% if main_news %}
-                    <div class="main-article text-center">
-                        <a href="{% url 'noticia_detalle' main_news.slug %}" style="text-decoration: none; color: inherit;">
-                            <h3>{{ main_news.title }}</h3>
-                            {% if main_news.video or main_news.video_link %}
-                            <div class="video-container">
-                                <iframe src="{{ main_news.media_source }}" title="Video principal" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                            </div>
-                            {% elif main_news.image %}
-                            <img src="{{ main_news.image.url }}" alt="Imagen principal" class="img-fluid">
-                            {% endif %}
-                        </a>
-                        <p>
-                            {{ main_news.author }} | {{ main_news.publication_date|date:"d F Y" }}
-                        </p>
-                        <p>{{ main_news.short_description|truncatewords:30  }}</p>
-                    </div>
-                {% endif %}
-                </div>
-                <div class="col-md-4 mt-4 mt-md-0">
-                    <h4>Anuncios</h4>
-                    {% for anuncio in anuncios %}
-                        <a href="{{ anuncio.link }}" target="_blank" style="text-decoration: none; color: inherit;">
-                            <div class="side-news-item mb-3">
-                                <img src="{{ anuncio.imagen.url }}" alt="{{ anuncio.titulo }}" class="img-fluid">
-                            </div>
-                        </a>
-                    {% endfor %}
-                </div>
-            </div>
-            
-            <!-- Banner Horizontal: Después de la Noticia Principal -->
-            <div class="row my-4 banner-row">
-                <div class="col-12 d-flex justify-content-center">
-                    {% for banner in banner_horizontal_after_main_news %}
-                        {{ banner.script|safe }}
-                    {% empty %}
-                        <p>No hay banner horizontal después de la noticia principal.</p>
-                    {% endfor %}
-                </div>
-            </div>
-            
-            <!-- Sección: Podcast -->
-            <div id="index-podcast" class="podcast-section text-center">
-                <h4>Podcast</h4>
-                <p>Disfruta de nuestro podcast con las últimas noticias, entrevistas y análisis.</p>
-            
-                {# Escritorio: 3 por slide #}
-                <div id="podcastCarouselDesktop" class="carousel slide d-none d-md-block" data-bs-ride="carousel">
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <div class="row justify-content-center">
-                                {% for p in last_podcasts|slice:"0:3" %}
-                                <div class="col-md-4 text-center mb-4">
-                                    <a href="{% url 'podcast_detail' p.slug %}">
-                                        <img src="{{ p.cover_image.url }}" alt="{{ p.title }}"
-                                            class="img-fluid rounded-circle mx-auto"
-                                            style="width:150px; height:150px; object-fit:cover;">
-                                    </a>
-                                    <h5 class="mt-2">{{ p.title }}</h5>
-                                    <p class="small text-muted">{{ p.date_created|date:"d F Y" }}</p>
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% if last_podcasts|length > 3 %}
-                        <div class="carousel-item">
-                            <div class="row justify-content-center">
-                                {% for p in last_podcasts|slice:"3:6" %}
-                                <div class="col-md-4 text-center mb-4">
-                                    <a href="{% url 'podcast_detail' p.slug %}">
-                                        <img src="{{ p.cover_image.url }}" alt="{{ p.title }}"
-                                            class="img-fluid rounded-circle mx-auto"
-                                            style="width:150px; height:150px; object-fit:cover;">
-                                    </a>
-                                    <h5 class="mt-2">{{ p.title }}</h5>
-                                    <p class="small text-muted">{{ p.date_created|date:"d F Y" }}</p>
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% endif %}
-                    </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#podcastCarouselDesktop"
-                        data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon"></span>
-                        <span class="visually-hidden">Anterior</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#podcastCarouselDesktop"
-                        data-bs-slide="next">
-                        <span class="carousel-control-next-icon"></span>
-                        <span class="visually-hidden">Siguiente</span>
-                    </button>
-                </div>
-            
-                {# Móvil: 1 por slide #}
-                <div id="podcastCarouselMobile" class="carousel slide d-block d-md-none" data-bs-ride="carousel">
-                    <div class="carousel-inner">
-                        {% for p in last_podcasts %}
-                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                            <div class="text-center py-3">
-                                <a href="{% url 'podcast_detail' p.slug %}">
-                                    <img src="{{ p.cover_image.url }}" alt="{{ p.title }}" class="img-fluid rounded-circle mx-auto"
-                                        style="width:120px; height:120px; object-fit:cover;">
-                                </a>
-                                <h5 class="mt-2">{{ p.title }}</h5>
-                                <p class="small text-muted">{{ p.date_created|date:"d F Y" }}</p>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#podcastCarouselMobile"
-                        data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon"></span>
-                        <span class="visually-hidden">Anterior</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#podcastCarouselMobile"
-                        data-bs-slide="next">
-                        <span class="carousel-control-next-icon"></span>
-                        <span class="visually-hidden">Siguiente</span>
-                    </button>
-                </div>
-            </div>
-
-            
-            <!-- Banner Horizontal: Después de la sección de Podcast -->
-            <div class="row my-4 banner-row">
-                <div class="col-12 d-flex justify-content-center">
-                    {% for banner in banner_horizontal_after_podcast %}
-                        {{ banner.script|safe }}
-                    {% empty %}
-                        <p>No hay banner horizontal después del podcast.</p>
-                    {% endfor %}
-                </div>
-            </div>
-            
-            <!-- Sección combinada: Programas Recientes y Magazine -->
-            <div class="container my-5">
-                <div class="row align-items-start">
-                    <!-- Programas Recientes -->
-                    <div class="col-12 col-md-6 mb-4">
-                        <div class="h-100 d-flex flex-column">
-                            <!-- Título con altura fija -->
-                            <div class="text-center mb-4" style="min-height: 80px; display: flex; flex-direction: column; justify-content: center;">
-                                <h4 class="mb-1">Contacto Total</h4>
-                                <h4 class="mb-0">Radio</h4>
-                            </div>
-                            
-                            <!-- Contenido que crece -->
-                            <div class="flex-grow-1">
-                                <!-- Lista de programas -->
-                                <ul class="list-group">
-                                    {% for program in last_programs %}
-                                    <li class="list-group-item d-flex justify-content-between align-items-center py-3 px-4">
-                                        <div class="flex-grow-1">
-                                            <h6 class="mb-2 fw-bold">{{ program.titulo }}</h6>
-                                            <small class="text-muted">{{ program.fecha_creacion|date:"d F Y" }}</small>
-                                        </div>
-                                        <div class="text-end ms-3">
-                                            <a href="{% url 'programas' %}" class="btn btn-sm btn-outline-danger px-3">
-                                                Escuchar
-                                            </a>
-                                        </div>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
-                                <!-- Enlace a más programas -->
-                                <div class="text-center mt-3">
-                                    <a href="{% url 'programas' %}" class="text-decoration-none">
-                                        <h5 class="mt-3 text-primary mb-0">Ver Todos los Programas</h5>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Magazine -->
-                    <div class="col-12 col-md-6 mb-4">
-                        <div class="h-100 d-flex flex-column">
-                            <!-- Título con la misma altura fija -->
-                            <div class="text-center mb-4" style="min-height: 80px; display: flex; flex-direction: column; justify-content: center;">
-                                <h4 class="mb-1">Contacto Total,</h4>
-                                <h4 class="mb-0">la revista que habla</h4>
-                            </div>
-                            
-                            <!-- Contenido que crece -->
-                            <div class="flex-grow-1 d-flex flex-column justify-content-center">
-                                <!-- Contenido de la revista -->
-                                <div class="text-center">
-                                    <a href="{% url 'revista' %}" class="text-decoration-none d-block">
-                                        <img src="{% static 'img/revista.jpeg' %}" alt="Magazine" class="img-fluid rounded mx-auto d-block" style="max-height: 300px; object-fit: cover;">
-                                        <h5 class="mt-3 text-primary mb-0">Ver Ediciones Anteriores</h5>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            
-            <!-- Banner Horizontal: Después de la sección de Programas -->
-            <div class="row my-4 banner-row">
-                <div class="col-12 d-flex justify-content-center">
-                {% for banner in banner_horizontal_after_programs %}
-                    {{ banner.script|safe }}
-                {% empty %}
-                    <p>No hay banner horizontal después de los programas.</p>
-                {% endfor %}
-                </div>
-            </div>
-            
-        </div>
-        
-        <!-- Columna lateral derecha: Banner vertical derecho -->
-        <div class="col-2 ad-bar d-none d-md-flex flex-column justify-content-start align-items-center">
-            {% for banner in banners_right %}
-            <div class="mb-5">
-                {{ banner.script|safe }}
-            </div>
-            {% empty %}
-            <p>No hay banner derecho activo.</p>
-            {% endfor %}
-        </div>
+    <!-- Columna lateral izquierda Banner vertical izquierdo  -->
+    <div class="col-2 ad-bar d-none d-md-flex flex-column justify-content-start align-items-center">
+      {% if banners_left %}
+        {% include 'base/banner_component.html' with banners=banners_left %}
+      {% else %}
+        <p>No hay banner izquierdo activo.</p>
+      {% endif %}
     </div>
+
+    <!-- Contenido principal -->
+    <div class="col-12 col-lg-8 main-content">
+
+      <!-- Sección: Carrusel de noticias (desktop) -->
+      <h2 id="ColorTitulo1" class="text-center mb-4">¡Lo que está pasando!</h2>
+      <div id="noticiasCarousel" class="carousel slide d-none d-md-block" data-bs-ride="carousel" data-bs-interval="5000">
+        <div class="carousel-inner">
+          {% for group in carousel_news %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+              <div class="row g-3">
+                {% for noticia in group %}
+                  <div class="col-md-4">
+                    <div class="card">
+                      <a href="{% url 'noticia_detalle' noticia.slug %}" class="text-decoration-none text-dark">
+                        <img src="{{ noticia.image.url }}" class="card-img-top" alt="{{ noticia.title }}">
+                        <div class="card-body">
+                          <h5 class="card-title">{{ noticia.title }}</h5>
+                          <p class="card-text small text-muted">
+                            {{ noticia.publication_date|date:"d F Y" }} - {{ noticia.author }}
+                          </p>
+                          <p class="card-text">{{ noticia.description|truncatewords:20 }}</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#noticiasCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#noticiasCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Siguiente</span>
+        </button>
+      </div>
+
+      <!-- Carrusel (móvil) -->
+      <div id="noticiasCarouselMobile" class="carousel slide d-block d-md-none" data-bs-ride="carousel" data-bs-interval="5000">
+        <div class="carousel-inner">
+          {% for group in carousel_news %}
+            {% for noticia in group %}
+              <div class="carousel-item {% if forloop.parentloop.first and forloop.first %}active{% endif %}">
+                <div class="card mx-auto" style="max-width: 90%;">
+                  <a href="{% url 'noticia_detalle' noticia.slug %}" class="text-decoration-none text-dark">
+                    <img src="{{ noticia.image.url }}" class="card-img-top" style="height: 400px; object-fit: cover;" alt="{{ noticia.title }}">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ noticia.title }}</h5>
+                      <p class="card-text small text-muted">
+                        {{ noticia.publication_date|date:"d F Y" }} – {{ noticia.author }}
+                      </p>
+                      <p class="card-text">{{ noticia.description|truncatewords:15 }}</p>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            {% endfor %}
+          {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#noticiasCarouselMobile" data-bs-slide="prev" style="left: -8px; width: auto;">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#noticiasCarouselMobile" data-bs-slide="next" style="right: -8px; width: auto;">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Siguiente</span>
+        </button>
+      </div>
+
+      <!-- SOLO MÓVIL -->
+      <div class="d-block d-md-none my-3 banner-mobile">
+        {% if banners_mobile %}
+          {% include 'base/banner_component.html' with banners=banners_mobile %}
+        {% endif %}
+      </div>
+
+      <!-- Banner Horizontal Después del Carrusel -->
+      <div class="row my-4 banner-row">
+        <div class="col-12 d-flex justify-content-center">
+          {% if banner_horizontal_after_carousel %}
+            {% include 'base/banner_component.html' with banners=banner_horizontal_after_carousel %}
+          {% else %}
+            <p>No hay banner horizontal después del carrusel.</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Sección: Noticias principal y anuncios -->
+      <div class="row mt-4">
+        <div class="col-md-8">
+          {% if main_news %}
+            <div class="main-article text-center">
+              <a href="{% url 'noticia_detalle' main_news.slug %}" style="text-decoration: none; color: inherit;">
+                <h3>{{ main_news.title }}</h3>
+                {% if main_news.video or main_news.video_link %}
+                  <div class="video-container">
+                    <iframe src="{{ main_news.media_source }}" title="Video principal" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                  </div>
+                {% elif main_news.image %}
+                  <img src="{{ main_news.image.url }}" alt="Imagen principal" class="img-fluid">
+                {% endif %}
+              </a>
+              <p>{{ main_news.author }} | {{ main_news.publication_date|date:"d F Y" }}</p>
+              <p>{{ main_news.short_description|truncatewords:30 }}</p>
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="col-md-4 mt-4 mt-md-0">
+          <h4>Anuncios</h4>
+          {% for anuncio in anuncios %}
+            <a href="{{ anuncio.link }}" target="_blank" style="text-decoration: none; color: inherit;">
+              <div class="side-news-item mb-3">
+                <img src="{{ anuncio.imagen.url }}" alt="{{ anuncio.titulo }}" class="img-fluid">
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Banner Horizontal: Después de la Noticia Principal -->
+      <div class="row my-4 banner-row">
+        <div class="col-12 d-flex justify-content-center">
+          {% if banner_horizontal_after_main_news %}
+            {% include 'base/banner_component.html' with banners=banner_horizontal_after_main_news %}
+          {% else %}
+            <p>No hay banner horizontal después de la noticia principal.</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Sección: Podcast -->
+      <div id="index-podcast" class="podcast-section text-center">
+        <h4>Podcast</h4>
+        <p>Disfruta de nuestro podcast con las últimas noticias, entrevistas y análisis.</p>
+
+        {# Escritorio: 3 por slide #}
+        <div id="podcastCarouselDesktop" class="carousel slide d-none d-md-block" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <div class="row justify-content-center">
+                {% for p in last_podcasts|slice:"0:3" %}
+                <div class="col-md-4 text-center mb-4">
+                  <a href="{% url 'podcast_detail' p.slug %}">
+                    <img src="{{ p.cover_image.url }}" alt="{{ p.title }}" class="img-fluid rounded-circle mx-auto" style="width:150px; height:150px; object-fit:cover;">
+                  </a>
+                  <h5 class="mt-2">{{ p.title }}</h5>
+                  <p class="small text-muted">{{ p.date_created|date:"d F Y" }}</p>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            {% if last_podcasts|length > 3 %}
+            <div class="carousel-item">
+              <div class="row justify-content-center">
+                {% for p in last_podcasts|slice:"3:6" %}
+                <div class="col-md-4 text-center mb-4">
+                  <a href="{% url 'podcast_detail' p.slug %}">
+                    <img src="{{ p.cover_image.url }}" alt="{{ p.title }}" class="img-fluid rounded-circle mx-auto" style="width:150px; height:150px; object-fit:cover;">
+                  </a>
+                  <h5 class="mt-2">{{ p.title }}</h5>
+                  <p class="small text-muted">{{ p.date_created|date:"d F Y" }}</p>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            {% endif %}
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#podcastCarouselDesktop" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+            <span class="visually-hidden">Anterior</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#podcastCarouselDesktop" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+            <span class="visually-hidden">Siguiente</span>
+          </button>
+        </div>
+
+        {# Móvil: 1 por slide #}
+        <div id="podcastCarouselMobile" class="carousel slide d-block d-md-none" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            {% for p in last_podcasts %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+              <div class="text-center py-3">
+                <a href="{% url 'podcast_detail' p.slug %}">
+                  <img src="{{ p.cover_image.url }}" alt="{{ p.title }}" class="img-fluid rounded-circle mx-auto" style="width:120px; height:120px; object-fit:cover;">
+                </a>
+                <h5 class="mt-2">{{ p.title }}</h5>
+                <p class="small text-muted">{{ p.date_created|date:"d F Y" }}</p>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#podcastCarouselMobile" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+            <span class="visually-hidden">Anterior</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#podcastCarouselMobile" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+            <span class="visually-hidden">Siguiente</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Banner Horizontal: Después del Podcast -->
+      <div class="row my-4 banner-row">
+        <div class="col-12 d-flex justify-content-center">
+          {% if banner_horizontal_after_podcast %}
+            {% include 'base/banner_component.html' with banners=banner_horizontal_after_podcast %}
+          {% else %}
+            <p>No hay banner horizontal después del podcast.</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Sección combinada: Programas Recientes y Magazine -->
+      <div class="container my-5">
+        <div class="row align-items-start">
+
+          <!-- Programas Recientes -->
+          <div class="col-12 col-md-6 mb-4">
+            <div class="h-100 d-flex flex-column">
+              <div class="text-center mb-4" style="min-height: 80px; display: flex; flex-direction: column; justify-content: center;">
+                <h4 class="mb-1">Contacto Total</h4>
+                <h4 class="mb-0">Radio</h4>
+              </div>
+              <div class="flex-grow-1">
+                <ul class="list-group">
+                  {% for program in last_programs %}
+                  <li class="list-group-item d-flex justify-content-between align-items-center py-3 px-4">
+                    <div class="flex-grow-1">
+                      <h6 class="mb-2 fw-bold">{{ program.titulo }}</h6>
+                      <small class="text-muted">{{ program.fecha_creacion|date:"d F Y" }}</small>
+                    </div>
+                    <div class="text-end ms-3">
+                      <a href="{% url 'programas' %}" class="btn btn-sm btn-outline-danger px-3">Escuchar</a>
+                    </div>
+                  </li>
+                  {% endfor %}
+                </ul>
+                <div class="text-center mt-3">
+                  <a href="{% url 'programas' %}" class="text-decoration-none">
+                    <h5 class="mt-3 text-primary mb-0">Ver Todos los Programas</h5>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Magazine -->
+          <div class="col-12 col-md-6 mb-4">
+            <div class="h-100 d-flex flex-column">
+              <div class="text-center mb-4" style="min-height: 80px; display: flex; flex-direction: column; justify-content: center;">
+                <h4 class="mb-1">Contacto Total,</h4>
+                <h4 class="mb-0">la revista que habla</h4>
+              </div>
+              <div class="flex-grow-1 d-flex flex-column justify-content-center">
+                <div class="text-center">
+                  <a href="{% url 'revista' %}" class="text-decoration-none d-block">
+                    <img src="{% static 'img/revista.jpeg' %}" alt="Magazine" class="img-fluid rounded mx-auto d-block" style="max-height: 300px; object-fit: cover;">
+                    <h5 class="mt-3 text-primary mb-0">Ver Ediciones Anteriores</h5>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="row my-4 banner-row">
+        <div class="col-12 d-flex justify-content-center">
+          {% if banner_horizontal_after_programs %}
+            {% include 'base/banner_component.html' with banners=banner_horizontal_after_programs %}
+          {% else %}
+            <p>No hay banner horizontal después de los programas.</p>
+          {% endif %}
+        </div>
+      </div>
+
+    </div> 
+
+    <div class="col-2 ad-bar d-none d-md-flex flex-column justify-content-start align-items-center">
+      {% if banners_right %}
+        {% include 'base/banner_component.html' with banners=banners_right %}
+      {% else %}
+        <p>No hay banner derecho activo.</p>
+      {% endif %}
+    </div>
+
+  </div>
 </div>
+
+<style>
+@media (max-width: 576px){
+  .banner-mobile .mb-4{ margin-bottom: 1.25rem !important; } /* parecido a tu mb-5 */
+  .banner-mobile img{ width:100%; height:auto; object-fit:contain; }
+}
+</style>
 {% endblock %}

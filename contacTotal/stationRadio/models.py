@@ -1,5 +1,4 @@
 from django.db import models
-from pytz import timezone
 import pytz
 from datetime import date, datetime
 from django.utils.text import slugify
@@ -10,6 +9,7 @@ from django.core.validators import FileExtensionValidator
 from mutagen import File as MutagenFile
 from mutagen.easyid3 import EasyID3
 from mutagen.mp4 import MP4
+from django.db.models import Q
 import os
 from dirtyfields import DirtyFieldsMixin
 
@@ -107,7 +107,18 @@ class PodcastVideo(models.Model):
         return self.title
 
 
-# ANUNCIO REUTILIZABLE EN VISTAS
+
+# ANUNCIO 
+class AnnouncementQuerySet(models.QuerySet):
+    def running(self):
+        now = timezone.now()
+        return (
+            self.filter(active=True)
+                .filter(Q(starts_at__isnull=True) | Q(starts_at__lte=now))
+                .filter(Q(ends_at__isnull=True)   | Q(ends_at__gt=now))
+        )
+
+
 class Announcement(models.Model):
     POSITION_CHOICES = [
         ('left', 'Izquierda'),
@@ -118,6 +129,10 @@ class Announcement(models.Model):
 
     title = models.CharField(max_length=200, blank=True, null=True)
     image = models.ImageField(upload_to='announcements/', blank=True, null=True)
+    image_desktop = models.ImageField(upload_to='announcements/desktop/', blank=True, null=True)
+    image_tablet  = models.ImageField(upload_to='announcements/tablet/',  blank=True, null=True)
+    image_mobile  = models.ImageField(upload_to='announcements/mobile/',  blank=True, null=True)
+
     link = models.URLField(blank=True, null=True, help_text="Link a donde redirige el anuncio")
     position = models.CharField(
         max_length=10,
@@ -125,13 +140,31 @@ class Announcement(models.Model):
         default='right',
         help_text="Ubicación del anuncio en la página"
     )
+
     custom_script = models.TextField(
-        blank=True,
-        null=True,
-        help_text="Código HTML o script del anuncio (tendrá prioridad sobre la imagen si se define)"
+        blank=True, null=True,
+        help_text="HTML/script del anuncio (tiene prioridad sobre la imagen)"
     )
-    date_created = models.DateTimeField(auto_now_add=True)
+
     active = models.BooleanField(default=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    starts_at = models.DateTimeField(blank=True, null=True)
+    ends_at   = models.DateTimeField(blank=True, null=True)
+    objects = AnnouncementQuerySet.as_manager()
+
+    @property
+    def is_running(self):
+        """
+        Propiedad para usar en plantillas: ad.is_running
+        """
+        now = timezone.now()
+        if not self.active:
+            return False
+        if self.starts_at and now < self.starts_at:
+            return False
+        if self.ends_at and now > self.ends_at:
+            return False
+        return True
 
     def __str__(self):
         return self.title or f"Anuncio {self.id}"
@@ -483,20 +516,24 @@ class Banner(models.Model):
         ('horizontal_after_podcast', 'Horizontal - Después del Podcast'),
         ('horizontal_after_programs', 'Horizontal - Después de Programas'),
     )
-    
-    position = models.CharField(max_length=30,choices=POSITION_CHOICES,verbose_name="Posición")
-    orden = models.PositiveIntegerField(default=1,verbose_name="Orden de aparición",help_text="Número que define el orden de aparición (de menor a mayor)")
-    script = models.TextField(verbose_name="Código del Banner",help_text="Copia y pega el código HTML del banner generado")
-    activo = models.BooleanField(default=True,verbose_name="Activo",help_text="Indica si el banner se muestra en la página")
+
+    position = models.CharField(max_length=30, choices=POSITION_CHOICES, verbose_name="Posición")
+    orden = models.PositiveIntegerField(default=1, verbose_name="Orden de aparición")
+    activo = models.BooleanField(default=True, verbose_name="Activo")
     creado_en = models.DateTimeField(auto_now_add=True, verbose_name="Creado el")
     actualizado_en = models.DateTimeField(auto_now=True, verbose_name="Actualizado el")
-    
+    script = models.TextField(blank=True, null=True, verbose_name="Código del Banner",help_text="HTML del proveedor. Si está, tiene prioridad.")
+    image_desktop = models.ImageField(upload_to='banners/desktop/', blank=True, null=True)
+    image_tablet  = models.ImageField(upload_to='banners/tablet/',  blank=True, null=True)
+    image_mobile  = models.ImageField(upload_to='banners/mobile/',  blank=True, null=True)
+    link = models.URLField(blank=True, null=True)
+
     class Meta:
         ordering = ['position', 'orden']
         verbose_name = "Banner Publicitario"
         verbose_name_plural = "Banners Publicitarios"
-    
-    def _str_(self):
+
+    def __str__(self):
         return f"{self.get_position_display()} - Orden {self.orden}"
     
     

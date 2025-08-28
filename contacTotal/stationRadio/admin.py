@@ -290,25 +290,87 @@ class AnuncioAdmin(admin.ModelAdmin):
 
 @admin.register(Announcement)
 class AnnouncementAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'position', 'active', 'image_preview', 'script_preview', 'date_created')
-    list_filter = ('active', 'position', 'date_created')
+    list_display = (
+        'id', 'title', 'position', 'active',
+        'has_script', 'has_images',
+        'date_created', 'image_preview_desktop'
+    )
+    list_filter  = ('active', 'position', 'date_created')
     search_fields = ('title',)
-    readonly_fields = ('image_preview', 'script_preview')
     actions = ['activar_anuncios', 'desactivar_anuncios']
     list_per_page = 25
+    readonly_fields = (
+        'image_preview', 'image_preview_desktop', 'image_preview_tablet', 'image_preview_mobile',
+        'script_preview', 'date_created',
+    )
 
-    def image_preview(self, obj):
-        if obj.image:
-            return format_html('<img src="{}" width="100" style="border-radius:6px;" />', obj.image.url)
-        return "—"
-    image_preview.short_description = "Vista previa imagen"
+    fieldsets = (
+        ('Información', {
+            'fields': ('title', 'position', 'active', 'starts_at', 'ends_at')
+        }),
+        ('Destino', {
+            'fields': ('link',)
+        }),
+        ('Creatividad (prioridad: script > imágenes)', {
+            'fields': (
+                'custom_script',
+                'script_preview',
+                'image',
+                'image_desktop', 'image_tablet', 'image_mobile',
+                'image_preview', 'image_preview_desktop', 'image_preview_tablet', 'image_preview_mobile'
+            )
+        }),
+        ('Metadatos', {
+            'fields': ('date_created',),
+            'classes': ('collapse',)
+        }),
+    )
+
+    def has_script(self, obj):
+        return bool(obj.custom_script)
+    has_script.boolean = True
+    has_script.short_description = "Script"
+
+    def has_images(self, obj):
+        return any([
+            obj.image,
+            getattr(obj, 'image_desktop', None),
+            getattr(obj, 'image_tablet', None),
+            getattr(obj, 'image_mobile', None)
+        ])
+    has_images.boolean = True
+    has_images.short_description = "Imágenes"
 
     def script_preview(self, obj):
         if obj.custom_script:
-            content = (obj.custom_script[:100] + '...') if len(obj.custom_script) > 100 else obj.custom_script
+            content = (obj.custom_script[:160] + '...') if len(obj.custom_script) > 160 else obj.custom_script
             return format_html('<code style="white-space:pre-wrap; font-size:11px;">{}</code>', content)
         return "—"
     script_preview.short_description = "Vista previa script"
+
+    def image_preview(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" width="120" style="border-radius:6px;">', obj.image.url)
+        return "—"
+    image_preview.short_description = "Fallback"
+
+    def image_preview_desktop(self, obj):
+        if getattr(obj, 'image_desktop', None):
+            return format_html('<img src="{}" width="120" style="border-radius:6px;">', obj.image_desktop.url)
+        return "—"
+    image_preview_desktop.short_description = "Desktop"
+
+    def image_preview_tablet(self, obj):
+        if getattr(obj, 'image_tablet', None):
+            return format_html('<img src="{}" width="120" style="border-radius:6px;">', obj.image_tablet.url)
+        return "—"
+    image_preview_tablet.short_description = "Tablet"
+
+    def image_preview_mobile(self, obj):
+        if getattr(obj, 'image_mobile', None):
+            return format_html('<img src="{}" width="120" style="border-radius:6px;">', obj.image_mobile.url)
+        return "—"
+    image_preview_mobile.short_description = "Mobile"
 
     @admin.action(description="✅ Activar anuncios seleccionados")
     def activar_anuncios(self, request, queryset):
@@ -320,13 +382,50 @@ class AnnouncementAdmin(admin.ModelAdmin):
         updated = queryset.update(active=False)
         self.message_user(request, f"{updated} anuncio(s) desactivado(s) correctamente.")
 
+
 @admin.register(Banner)
 class BannerAdmin(admin.ModelAdmin):
-    list_display = ('id', 'position', 'orden', 'activo', 'actualizado_en')
-    list_filter = ('position', 'activo')
-    search_fields = ('script',)
+    list_display = ('id', 'position', 'orden', 'activo', 'has_script', 'has_any_image', 'preview_desktop', 'actualizado_en')
+    list_filter  = ('position', 'activo')
+    search_fields = ('script', 'link')
     ordering = ('position', 'orden')
     list_per_page = 25
+    readonly_fields = ('preview_desktop','preview_tablet','preview_mobile','creado_en','actualizado_en')
+
+    fieldsets = (
+        ('Ubicación y estado', {'fields': ('position','orden','activo')}),
+        ('Enlace', {'fields': ('link',)}),
+        ('Creatividad (prioridad: script > imágenes)', {
+            'fields': (
+                'script',
+                'image_desktop', 'image_tablet', 'image_mobile',
+                'preview_desktop', 'preview_tablet', 'preview_mobile'
+            )
+        }),
+        ('Fechas', {'fields': ('creado_en','actualizado_en'), 'classes': ('collapse',)})
+    )
+
+    def has_script(self, obj):
+        return bool(obj.script)
+    has_script.boolean = True
+    has_script.short_description = "Script"
+
+    def has_any_image(self, obj):
+        return any([obj.image_desktop, obj.image_tablet, obj.image_mobile])
+    has_any_image.boolean = True
+    has_any_image.short_description = "Imágenes"
+
+    def preview_desktop(self, obj):
+        return format_html('<img src="{}" width="120" style="border-radius:6px;">', obj.image_desktop.url) if obj.image_desktop else "—"
+    preview_desktop.short_description = "Desktop"
+
+    def preview_tablet(self, obj):
+        return format_html('<img src="{}" width="120" style="border-radius:6px;">', obj.image_tablet.url) if obj.image_tablet else "—"
+    preview_tablet.short_description = "Tablet"
+
+    def preview_mobile(self, obj):
+        return format_html('<img src="{}" width="120" style="border-radius:6px;">', obj.image_mobile.url) if obj.image_mobile else "—"
+    preview_mobile.short_description = "Mobile"
 
 @admin.register(Programa)
 class ProgramaAdmin(admin.ModelAdmin):

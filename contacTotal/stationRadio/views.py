@@ -13,6 +13,8 @@ import urllib.parse
 from datetime import datetime, time
 from math import ceil
 import pytz
+from itertools import chain
+
 
 
 def IndexView(request):
@@ -28,12 +30,26 @@ def IndexView(request):
     latest_podcast_section = PodcastSection.objects.order_by('-date_created', '-id').first()
     noticias_flat = list(CarouselNews.objects.all().order_by('-publication_date')[:6])
     podcasts_flat = list(PodcastSection.objects.order_by('-date_created')[:6])
-    
-    # Banners verticales
     banners_left = Banner.objects.filter(activo=True, position='vertical_left').order_by('orden')
     banners_right = Banner.objects.filter(activo=True, position='vertical_right').order_by('orden')
-    
-    # Banners horizontales por posición
+
+    def _banner_key(b):
+        if b.script:
+            return f"script:{hash(b.script)}"
+        for field in ('image_desktop', 'image_tablet', 'image_mobile'):
+            img = getattr(b, field, None)
+            if img and getattr(img, 'name', ''):
+                return f"img:{img.name}"
+        return f"id:{b.pk}"
+
+    banners_mobile = []
+    _seen = set()
+    for b in chain(banners_left, banners_right):
+        k = _banner_key(b)
+        if k not in _seen:
+            _seen.add(k)
+            banners_mobile.append(b)
+
     banner_horizontal_after_carousel = Banner.objects.filter(activo=True, position='horizontal_after_carousel').order_by('orden')
     banner_horizontal_after_main_news = Banner.objects.filter(activo=True, position='horizontal_after_main_news').order_by('orden')
     banner_horizontal_after_podcast = Banner.objects.filter(activo=True, position='horizontal_after_podcast').order_by('orden')
@@ -46,19 +62,13 @@ def IndexView(request):
     else:
         latest_audio = None
 
-    # Nueva lógica para alternar entre video y Twitch según la hora
-    # Obtener la hora actual en Bogotá (o tu zona horaria preferida)
+
     now = datetime.now(pytz.timezone('America/Bogota'))
-    #current_hour = now.hour
     current_time = now.time()
-    
-    # Nueva lógica para verificar si hay que mostrar Twitch según los horarios configurados
-    # Obtener la hora y día actual
     now = datetime.now(pytz.timezone('America/Bogota'))
-    current_day = now.weekday()  # 0 = Lunes, 6 = Domingo
+    current_day = now.weekday()
     current_time = now.time()
-    
-    # Verificar si hay una programación para mostrar Twitch ahora
+
     twitch_schedule = TwitchSchedule.objects.filter(
         day_of_week=current_day,
         start_time__lte=current_time,
@@ -66,7 +76,6 @@ def IndexView(request):
         is_active=True
     ).first()
 
-    # Obtener el próximo cambio programado
     next_start_schedule = TwitchSchedule.objects.filter(
         day_of_week=current_day,
         start_time__gt=current_time,
@@ -79,15 +88,9 @@ def IndexView(request):
         is_active=True
     ).order_by('end_time').first()
     
-    # Determinar si mostrar Twitch basado en la programación:
-    # - Si hay un horario activo para ahora, mostrar Twitch
-    # - Si no hay video principal, mostrar Twitch
     show_twitch = twitch_schedule is not None or main_video is None
-    
-    # Obtener el canal de Twitch (o usar uno por defecto)
     twitch_channel = twitch_schedule.twitch_channel if twitch_schedule else 'contactototal'
 
-    # Preparar tiempos para JavaScript (en milisegundos desde medianoche)
     current_ms = (current_time.hour * 3600 + current_time.minute * 60 + current_time.second) * 1000
     next_change_ms = None
 
@@ -97,15 +100,15 @@ def IndexView(request):
                          next_start_schedule.start_time.second) * 1000
         if next_end_schedule:
             next_end_ms = (next_end_schedule.end_time.hour * 3600 + 
-                          next_end_schedule.end_time.minute * 60 + 
-                          next_end_schedule.end_time.second) * 1000
+                           next_end_schedule.end_time.minute * 60 + 
+                           next_end_schedule.end_time.second) * 1000
             next_change_ms = min(next_start_ms, next_end_ms)
         else:
             next_change_ms = next_start_ms
     elif next_end_schedule:
         next_change_ms = (next_end_schedule.end_time.hour * 3600 + 
-                         next_end_schedule.end_time.minute * 60 + 
-                         next_end_schedule.end_time.second) * 1000
+                          next_end_schedule.end_time.minute * 60 + 
+                          next_end_schedule.end_time.second) * 1000
     
     context = {
         'latest_edicion': latest_edicion,
@@ -121,6 +124,7 @@ def IndexView(request):
         'podcasts_flat': podcasts_flat,
         'banners_left': banners_left,
         'banners_right': banners_right,
+        'banners_mobile': banners_mobile,  
         'banner_horizontal_after_carousel': banner_horizontal_after_carousel,
         'banner_horizontal_after_main_news': banner_horizontal_after_main_news,
         'banner_horizontal_after_podcast': banner_horizontal_after_podcast,
