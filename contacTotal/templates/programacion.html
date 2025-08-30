@@ -8,7 +8,7 @@
 {% block main %}
 <main class="container-fluid mt-4" aria-labelledby="programacion-title">
   <div class="row">
-    <!-- Anuncios Izquierda -->
+    <!-- Anuncios Izquierda (solo md y arriba) -->
     <aside class="col-2 d-none d-md-flex flex-column align-items-center">
       <div class="sticky-top">
         {% include 'base/announcement_component.html' with announcements=left_ads %}
@@ -24,6 +24,12 @@
         </p>
         <p class="text-muted mb-0">Horarios mostrados según tu zona: <strong>{{ base_tz_label }}</strong>.</p>
       </header>
+
+      {# ====== Bloque de anuncios SOLO en móvil ====== #}
+      <div class="d-flex d-md-none justify-content-center my-3">
+        {% include 'base/announcement_component.html' with announcements=right_ads %}
+      </div>
+      {# ============================================= #}
 
       <!-- Parrilla SIN columna de horas -->
       <div class="schedule border rounded shadow-sm" style="--rows: {{ rows }};">
@@ -70,7 +76,7 @@
       <!-- /Parrilla -->
     </section>
 
-    <!-- Anuncios Derecha -->
+    <!-- Anuncios Derecha (solo md y arriba) -->
     <aside class="col-2 d-none d-md-flex flex-column align-items-center">
       <div class="sticky-top">
         {% include 'base/announcement_component.html' with announcements=right_ads %}

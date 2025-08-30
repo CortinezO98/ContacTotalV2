@@ -13,6 +13,7 @@ import urllib.parse
 from datetime import datetime, time
 from math import ceil
 import pytz
+from stationRadio.utils.announcements import get_announcements
 from itertools import chain
 
 
@@ -141,17 +142,15 @@ def noticia_detalle(request, slug):
 
     news_item = MainNews.objects.filter(slug=slug).first() or get_object_or_404(CarouselNews, slug=slug)
 
-    left_ads = Announcement.objects.filter(active=True, position='left')[:2]
-    right_ads = Announcement.objects.filter(active=True, position='right')[:2]
-    inline_ads = Announcement.objects.filter(active=True, position='inline')[:1]
-    bottom_ads = Announcement.objects.filter(active=True, position='bottom')[:1]
+    left_ads   = get_announcements('left',   'noticia_detalle', 2)
+    right_ads  = get_announcements('right',  'noticia_detalle', 2)
+    inline_ads = get_announcements('inline', 'noticia_detalle', 1)
+    bottom_ads = get_announcements('bottom', 'noticia_detalle', 1)
 
     context = {
         'news_item': news_item,
-        'left_ads': left_ads,
-        'right_ads': right_ads,
-        'inline_ads': inline_ads,
-        'bottom_ads': bottom_ads,
+        'left_ads': left_ads, 'right_ads': right_ads,
+        'inline_ads': inline_ads, 'bottom_ads': bottom_ads,
         'logo_type': 'noticia',  
     }
 
@@ -172,13 +171,13 @@ def revista(request):
     except EmptyPage:
         page_obj = paginator.get_page(paginator.num_pages)
     
-    left_ads  = Announcement.objects.filter(active=True, position='left')[:2]
-    right_ads = Announcement.objects.filter(active=True, position='right')[:2]
+    left_ads  = get_announcements('left',  'revista', 2)
+    right_ads = get_announcements('right', 'revista', 2)
+
     
     context = {
         'page_obj': page_obj,
-        'left_ads': left_ads,
-        'right_ads': right_ads,
+        'left_ads': left_ads, 'right_ads': right_ads,
         'logo_type': 'revista'
     }
     
@@ -197,18 +196,17 @@ def revista_detail(request, slug):
     secundarios = articulos.filter(es_principal=False)
 
 
-    left_ads   = Announcement.objects.filter(active=True, position='left')[:2]
-    right_ads  = Announcement.objects.filter(active=True, position='right')[:2]
-    inline_ads = Announcement.objects.filter(active=True, position='inline')[:3]
+    left_ads   = get_announcements('left',   'revista_detail', 2)
+    right_ads  = get_announcements('right',  'revista_detail', 2)
+    inline_ads = get_announcements('inline', 'revista_detail', 3)
+
 
 
     context = {
         'edicion':     edicion,
         'principal':   principal,
         'secundarios': secundarios,
-        'left_ads':    left_ads,
-        'right_ads':   right_ads,
-        'inline_ads':  inline_ads,
+        'left_ads': left_ads, 'right_ads': right_ads, 'inline_ads': inline_ads,
         'logo_type':   'revistaa',
     }
 
@@ -228,12 +226,15 @@ def articulo_detail(request, slug):
         if i < len(imagenes):
             contenido_mezclado.append({'tipo': 'imagen', 'contenido': imagenes[i]})
 
+    left_ads   = get_announcements('left',   'articulo_detail', 2)
+    right_ads  = get_announcements('right',  'articulo_detail', 2)
+    inline_ads = get_announcements('inline', 'articulo_detail', 1)
+
+
     context = {
         'articulo': articulo,
         'contenido_mezclado': contenido_mezclado,
-        'left_ads': Announcement.objects.filter(active=True, position='left')[:1],
-        'right_ads': Announcement.objects.filter(active=True, position='right')[:1],
-        'inline_ads': Announcement.objects.filter(active=True, position='inline')[:1],
+        'left_ads': left_ads, 'right_ads': right_ads, 'inline_ads': inline_ads,
         'logo_type': 'revistaa',
     }
 
@@ -262,14 +263,13 @@ def programas(request):
     except EmptyPage:
         page_obj = paginator.get_page(paginator.num_pages)
     
-    left_ads  = Announcement.objects.filter(active=True, position='left')[:2]
-    right_ads = Announcement.objects.filter(active=True, position='right')[:2]
+    left_ads  = get_announcements('left',  'programas', 2)
+    right_ads = get_announcements('right', 'programas', 2)
     
     context = {
         'page_obj': page_obj,
         'query': query,
-        'left_ads': left_ads,
-        'right_ads': right_ads,
+        'left_ads': left_ads, 'right_ads': right_ads,
         'logo_type': 'programas'
     }
     return render(request, 'programas.html', context)
@@ -282,14 +282,14 @@ def podcast(request):
     else:
         sections = PodcastSection.objects.all().order_by('-date_created')
     
-    left_ads  = Announcement.objects.filter(active=True, position='left')[:2]
-    right_ads = Announcement.objects.filter(active=True, position='right')[:2]
+    left_ads   = get_announcements('left',   'podcast', 2)
+    right_ads  = get_announcements('right',  'podcast', 2)
+    bottom_ads = get_announcements('bottom', 'podcast', 1)
 
     context = {
         'featured_section': featured_section,
         'sections': sections,
-        'left_ads': left_ads,
-        'right_ads': right_ads,
+        'left_ads': left_ads, 'right_ads': right_ads, 'bottom_ads': bottom_ads,
         'logo_type': 'podcast'
     }
     return render(request, 'podcast.html', context)
@@ -313,15 +313,19 @@ def podcast_detail(request, slug):
     except (PageNotAnInteger, EmptyPage):
         videos = paginator_video.page(1)
 
+    left_ads   = get_announcements('left',   'podcast_detail', 2)
+    right_ads  = get_announcements('right',  'podcast_detail', 2)
+    inline_ads = get_announcements('inline', 'podcast_detail', 1)
+    bottom_ads = get_announcements('bottom', 'podcast_detail', 1)
+
     context = {
         'section':       section,
         'audios':        audios,
         'videos':        videos,
         'audio_page':    audios.number,
         'video_page':    videos.number,
-        'left_ads':      Announcement.objects.filter(active=True, position='left')[:2],
-        'right_ads':     Announcement.objects.filter(active=True, position='right')[:2],
-        'inline_ads':    Announcement.objects.filter(active=True, position='inline'),
+        'left_ads': left_ads, 'right_ads': right_ads,
+        'inline_ads': inline_ads, 'bottom_ads': bottom_ads,
         'logo_type': 'podcastsDetalle'
     }
     return render(request, 'podcast_detail.html', context)
@@ -331,12 +335,11 @@ def podcast_detail(request, slug):
 
 #QUIENES SOMOS
 def quienesSomos(request):
-    left_ads  = Announcement.objects.filter(active=True, position='left')[:2]
-    right_ads = Announcement.objects.filter(active=True, position='right')[:2]
+    left_ads  = get_announcements('left',  'quienesSomos', 2)
+    right_ads = get_announcements('right', 'quienesSomos', 2)
 
     context = {
-        'left_ads': left_ads,
-        'right_ads': right_ads,
+        'left_ads': left_ads, 'right_ads': right_ads,
         'logo_type': 'quienes_somos'
     }
     return render(request, 'quienesSomos.html', context)
@@ -455,6 +458,10 @@ def programacion(request):
     for col in columns:
         col['is_today'] = (col['key'] == today_key)
 
+
+    left_ads  = get_announcements('left',  'programacion', 2)
+    right_ads = get_announcements('right', 'programacion', 2)
+
     context = {
         'columns': columns,
         'rows': rows,                
@@ -462,8 +469,7 @@ def programacion(request):
         'show_now_line': show_now_line,
         'now_top_pct': now_top_pct,
         'base_tz_label': base_tz_label,
-        'left_ads':  Announcement.objects.filter(active=True, position='left')[:2],
-        'right_ads': Announcement.objects.filter(active=True, position='right')[:2],
+        'left_ads': left_ads, 'right_ads': right_ads,
         'logo_type': 'programacion',
     }
     return render(request, 'programacion.html', context)
@@ -471,13 +477,12 @@ def programacion(request):
 
 #CONTACTATE
 def contacto(request):
-    left_ads  = Announcement.objects.filter(active=True, position='left')[:2]
-    right_ads = Announcement.objects.filter(active=True, position='right')[:2]
+    left_ads  = get_announcements('left',  'contacto', 2)
+    right_ads = get_announcements('right', 'contacto', 2)
 
 
     context = {
-        'left_ads':  left_ads,
-        'right_ads': right_ads,
+        'left_ads': left_ads, 'right_ads': right_ads,
         'logo_type': 'contacto',
     }
 
@@ -565,12 +570,11 @@ def contacto(request):
 
 #ANUNCIATE CON NOSTROS PARA PUBLICIDAD
 def anunciate(request):
-    left_ads  = Announcement.objects.filter(active=True, position='left')[:2]
-    right_ads = Announcement.objects.filter(active=True, position='right')[:2]
+    left_ads  = get_announcements('left',  'anunciate', 2)
+    right_ads = get_announcements('right', 'anunciate', 2)
 
     context = {
-        'left_ads': left_ads,
-        'right_ads': right_ads,
+        'left_ads': left_ads, 'right_ads': right_ads,
         'logo_type': 'contacto'
     }
 

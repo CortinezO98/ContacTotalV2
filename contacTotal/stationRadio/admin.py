@@ -295,10 +295,15 @@ class AnnouncementAdmin(admin.ModelAdmin):
         'has_script', 'has_images',
         'date_created', 'image_preview_desktop'
     )
-    list_filter  = ('active', 'position', 'date_created')
+    # ⬇️ Añadimos show_in_all y placements al filtro
+    list_filter  = ('active', 'position', 'date_created', 'show_in_all', 'placements')
     search_fields = ('title',)
     actions = ['activar_anuncios', 'desactivar_anuncios']
     list_per_page = 25
+
+    # ⬇️ Para elegir varias vistas cómodamente
+    filter_horizontal = ('placements',)
+
     readonly_fields = (
         'image_preview', 'image_preview_desktop', 'image_preview_tablet', 'image_preview_mobile',
         'script_preview', 'date_created',
@@ -311,12 +316,14 @@ class AnnouncementAdmin(admin.ModelAdmin):
         ('Destino', {
             'fields': ('link',)
         }),
+        # ⬇️ NUEVO bloque de visibilidad por vista
+        ('Visibilidad', {
+            'fields': ('show_in_all', 'placements')
+        }),
         ('Creatividad (prioridad: script > imágenes)', {
             'fields': (
-                'custom_script',
-                'script_preview',
-                'image',
-                'image_desktop', 'image_tablet', 'image_mobile',
+                'custom_script', 'script_preview',
+                'image', 'image_desktop', 'image_tablet', 'image_mobile',
                 'image_preview', 'image_preview_desktop', 'image_preview_tablet', 'image_preview_mobile'
             )
         }),
@@ -326,6 +333,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
         }),
     )
 
+    # --- Helpers visuales (igual que ya tenías) ---
     def has_script(self, obj):
         return bool(obj.custom_script)
     has_script.boolean = True

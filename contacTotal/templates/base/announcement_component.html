@@ -1,38 +1,39 @@
-{# templates/base/banner_component.html #}
-<div class="banner-component">
-  {% if banners %}
-    {% for b in banners %}
+{% if announcements %}
+  {% with ads=announcements %}
+  <div class="banner-component">
+    {% for b in ads %}
       <div class="mb-4 text-center">
-        {% if b.script %}
-          {{ b.script|safe }}
+        {% if b.custom_script %}
+          {{ b.custom_script|safe }}
         {% else %}
-          {% with mobile=b.image_mobile tablet=b.image_tablet desktop=b.image_desktop %}
-            {% if mobile or tablet or desktop %}
+          {% with mobile=b.image_mobile tablet=b.image_tablet desktop=b.image_desktop fallback=b.image %}
+            {% if mobile or tablet or desktop or fallback %}
               {% if b.link %}<a href="{{ b.link }}" target="_blank" rel="noopener noreferrer" class="d-inline-block">{% endif %}
                 <picture>
-                  {# Los <source> también se protegen con .name #}
                   {% if mobile and mobile.name %}<source media="(max-width: 576px)" srcset="{{ mobile.url }}">{% endif %}
                   {% if tablet and tablet.name %}<source media="(max-width: 992px)" srcset="{{ tablet.url }}">{% endif %}
                   {% if desktop and desktop.name %}<source media="(min-width: 993px)" srcset="{{ desktop.url }}">{% endif %}
 
-                  {# Fallback seguro: primero desktop, luego tablet, luego mobile #}
                   {% if desktop and desktop.name %}
-                    <img src="{{ desktop.url }}" alt="Banner publicitario" class="img-fluid rounded shadow-sm">
+                    <img src="{{ desktop.url }}" alt="Anuncio" class="img-fluid rounded shadow-sm">
                   {% elif tablet and tablet.name %}
-                    <img src="{{ tablet.url }}"  alt="Banner publicitario" class="img-fluid rounded shadow-sm">
+                    <img src="{{ tablet.url }}"  alt="Anuncio" class="img-fluid rounded shadow-sm">
                   {% elif mobile and mobile.name %}
-                    <img src="{{ mobile.url }}"   alt="Banner publicitario" class="img-fluid rounded shadow-sm">
+                    <img src="{{ mobile.url }}"   alt="Anuncio" class="img-fluid rounded shadow-sm">
+                  {% elif fallback and fallback.name %}
+                    <img src="{{ fallback.url }}" alt="Anuncio" class="img-fluid rounded shadow-sm">
                   {% else %}
-                    <small class="text-muted">Banner no disponible</small>
+                    <small class="text-muted">Anuncio no disponible</small>
                   {% endif %}
                 </picture>
               {% if b.link %}</a>{% endif %}
             {% else %}
-              <small class="text-muted">Banner no disponible</small>
+              <small class="text-muted">Anuncio no disponible</small>
             {% endif %}
           {% endwith %}
         {% endif %}
       </div>
     {% endfor %}
-  {% endif %}
-</div>
+  </div>
+  {% endwith %}
+{% endif %}
