@@ -667,6 +667,7 @@ TIMEZONE_CHOICES = [
     ('America/Bogota',      'Bogotá'),
     ('America/Argentina/Buenos_Aires', 'Argentina'),
     ('America/New_York',    'EEUU'),
+    ('America/Phoenix',     'EEUU (Arizona)'),
 ]
 
 class Programacion(models.Model):

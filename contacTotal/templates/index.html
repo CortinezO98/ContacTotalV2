@@ -1,46 +1,54 @@
 {% extends 'base/base.html' %}
 {% load static %}
+
 {% block main %}
 <div class="container">
   <div class="row">
 
-    <!-- Columna lateral izquierda Banner vertical izquierdo  -->
-    <div class="col-2 ad-bar d-none d-md-flex flex-column justify-content-start align-items-center">
-      {% if banners_left %}
-        {% include 'base/banner_component.html' with banners=banners_left %}
-      {% else %}
-        <p>No hay banner izquierdo activo.</p>
-      {% endif %}
-    </div>
+    {# ===== LATERAL IZQUIERDO (solo md+) ===== #}
+    <aside class="col-2 d-none d-md-flex flex-column align-items-center">
+      <div class="sticky-top pt-3">
+        {% if banners_left %}
+          {% include 'base/banner_component.html' with banners=banners_left %}
+        {% endif %}
+      </div>
+    </aside>
 
-    <!-- Contenido principal -->
-    <div class="col-12 col-lg-8 main-content">
+    {# ===== CONTENIDO PRINCIPAL ===== #}
+    <section class="col-12 col-lg-8 main-content">
 
-      <!-- Sección: Carrusel de noticias (desktop) -->
+      {# ===== BLOQUE MÓVIL (antes del contenido) -> usa banners_left ===== #}
+      <div class="d-block d-md-none my-3 banner-mobile">
+        {% if banners_left %}
+          {% include 'base/banner_component.html' with banners=banners_left %}
+        {% endif %}
+      </div>
+
+      {# === Carrusel de noticias (desktop) === #}
       <h2 id="ColorTitulo1" class="text-center mb-4">¡Lo que está pasando!</h2>
       <div id="noticiasCarousel" class="carousel slide d-none d-md-block" data-bs-ride="carousel" data-bs-interval="5000">
         <div class="carousel-inner">
           {% for group in carousel_news %}
-            <div class="carousel-item {% if forloop.first %}active{% endif %}">
-              <div class="row g-3">
-                {% for noticia in group %}
-                  <div class="col-md-4">
-                    <div class="card">
-                      <a href="{% url 'noticia_detalle' noticia.slug %}" class="text-decoration-none text-dark">
-                        <img src="{{ noticia.image.url }}" class="card-img-top" alt="{{ noticia.title }}">
-                        <div class="card-body">
-                          <h5 class="card-title">{{ noticia.title }}</h5>
-                          <p class="card-text small text-muted">
-                            {{ noticia.publication_date|date:"d F Y" }} - {{ noticia.author }}
-                          </p>
-                          <p class="card-text">{{ noticia.description|truncatewords:20 }}</p>
-                        </div>
-                      </a>
+          <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <div class="row g-3">
+              {% for noticia in group %}
+              <div class="col-md-4">
+                <div class="card">
+                  <a href="{% url 'noticia_detalle' noticia.slug %}" class="text-decoration-none text-dark">
+                    <img src="{{ noticia.image.url }}" class="card-img-top" alt="{{ noticia.title }}">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ noticia.title }}</h5>
+                      <p class="card-text small text-muted">
+                        {{ noticia.publication_date|date:"d F Y" }} - {{ noticia.author }}
+                      </p>
+                      <p class="card-text">{{ noticia.description|truncatewords:20 }}</p>
                     </div>
-                  </div>
-                {% endfor %}
+                  </a>
+                </div>
               </div>
+              {% endfor %}
             </div>
+          </div>
           {% endfor %}
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#noticiasCarousel" data-bs-slide="prev">
@@ -53,25 +61,25 @@
         </button>
       </div>
 
-      <!-- Carrusel (móvil) -->
+      {# === Carrusel (móvil) === #}
       <div id="noticiasCarouselMobile" class="carousel slide d-block d-md-none" data-bs-ride="carousel" data-bs-interval="5000">
         <div class="carousel-inner">
           {% for group in carousel_news %}
             {% for noticia in group %}
-              <div class="carousel-item {% if forloop.parentloop.first and forloop.first %}active{% endif %}">
-                <div class="card mx-auto" style="max-width: 90%;">
-                  <a href="{% url 'noticia_detalle' noticia.slug %}" class="text-decoration-none text-dark">
-                    <img src="{{ noticia.image.url }}" class="card-img-top" style="height: 400px; object-fit: cover;" alt="{{ noticia.title }}">
-                    <div class="card-body">
-                      <h5 class="card-title">{{ noticia.title }}</h5>
-                      <p class="card-text small text-muted">
-                        {{ noticia.publication_date|date:"d F Y" }} – {{ noticia.author }}
-                      </p>
-                      <p class="card-text">{{ noticia.description|truncatewords:15 }}</p>
-                    </div>
-                  </a>
-                </div>
+            <div class="carousel-item {% if forloop.parentloop.first and forloop.first %}active{% endif %}">
+              <div class="card mx-auto" style="max-width: 90%;">
+                <a href="{% url 'noticia_detalle' noticia.slug %}" class="text-decoration-none text-dark">
+                  <img src="{{ noticia.image.url }}" class="card-img-top" style="height: 400px; object-fit: cover;" alt="{{ noticia.title }}">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ noticia.title }}</h5>
+                    <p class="card-text small text-muted">
+                      {{ noticia.publication_date|date:"d F Y" }} – {{ noticia.author }}
+                    </p>
+                    <p class="card-text">{{ noticia.description|truncatewords:15 }}</p>
+                  </div>
+                </a>
               </div>
+            </div>
             {% endfor %}
           {% endfor %}
         </div>
@@ -85,69 +93,58 @@
         </button>
       </div>
 
-      <!-- SOLO MÓVIL -->
-      <div class="d-block d-md-none my-3 banner-mobile">
-        {% if banners_mobile %}
-          {% include 'base/banner_component.html' with banners=banners_mobile %}
-        {% endif %}
-      </div>
-
-      <!-- Banner Horizontal Después del Carrusel -->
+      {# === Banner Horizontal Después del Carrusel === #}
       <div class="row my-4 banner-row">
         <div class="col-12 d-flex justify-content-center">
           {% if banner_horizontal_after_carousel %}
             {% include 'base/banner_component.html' with banners=banner_horizontal_after_carousel %}
-          {% else %}
-            <p>No hay banner horizontal después del carrusel.</p>
           {% endif %}
         </div>
       </div>
 
-      <!-- Sección: Noticias principal y anuncios -->
+      {# === Noticia principal + Anuncios laterales de sección === #}
       <div class="row mt-4">
         <div class="col-md-8">
           {% if main_news %}
-            <div class="main-article text-center">
-              <a href="{% url 'noticia_detalle' main_news.slug %}" style="text-decoration: none; color: inherit;">
-                <h3>{{ main_news.title }}</h3>
-                {% if main_news.video or main_news.video_link %}
-                  <div class="video-container">
-                    <iframe src="{{ main_news.media_source }}" title="Video principal" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                  </div>
-                {% elif main_news.image %}
-                  <img src="{{ main_news.image.url }}" alt="Imagen principal" class="img-fluid">
-                {% endif %}
-              </a>
-              <p>{{ main_news.author }} | {{ main_news.publication_date|date:"d F Y" }}</p>
-              <p>{{ main_news.short_description|truncatewords:30 }}</p>
-            </div>
+          <div class="main-article text-center">
+            <a href="{% url 'noticia_detalle' main_news.slug %}" style="text-decoration: none; color: inherit;">
+              <h3>{{ main_news.title }}</h3>
+              {% if main_news.video or main_news.video_link %}
+              <div class="video-container">
+                <iframe src="{{ main_news.media_source }}" title="Video principal" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              </div>
+              {% elif main_news.image %}
+              <img src="{{ main_news.image.url }}" alt="Imagen principal" class="img-fluid">
+              {% endif %}
+            </a>
+            <p>{{ main_news.author }} | {{ main_news.publication_date|date:"d F Y" }}</p>
+            <p>{{ main_news.short_description|truncatewords:30 }}</p>
+          </div>
           {% endif %}
         </div>
 
         <div class="col-md-4 mt-4 mt-md-0">
           <h4>Anuncios</h4>
           {% for anuncio in anuncios %}
-            <a href="{{ anuncio.link }}" target="_blank" style="text-decoration: none; color: inherit;">
-              <div class="side-news-item mb-3">
-                <img src="{{ anuncio.imagen.url }}" alt="{{ anuncio.titulo }}" class="img-fluid">
-              </div>
-            </a>
+          <a href="{{ anuncio.link }}" target="_blank" rel="noopener" class="text-decoration-none text-dark">
+            <div class="side-news-item mb-3">
+              <img src="{{ anuncio.imagen.url }}" alt="{{ anuncio.titulo }}" class="img-fluid">
+            </div>
+          </a>
           {% endfor %}
         </div>
       </div>
 
-      <!-- Banner Horizontal: Después de la Noticia Principal -->
+      {# === Banner Horizontal: Después de la Noticia Principal === #}
       <div class="row my-4 banner-row">
         <div class="col-12 d-flex justify-content-center">
           {% if banner_horizontal_after_main_news %}
             {% include 'base/banner_component.html' with banners=banner_horizontal_after_main_news %}
-          {% else %}
-            <p>No hay banner horizontal después de la noticia principal.</p>
           {% endif %}
         </div>
       </div>
 
-      <!-- Sección: Podcast -->
+      {# === Podcast === #}
       <div id="index-podcast" class="podcast-section text-center">
         <h4>Podcast</h4>
         <p>Disfruta de nuestro podcast con las últimas noticias, entrevistas y análisis.</p>
@@ -220,22 +217,18 @@
         </div>
       </div>
 
-      <!-- Banner Horizontal: Después del Podcast -->
+      {# === Banner Horizontal: Después del Podcast === #}
       <div class="row my-4 banner-row">
         <div class="col-12 d-flex justify-content-center">
           {% if banner_horizontal_after_podcast %}
             {% include 'base/banner_component.html' with banners=banner_horizontal_after_podcast %}
-          {% else %}
-            <p>No hay banner horizontal después del podcast.</p>
           {% endif %}
         </div>
       </div>
 
-      <!-- Sección combinada: Programas Recientes y Magazine -->
+      {# === Programas + Magazine === #}
       <div class="container my-5">
         <div class="row align-items-start">
-
-          <!-- Programas Recientes -->
           <div class="col-12 col-md-6 mb-4">
             <div class="h-100 d-flex flex-column">
               <div class="text-center mb-4" style="min-height: 80px; display: flex; flex-direction: column; justify-content: center;">
@@ -265,7 +258,6 @@
             </div>
           </div>
 
-          <!-- Magazine -->
           <div class="col-12 col-md-6 mb-4">
             <div class="h-100 d-flex flex-column">
               <div class="text-center mb-4" style="min-height: 80px; display: flex; flex-direction: column; justify-content: center;">
@@ -286,32 +278,39 @@
         </div>
       </div>
 
+      {# === Banner Horizontal: Después de Programas === #}
       <div class="row my-4 banner-row">
         <div class="col-12 d-flex justify-content-center">
           {% if banner_horizontal_after_programs %}
             {% include 'base/banner_component.html' with banners=banner_horizontal_after_programs %}
-          {% else %}
-            <p>No hay banner horizontal después de los programas.</p>
           {% endif %}
         </div>
       </div>
 
-    </div> 
+      {# ===== BLOQUE MÓVIL (después del contenido) -> usa banners_right ===== #}
+      <div class="d-block d-md-none my-3 banner-mobile">
+        {% if banners_right %}
+          {% include 'base/banner_component.html' with banners=banners_right %}
+        {% endif %}
+      </div>
 
-    <div class="col-2 ad-bar d-none d-md-flex flex-column justify-content-start align-items-center">
-      {% if banners_right %}
-        {% include 'base/banner_component.html' with banners=banners_right %}
-      {% else %}
-        <p>No hay banner derecho activo.</p>
-      {% endif %}
-    </div>
+    </section>
+
+    {# ===== LATERAL DERECHO (solo md+) ===== #}
+    <aside class="col-2 d-none d-md-flex flex-column align-items-center">
+      <div class="sticky-top pt-3">
+        {% if banners_right %}
+          {% include 'base/banner_component.html' with banners=banners_right %}
+        {% endif %}
+      </div>
+    </aside>
 
   </div>
 </div>
 
 <style>
 @media (max-width: 576px){
-  .banner-mobile .mb-4{ margin-bottom: 1.25rem !important; } /* parecido a tu mb-5 */
+  .banner-mobile .mb-4{ margin-bottom: 1.25rem !important; }
   .banner-mobile img{ width:100%; height:auto; object-fit:contain; }
 }
 </style>

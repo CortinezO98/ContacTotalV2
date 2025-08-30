@@ -2,90 +2,98 @@
 {% load static %}
 
 {% block header %}
-    {% include 'base/headerCompact.html' %}
+  {% include 'base/headerCompact.html' %}
 {% endblock %}
 
 {% block main %}
-<div class="container-fluid min-vh-100 bg-light p-3">
-    <div class="row">
-        <!-- Anuncios Izquierda -->
-        <aside class="col-2 d-none d-md-flex flex-column justify-content-start align-items-center">
-            <div class="sticky-top">
-                {% include 'base/announcement_component.html' with announcements=left_ads %}
-            </div>
-        </aside>
+<main class="container-fluid min-vh-100 bg-light p-3" aria-labelledby="revista-title">
+  <div class="row">
+    <!-- Anuncios Izquierda (solo md y arriba) -->
+    <aside class="col-2 d-none d-md-flex flex-column align-items-center">
+      <div class="sticky-top">
+        {% include 'base/announcement_component.html' with announcements=left_ads %}
+      </div>
+    </aside>
 
-        <!-- Contenido Principal -->
-        <div class="col-12 col-md-8">
-            <h1 class="text-center mb-4">Ediciones Anteriores</h1>
-            
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-                {% for edicion in page_obj %}
-                <div class="col">
-                    <div class="card h-100 shadow-sm">
-                        <img src="{{ edicion.imagen.url }}" class="card-img-top" alt="{{ edicion.titulo }}" style="object-fit: cover; height: 400px;">
-                        <div class="card-body">
-                            <p class="text-muted mb-1">
-                                {{ edicion.fecha_publicacion|date:"d M Y" }} | {{ edicion.articulos.count }} Artículos
-                            </p>
-                            <p class="card-text">{{ edicion.descripcion|truncatechars:100 }}</p>
-                        </div>
-                        <div class="card-footer bg-transparent border-top-0 text-center">
-                            <a href="{{ edicion.get_absolute_url }}" class="btn btn-sm btn-outline-danger">Leer más</a>
-                        </div>
-                    </div>
-                </div>
-                {% empty %}
-                <div class="col-12 text-center">
-                    <p class="text-center">No hay ediciones disponibles.</p>
-                </div>
-                {% endfor %}
-            </div>
-            
-            <!-- Paginación -->
-            <div class="d-flex justify-content-center mt-4">
-                <nav>
-                    <ul class="pagination">
-                        {% if page_obj.has_previous %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
-                            </li>
-                        {% else %}
-                            <li class="page-item disabled">
-                                <span class="page-link">Anterior</span>
-                            </li>
-                        {% endif %}
-                        {% for num in page_obj.paginator.page_range %}
-                            {% if page_obj.number == num %}
-                                <li class="page-item active" aria-current="page">
-                                    <span class="page-link">{{ num }}</span>
-                                </li>
-                            {% else %}
-                                <li class="page-item">
-                                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-                                </li>
-                            {% endif %}
-                        {% endfor %}
-                        {% if page_obj.has_next %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Siguiente</a>
-                            </li>
-                        {% else %}
-                            <li class="page-item disabled">
-                                <span class="page-link">Siguiente</span>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </nav>
-            </div>
+      {# ====== Bloque de anuncios SOLO en móvil (antes del grid) ====== #}
+      <div class="d-md-none my-3">
+        <div class="mb-3">
+          {% include 'base/announcement_component.html' with announcements=left_ads %}
         </div>
+      </div>
+    <!-- Contenido Principal -->
+    <section class="col-12 col-md-8">
+      <h1 id="revista-title" class="text-center mb-4">Ediciones Anteriores</h1>
 
-        <!-- Anuncios Derecha-->
-        <aside class="col-2 d-none d-md-flex flex-column justify-content-start align-items-center">
-            <div class="sticky-top">
-                {% include 'base/announcement_component.html' with announcements=right_ads %}
+
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        {% for edicion in page_obj %}
+        <div class="col">
+          <div class="card h-100 shadow-sm">
+            <img src="{{ edicion.imagen.url }}" class="card-img-top" alt="{{ edicion.titulo }}" style="object-fit: cover; height: 400px;">
+            <div class="card-body">
+              <p class="text-muted mb-1">
+                {{ edicion.fecha_publicacion|date:"d M Y" }} | {{ edicion.articulos.count }} Artículos
+              </p>
+              <p class="card-text">{{ edicion.descripcion|truncatechars:100 }}</p>
             </div>
-        </aside>
-    </div>
-</div>
+            <div class="card-footer bg-transparent border-top-0 text-center">
+              <a href="{{ edicion.get_absolute_url }}" class="btn btn-sm btn-outline-danger">Leer más</a>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+          <p class="text-center">No hay ediciones disponibles.</p>
+        </div>
+        {% endfor %}
+      </div>
+
+
+      <!-- Paginación -->
+      <div class="d-flex justify-content-center mt-4">
+        <nav aria-label="Paginación de ediciones">
+          <ul class="pagination">
+            {% if page_obj.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+              </li>
+            {% else %}
+              <li class="page-item disabled"><span class="page-link">Anterior</span></li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+              {% if page_obj.number == num %}
+                <li class="page-item active" aria-current="page"><span class="page-link">{{ num }}</span></li>
+              {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+              {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+              </li>
+            {% else %}
+              <li class="page-item disabled"><span class="page-link">Siguiente</span></li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+      {# ====== Bloque de anuncios SOLO en móvil (después del grid) ====== #}
+      <div class="d-md-none my-3">
+        <div>
+          {% include 'base/announcement_component.html' with announcements=right_ads %}
+        </div>
+      </div>
+    </section>
+
+    <!-- Anuncios Derecha (solo md y arriba) -->
+    <aside class="col-2 d-none d-md-flex flex-column align-items-center">
+      <div class="sticky-top">
+        {% include 'base/announcement_component.html' with announcements=right_ads %}
+      </div>
+    </aside>
+  </div>
+</main>
 {% endblock %}

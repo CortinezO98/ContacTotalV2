@@ -6,32 +6,45 @@
 {% endblock %}
 
 {% block main %}
-<div class="container-fluid min-vh-100 bg-light py-4">
+<main class="container-fluid mt-4" aria-labelledby="programas-title">
   <div class="row gx-3 gy-3">
 
-    <!-- Anuncios Izquierda -->
-    <aside class="col-2 d-none d-md-flex flex-column justify-content-start align-items-center">
+    <!-- Anuncios Izquierda (solo md y arriba) -->
+    <aside class="col-2 d-none d-md-flex flex-column align-items-center">
       <div class="sticky-top">
         {% include 'base/announcement_component.html' with announcements=left_ads %}
       </div>
     </aside>
 
+      {# ====== Bloque de anuncios SOLO en móvil (antes del contenido) ====== #}
+      <div class="d-md-none my-3">
+        <div class="mb-3">
+          {% include 'base/announcement_component.html' with announcements=left_ads %}
+        </div>
+      </div>
     <!-- Contenido Principal -->
-    <div class="col-12 col-lg-8">
+    <section class="col-12 col-lg-8">
+      <header class="text-center mb-3">
+        <h1 id="programas-title" class="fw-bold mb-1">Programas Anteriores</h1>
+        <p class="text-muted mb-0">
+          Explora entrevistas, reportajes y análisis para revivir lo mejor de cada emisión.
+        </p>
+      </header>
+
+
       <div class="bg-white p-3 rounded shadow-sm border">
         <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
-          <h2 class="text-center mb-3 mb-md-0">Programas Anteriores</h2>
+          <h2 class="mb-3 mb-md-0 h4">Listado</h2>
           <form class="input-group" method="GET" action="" style="max-width: 300px;">
-            <input type="text" name="q" class="form-control border-secondary" placeholder="Buscar Programas"
-              aria-label="Buscar Programas" aria-describedby="search-icon" value="{{ query|default_if_none:'' }}">
+            <input type="text" name="q" class="form-control border-secondary"
+                   placeholder="Buscar Programas"
+                   aria-label="Buscar Programas" aria-describedby="search-icon"
+                   value="{{ query|default_if_none:'' }}">
             <span class="input-group-text bg-secondary text-light border-0" id="search-icon">
               <i class="bi bi-search"></i>
             </span>
           </form>
         </div>
-        <p class="text-center text-muted mb-4">
-          Explora nuestra colección de programas anteriores: entrevistas, reportajes y análisis para que revivas lo mejor de cada emisión.
-        </p>
 
         <div class="table-responsive">
           <table class="table table-hover align-middle mb-0">
@@ -41,7 +54,7 @@
                 <th scope="col" class="text-end">Duración</th>
                 <th scope="col" class="text-end">Acciones</th>
               </tr>
-            </thead>              
+            </thead>
             <tbody>
               {% for programa in page_obj %}
               <tr>
@@ -55,14 +68,18 @@
                       Escuchar
                     </button>
                   {% elif programa.url_reproducir %}
-                    <a href="{{ programa.url_reproducir }}" class="btn btn-sm btn-outline-danger" target="_blank">
+                    <a href="{{ programa.url_reproducir }}" class="btn btn-sm btn-outline-danger" target="_blank" rel="noopener">
                       Escuchar
                     </a>
                   {% else %}
                     <span class="text-muted small">No disponible</span>
                   {% endif %}
-                </td>                             
-              </tr>                
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="3" class="text-center text-muted py-4">No se encontraron programas.</td>
+              </tr>
               {% endfor %}
             </tbody>
           </table>
@@ -70,7 +87,7 @@
 
         <div class="d-flex justify-content-between align-items-center mt-3">
           <span class="fw-bold">Páginas</span>
-          <nav>
+          <nav aria-label="Paginación de programas">
             <ul class="pagination pagination-sm mb-0">
               {% if page_obj.has_previous %}
                 <li class="page-item">
@@ -80,7 +97,7 @@
                 <li class="page-item disabled"><span class="page-link">Anterior</span></li>
               {% endif %}
 
-              <li class="page-item active"><span class="page-link">{{ page_obj.number }}</span></li>
+              <li class="page-item active" aria-current="page"><span class="page-link">{{ page_obj.number }}</span></li>
 
               {% if page_obj.has_next %}
                 <li class="page-item">
@@ -93,17 +110,24 @@
           </nav>
         </div>
       </div>
-    </div>
 
-    <!-- Anuncios Derecha -->
-    <aside class="col-2 d-none d-md-flex flex-column justify-content-start align-items-center">
+      {# ====== Bloque de anuncios SOLO en móvil (después del contenido) ====== #}
+      <div class="d-md-none my-3">
+        <div>
+          {% include 'base/announcement_component.html' with announcements=right_ads %}
+        </div>
+      </div>
+    </section>
+
+    <!-- Anuncios Derecha (solo md y arriba) -->
+    <aside class="col-2 d-none d-md-flex flex-column align-items-center">
       <div class="sticky-top">
         {% include 'base/announcement_component.html' with announcements=right_ads %}
       </div>
     </aside>
 
   </div>
-</div>
+</main>
 
 {% block extra_js %}
 <script>
@@ -114,25 +138,26 @@ document.addEventListener('DOMContentLoaded', function () {
   document.body.appendChild(hiddenPlayer);
 
   let currentButton = null;
-  let currentAudioSrc = null;
 
   document.querySelectorAll('.reproducir-audio').forEach(btn => {
     btn.addEventListener('click', function () {
       const audioSrc = this.getAttribute('data-audio');
+
+      // Si es el mismo botón y está reproduciendo, pausamos
       if (currentButton === this && !hiddenPlayer.paused) {
         hiddenPlayer.pause();
         this.textContent = 'Escuchar';
         currentButton = null;
-        currentAudioSrc = null;
         return;
       }
 
+      // Restaurar texto del botón previo
       if (currentButton && currentButton !== this) {
         currentButton.textContent = 'Escuchar';
       }
 
       hiddenPlayer.pause();
-      hiddenPlayer.setAttribute('src', audioSrc);
+      hiddenPlayer.src = audioSrc;
       hiddenPlayer.load();
       hiddenPlayer.play().catch(() => {
         alert("Tu navegador bloqueó la reproducción automática.");
@@ -140,7 +165,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
       this.textContent = 'Pausar';
       currentButton = this;
-      currentAudioSrc = audioSrc;
     });
   });
 
@@ -148,7 +172,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (currentButton) {
       currentButton.textContent = 'Escuchar';
       currentButton = null;
-      currentAudioSrc = null;
     }
   });
 });

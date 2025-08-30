@@ -146,11 +146,15 @@ def noticia_detalle(request, slug):
     right_ads  = get_announcements('right',  'noticia_detalle', 2)
     inline_ads = get_announcements('inline', 'noticia_detalle', 1)
     bottom_ads = get_announcements('bottom', 'noticia_detalle', 1)
+    mobile_top_ads    = get_announcements('inline', 'noticia_detalle', 2)
+    mobile_bottom_ads = get_announcements('bottom', 'noticia_detalle', 2)
 
     context = {
         'news_item': news_item,
         'left_ads': left_ads, 'right_ads': right_ads,
         'inline_ads': inline_ads, 'bottom_ads': bottom_ads,
+        'mobile_top_ads': mobile_top_ads,
+        'mobile_bottom_ads': mobile_bottom_ads,        
         'logo_type': 'noticia',  
     }
 
@@ -173,11 +177,15 @@ def revista(request):
     
     left_ads  = get_announcements('left',  'revista', 2)
     right_ads = get_announcements('right', 'revista', 2)
+    mobile_top_ads    = get_announcements('inline', 'revista', 2)
+    mobile_bottom_ads = get_announcements('bottom', 'revista', 2)
 
     
     context = {
         'page_obj': page_obj,
         'left_ads': left_ads, 'right_ads': right_ads,
+        'mobile_top_ads': mobile_top_ads,
+        'mobile_bottom_ads': mobile_bottom_ads,
         'logo_type': 'revista'
     }
     
@@ -199,6 +207,8 @@ def revista_detail(request, slug):
     left_ads   = get_announcements('left',   'revista_detail', 2)
     right_ads  = get_announcements('right',  'revista_detail', 2)
     inline_ads = get_announcements('inline', 'revista_detail', 3)
+    mobile_top_ads    = get_announcements('inline', 'revista_detail', 2)
+    mobile_bottom_ads = get_announcements('bottom', 'revista_detail', 2)
 
 
 
@@ -207,6 +217,8 @@ def revista_detail(request, slug):
         'principal':   principal,
         'secundarios': secundarios,
         'left_ads': left_ads, 'right_ads': right_ads, 'inline_ads': inline_ads,
+        'mobile_top_ads': mobile_top_ads,
+        'mobile_bottom_ads': mobile_bottom_ads,
         'logo_type':   'revistaa',
     }
 
@@ -229,12 +241,16 @@ def articulo_detail(request, slug):
     left_ads   = get_announcements('left',   'articulo_detail', 2)
     right_ads  = get_announcements('right',  'articulo_detail', 2)
     inline_ads = get_announcements('inline', 'articulo_detail', 1)
+    mobile_top_ads    = get_announcements('inline', 'articulo_detail', 2)
+    mobile_bottom_ads = get_announcements('bottom', 'articulo_detail', 2)
 
 
     context = {
         'articulo': articulo,
         'contenido_mezclado': contenido_mezclado,
         'left_ads': left_ads, 'right_ads': right_ads, 'inline_ads': inline_ads,
+        'mobile_top_ads': mobile_top_ads,
+        'mobile_bottom_ads': mobile_bottom_ads,
         'logo_type': 'revistaa',
     }
 
@@ -265,11 +281,15 @@ def programas(request):
     
     left_ads  = get_announcements('left',  'programas', 2)
     right_ads = get_announcements('right', 'programas', 2)
+    mobile_top_ads    = get_announcements('inline', 'programas', 2)
+    mobile_bottom_ads = get_announcements('bottom', 'programas', 2)
     
     context = {
         'page_obj': page_obj,
         'query': query,
         'left_ads': left_ads, 'right_ads': right_ads,
+        'mobile_top_ads': mobile_top_ads,
+        'mobile_bottom_ads': mobile_bottom_ads,
         'logo_type': 'programas'
     }
     return render(request, 'programas.html', context)
@@ -285,11 +305,14 @@ def podcast(request):
     left_ads   = get_announcements('left',   'podcast', 2)
     right_ads  = get_announcements('right',  'podcast', 2)
     bottom_ads = get_announcements('bottom', 'podcast', 1)
-
+    mobile_top_ads    = get_announcements('inline', 'podcast', 2)
+    mobile_bottom_ads = get_announcements('bottom', 'podcast', 2)
     context = {
         'featured_section': featured_section,
         'sections': sections,
         'left_ads': left_ads, 'right_ads': right_ads, 'bottom_ads': bottom_ads,
+        'mobile_top_ads': mobile_top_ads,
+        'mobile_bottom_ads': mobile_bottom_ads,
         'logo_type': 'podcast'
     }
     return render(request, 'podcast.html', context)
@@ -317,6 +340,8 @@ def podcast_detail(request, slug):
     right_ads  = get_announcements('right',  'podcast_detail', 2)
     inline_ads = get_announcements('inline', 'podcast_detail', 1)
     bottom_ads = get_announcements('bottom', 'podcast_detail', 1)
+    mobile_top_ads    = get_announcements('inline', 'podcast_detail', 2)
+    mobile_bottom_ads = get_announcements('bottom', 'podcast_detail', 2)
 
     context = {
         'section':       section,
@@ -326,6 +351,8 @@ def podcast_detail(request, slug):
         'video_page':    videos.number,
         'left_ads': left_ads, 'right_ads': right_ads,
         'inline_ads': inline_ads, 'bottom_ads': bottom_ads,
+        'mobile_top_ads': mobile_top_ads,
+        'mobile_bottom_ads': mobile_bottom_ads,
         'logo_type': 'podcastsDetalle'
     }
     return render(request, 'podcast_detail.html', context)
@@ -337,9 +364,13 @@ def podcast_detail(request, slug):
 def quienesSomos(request):
     left_ads  = get_announcements('left',  'quienesSomos', 2)
     right_ads = get_announcements('right', 'quienesSomos', 2)
+    mobile_top_ads    = get_announcements('inline', 'quienesSomos', 2)
+    mobile_bottom_ads = get_announcements('bottom', 'quienesSomos', 2)
 
     context = {
         'left_ads': left_ads, 'right_ads': right_ads,
+        'mobile_top_ads': mobile_top_ads,
+        'mobile_bottom_ads': mobile_bottom_ads,
         'logo_type': 'quienes_somos'
     }
     return render(request, 'quienesSomos.html', context)
@@ -461,6 +492,8 @@ def programacion(request):
 
     left_ads  = get_announcements('left',  'programacion', 2)
     right_ads = get_announcements('right', 'programacion', 2)
+    mobile_top_ads    = get_announcements('inline', 'programacion', 2)
+    mobile_bottom_ads = get_announcements('bottom', 'programacion', 2)
 
     context = {
         'columns': columns,
@@ -470,6 +503,8 @@ def programacion(request):
         'now_top_pct': now_top_pct,
         'base_tz_label': base_tz_label,
         'left_ads': left_ads, 'right_ads': right_ads,
+        'mobile_top_ads': mobile_top_ads,
+        'mobile_bottom_ads': mobile_bottom_ads,
         'logo_type': 'programacion',
     }
     return render(request, 'programacion.html', context)
@@ -479,10 +514,14 @@ def programacion(request):
 def contacto(request):
     left_ads  = get_announcements('left',  'contacto', 2)
     right_ads = get_announcements('right', 'contacto', 2)
+    mobile_top_ads    = get_announcements('inline', 'contacto', 2)
+    mobile_bottom_ads = get_announcements('bottom', 'contacto', 2)
 
 
     context = {
         'left_ads': left_ads, 'right_ads': right_ads,
+        'mobile_top_ads': mobile_top_ads,
+        'mobile_bottom_ads': mobile_bottom_ads,
         'logo_type': 'contacto',
     }
 
@@ -572,9 +611,13 @@ def contacto(request):
 def anunciate(request):
     left_ads  = get_announcements('left',  'anunciate', 2)
     right_ads = get_announcements('right', 'anunciate', 2)
+    mobile_top_ads    = get_announcements('inline', 'anunciate', 2)
+    mobile_bottom_ads = get_announcements('bottom', 'anunciate', 2)
 
     context = {
         'left_ads': left_ads, 'right_ads': right_ads,
+        'mobile_top_ads': mobile_top_ads,
+        'mobile_bottom_ads': mobile_bottom_ads,
         'logo_type': 'contacto'
     }
 

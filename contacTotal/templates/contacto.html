@@ -6,86 +6,101 @@
 {% endblock %}
 
 {% block main %}
-<div class="container-fluid ">
-  <div class="container">
-    <div class="row justify-content-center align-items-start g-4">
+<main class="container-fluid mt-4" aria-labelledby="contacto-title">
+  <div class="row">
+    <!-- Anuncios Izquierda (solo md y arriba) -->
+    <aside class="col-2 d-none d-md-flex flex-column align-items-center">
+      <div class="sticky-top">
+        {% include 'base/announcement_component.html' with announcements=left_ads %}
+      </div>
+    </aside>
 
-      <!-- Anuncios izquierda -->
-      <aside class="col-2 d-none d-md-flex flex-column justify-content-start align-items-center">
-        <div class="sticky-top">
+      {# ====== Bloque de anuncios SOLO en móvil (antes del formulario) ====== #}
+      <div class="d-md-none my-3">
+        <div class="mb-3">
           {% include 'base/announcement_component.html' with announcements=left_ads %}
         </div>
-      </aside>
+      </div>
+    <!-- Contenido principal -->
+    <section class="col-12 col-lg-8">
+      <header class="text-center mb-3">
+        <h1 id="contacto-title" class="fw-bold mb-1">Contáctanos <span class="text-danger">/ Contact us</span></h1>
+        <p class="text-muted mb-0">
+          En Contacto Total Media te ofrecemos soluciones publicitarias para conectar tu marca con tu audiencia.
+        </p>
+      </header>
 
-      <!-- Formulario principal -->
-      <div class="col-12 col-lg-8">
-        <div class="card shadow-sm border-0 p-4">
-          <h2 class="fw-bold text-center mb-3">Contáctanos <span class="text-danger">/ Contact us</span></h2>
-          <p class="text-justify-center mb-4">En Contacto Total Media sabemos que la visibilidad de tu marca es clave. Por eso, te ofrecemos soluciones publicitarias personalizadas diseñadas para conectar con tu público de manera efectiva a través de nuestra plataforma multimedia. Ponte en contacto hoy mismo para que podamos empezar a explorar cómo tu mensaje puede brillar y alcanzar un impacto total. ¡Estamos listos para ayudarte a crecer!</p>
-          <form method="POST" action="{% url 'contacto' %}">
-            {% csrf_token %}
-            <div class="mb-3">
-              <label for="nombre" class="form-label">Nombre / Name*</label>
-              <input type="text" class="form-control" name="nombre" required value="{{ nombre|default:'' }}">
-            </div>
-            <div class="mb-3">
-              <label for="telefono" class="form-label">Teléfono / Phone Number*</label>
-              <input type="text" class="form-control" name="telefono" required value="{{ telefono|default:'' }}">
-            </div>
-            <div class="mb-3">
-              <label for="email" class="form-label">Correo electrónico / Email*</label>
-              <input type="email" class="form-control" name="email" required value="{{ email|default:'' }}">
-            </div>
-            <div class="mb-3">
-              <label for="mensaje" class="form-label">Mensaje / Message</label>
-              <textarea class="form-control" name="mensaje" rows="4">{{ mensaje|default:'' }}</textarea>
-            </div>
-            <div class="text-center">
-              <button id="btnEnviar" type="submit" class="btn btn-sm btn-outline-danger px-5">Enviar</button>
-            </div>
-          </form>
-        </div>
+
+      <!-- Card con formulario -->
+      <div class="card shadow-sm border-0 p-4">
+        <form method="POST" action="{% url 'contacto' %}">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre / Name*</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" required value="{{ nombre|default:'' }}">
+          </div>
+          <div class="mb-3">
+            <label for="telefono" class="form-label">Teléfono / Phone Number*</label>
+            <input type="text" class="form-control" id="telefono" name="telefono" required value="{{ telefono|default:'' }}">
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Correo electrónico / Email*</label>
+            <input type="email" class="form-control" id="email" name="email" required value="{{ email|default:'' }}">
+          </div>
+          <div class="mb-3">
+            <label for="mensaje" class="form-label">Mensaje / Message</label>
+            <textarea class="form-control" id="mensaje" name="mensaje" rows="4">{{ mensaje|default:'' }}</textarea>
+          </div>
+          <div class="text-center">
+            <button id="btnEnviar" type="submit" class="btn btn-sm btn-outline-danger px-5">Enviar</button>
+          </div>
+        </form>
       </div>
 
-      <!-- Anuncios derecha -->
-      <aside class="col-2 d-none d-md-flex flex-column justify-content-start align-items-center">
-        <div class="sticky-top">
+      {# ====== Bloque de anuncios SOLO en móvil (después del formulario) ====== #}
+      <div class="d-md-none my-3">
+        <div>
           {% include 'base/announcement_component.html' with announcements=right_ads %}
         </div>
-      </aside>
+      </div>
+    </section>
 
-    </div>
+    <!-- Anuncios Derecha (solo md y arriba) -->
+    <aside class="col-2 d-none d-md-flex flex-column align-items-center">
+      <div class="sticky-top">
+        {% include 'base/announcement_component.html' with announcements=right_ads %}
+      </div>
+    </aside>
   </div>
-</div>
+</main>
 {% endblock %}
 
 {% block extra_scripts %}
-  <script>
-    const form = document.querySelector('form');
-    const btn = document.getElementById('btnEnviar');
+<script>
+  const form = document.querySelector('form');
+  const btn = document.getElementById('btnEnviar');
 
-    if (form && btn) {
-      form.addEventListener('submit', function () {
-        btn.disabled = true;
-        btn.innerHTML = 'Enviando...';
-      });
-    }
-    
-    {% if status %}
-    document.addEventListener("DOMContentLoaded", function () {
-      console.log("Mostrando SweetAlert con status: {{ status }}");
-      Swal.fire({
-        title: '{{ swal_title|escapejs }}',
-        text: '{{ msg|escapejs }}',
-        icon: '{{ status|escapejs }}',
-        confirmButtonText: 'Aceptar'
-      }).then((result) => {
-        if (result.isConfirmed && '{{ status }}' === 'success') {
-          const form = document.querySelector('form');
-          if (form) form.reset();
-        }
-      });
+  if (form && btn) {
+    form.addEventListener('submit', function () {
+      btn.disabled = true;
+      btn.innerHTML = 'Enviando...';
     });
-    {% endif %}
-  </script>
+  }
+
+  {% if status %}
+  document.addEventListener("DOMContentLoaded", function () {
+    Swal.fire({
+      title: '{{ swal_title|escapejs }}',
+      text: '{{ msg|escapejs }}',
+      icon: '{{ status|escapejs }}',
+      confirmButtonText: 'Aceptar'
+    }).then((result) => {
+      if (result.isConfirmed && '{{ status }}' === 'success') {
+        const form = document.querySelector('form');
+        if (form) form.reset();
+      }
+    });
+  });
+  {% endif %}
+</script>
 {% endblock %}

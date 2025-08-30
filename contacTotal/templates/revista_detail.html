@@ -16,6 +16,11 @@
       </div>
     </aside>
 
+    {# ===== Arriba del contenido: SOLO móviles y tablets (< md) ===== #}
+    <div class="d-md-none my-3">
+      {% include 'base/announcement_component.html' with announcements=left_ads %}
+    </div>
+
     <!-- CONTENIDO PRINCIPAL: full-width en móviles -->
     <section class="col-12 col-lg-8">
       <header class="text-center py-4 border-bottom">
@@ -185,6 +190,12 @@
           </article>
         </div>
         {% endfor %}
+      </div>
+      {# ====== Bloque de anuncios SOLO en móvil (después del contenido) ====== #}
+      <div class="d-lg-none my-4">
+        <div>
+          {% include 'base/announcement_component.html' with announcements=right_ads %}
+        </div>
       </div>
 
     </section>

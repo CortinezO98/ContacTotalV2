@@ -2,184 +2,185 @@
 {% load static %}
 
 {% block header %}
-    {% include 'base/headerCompact.html' %}
+  {% include 'base/headerCompact.html' %}
 {% endblock %}
 
 {% block main %}
 <style>
-/* Estilos para mejorar la separación de los controles del carrusel */
+/* === (se mantiene tu estilo del carrusel) === */
 .carousel-control-prev,
-.carousel-control-next {
-    width: 8% !important; /* Aumenta el área clickeable */
-    z-index: 5;
-}
-
-.carousel-control-prev {
-    justify-content: flex-start !important;
-    padding-left: 10px;
-}
-
-.carousel-control-next {
-    justify-content: flex-end !important;
-    padding-right: 10px;
-}
-
-/* Mejora visual de los iconos */
+.carousel-control-next { width: 8% !important; z-index: 5; }
+.carousel-control-prev { justify-content: flex-start !important; padding-left: 10px; }
+.carousel-control-next { justify-content: flex-end !important; padding-right: 10px; }
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
-    width: 40px !important;
-    height: 40px !important;
-    background-size: 20px !important;
-    border-radius: 50% !important;
-    background-color: rgba(0, 0, 0, 0.7) !important;
-    transition: all 0.3s ease;
+  width: 40px !important; height: 40px !important; background-size: 20px !important;
+  border-radius: 50% !important; background-color: rgba(0,0,0,.7) !important; transition: all .3s ease;
 }
-
 .carousel-control-prev:hover .carousel-control-prev-icon,
-.carousel-control-next:hover .carousel-control-next-icon {
-    background-color: rgba(0, 0, 0, 0.9) !important;
-    transform: scale(1.1);
+.carousel-control-next:hover .carousel-control-next-icon { background-color: rgba(0,0,0,.9) !important; transform: scale(1.1); }
+.carousel-inner { padding: 0 60px; }
+@media (max-width: 768px){
+  .carousel-control-prev, .carousel-control-next { display: none !important; }
+  .carousel-inner { padding: 0; }
 }
 
-/* Espaciado adicional para el contenido del carrusel */
-.carousel-inner {
-    padding: 0 60px; /* Agrega padding interno para separar el contenido de los botones */
-}
-
-/* Responsive: en pantallas pequeñas ocultamos los controles */
-@media (max-width: 768px) {
-    .carousel-control-prev,
-    .carousel-control-next {
-        display: none !important;
-    }
-    
-    .carousel-inner {
-        padding: 0; /* Remueve el padding en móviles */
-    }
+/* Accesibilidad, igual que en Programación */
+.visually-hidden{
+  position:absolute!important;width:1px!important;height:1px!important;padding:0!important;
+  margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important;
 }
 </style>
 
-<div class="container-fluid mt-4">
-    <div class="row">
-        <aside class="col-2 d-none d-md-flex flex-column justify-content-start align-items-center">
-            <div class="sticky-top">
-                {% include 'base/announcement_component.html' with announcements=left_ads %}
-            </div>
-        </aside>
-        <!-- Sección Principal -->
-        <div class="col-md-8">
-            {% if featured_section %}
-            <div class="text-center mb-4 p-3 border rounded">
-                <h1 class="display-4 fw-bold">{{ featured_section.title }}</h1>
-                <p>{{ featured_section.description }}</p>
-                {% if featured_section.cover_image %}
-                    <img src="{{ featured_section.cover_image.url }}" alt="{{ featured_section.title }}" class="img-fluid rounded" style="max-width:300px;">
-                {% else %}
-                    <img src="{% static 'img/default-podcast.png' %}" alt="{{ featured_section.title }}" class="img-fluid rounded" style="max-width:300px;">
-                {% endif %}
-                <div class="mt-3">
-                    <a href="{% url 'podcast_detail' featured_section.slug %}" class="btn btn-lg btn-outline-danger">Ver detalles</a>
-                </div>
-            </div>
-            {% endif %}
-            
-            <!-- Carrusel Mejorado -->
-            <div class="position-relative">
-                <div id="sectionCarousel" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <div class="row justify-content-center text-center">
-                                {% for section in sections|slice:"0:3" %}
-                                <div class="col-12 col-md-4 mb-4">
-                                    <a href="{% url 'podcast_detail' section.slug %}" class="d-block">
-                                    {% if section.cover_image %}
-                                    <img src="{{ section.cover_image.url }}" alt="{{ section.title }}" class="img-fluid rounded-circle mx-auto d-block" style="width:150px; height:150px; object-fit:cover;">
-                                    {% else %}
-                                    <img src="{% static 'img/default-podcast.png' %}" alt="{{ section.title }}" class="img-fluid rounded-circle mx-auto d-block" style="width:150px; height:150px; object-fit:cover;">
-                                    {% endif %}
-                                    </a>
-                                    <h5 class="mt-2">{{ section.title }}</h5>
-                                    <p>{{ section.date_created|date:"d F Y" }}</p>
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="carousel-item">
-                            <div class="row justify-content-center">
-                                {% for section in sections|slice:"3:6" %}
-                                <div class="col-12 col-md-4 mb-4 text-center">
-                                    <a href="{% url 'podcast_detail' section.slug %}" class="d-block">
-                                    {% if section.cover_image %}
-                                    <img src="{{ section.cover_image.url }}" alt="{{ section.title }}" class="img-fluid rounded-circle mx-auto d-block" style="width:150px; height:150px; object-fit:cover;">
-                                    {% else %}
-                                    <img src="{% static 'img/default-podcast.png' %}" alt="{{ section.title }}" class="img-fluid rounded-circle mx-auto d-block" style="width:150px; height:150px; object-fit:cover;">
-                                    {% endif %}
-                                    </a>
-                                    <h5 class="mt-2">{{ section.title }}</h5>
-                                    <p>{{ section.date_created|date:"d F Y" }}</p>
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Controles del carrusel mejorados -->
-                    <button class="carousel-control-prev" type="button" data-bs-target="#sectionCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Anterior</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#sectionCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Siguiente</span>
-                    </button>
-                </div>
-            </div>
+<main class="container-fluid mt-4" aria-labelledby="podcast-title">
+  <div class="row">
+    <!-- Anuncios Izquierda (solo md y arriba) -->
+    <aside class="col-2 d-none d-md-flex flex-column align-items-center">
+      <div class="sticky-top">
+        {% include 'base/announcement_component.html' with announcements=left_ads %}
+      </div>
+    </aside>
+
+      {# ====== Bloque de anuncios SOLO en móvil (antes del featured/carrusel) ====== #}
+      <div class="d-md-none my-3">
+        <div class="mb-3">
+          {% include 'base/announcement_component.html' with announcements=left_ads %}
         </div>
-        <aside class="col-2 d-none d-md-flex flex-column justify-content-start align-items-center">
-            <div class="sticky-top">
-                {% include 'base/announcement_component.html' with announcements=right_ads %}
+      </div>
+    <!-- Contenido principal -->
+    <section class="col-12 col-lg-8">
+      <header class="text-center mb-3">
+        <h1 id="podcast-title" class="fw-bold mb-1">Podcasts</h1>
+        <p class="text-muted mb-0">Escucha nuestras secciones y descubre episodios destacados.</p>
+      </header>
+
+
+      <!-- Sección destacada -->
+      {% if featured_section %}
+      <div class="text-center mb-4 p-3 border rounded">
+        <h2 class="fw-bold">{{ featured_section.title }}</h2>
+        <p>{{ featured_section.description }}</p>
+        {% if featured_section.cover_image %}
+          <img src="{{ featured_section.cover_image.url }}" alt="{{ featured_section.title }}" class="img-fluid rounded" style="max-width:300px;">
+        {% else %}
+          <img src="{% static 'img/default-podcast.png' %}" alt="{{ featured_section.title }}" class="img-fluid rounded" style="max-width:300px;">
+        {% endif %}
+        <div class="mt-3">
+          <a href="{% url 'podcast_detail' featured_section.slug %}" class="btn btn-lg btn-outline-danger">Ver detalles</a>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Carrusel -->
+      <div class="position-relative">
+        <div id="sectionCarousel" class="carousel slide" data-bs-ride="carousel" aria-label="Carrusel de secciones de podcast">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <div class="row justify-content-center text-center">
+                {% for section in sections|slice:"0:3" %}
+                <div class="col-12 col-md-4 mb-4">
+                  <a href="{% url 'podcast_detail' section.slug %}" class="d-block">
+                    {% if section.cover_image %}
+                      <img src="{{ section.cover_image.url }}" alt="{{ section.title }}" class="img-fluid rounded-circle mx-auto d-block" style="width:150px; height:150px; object-fit:cover;">
+                    {% else %}
+                      <img src="{% static 'img/default-podcast.png' %}" alt="{{ section.title }}" class="img-fluid rounded-circle mx-auto d-block" style="width:150px; height:150px; object-fit:cover;">
+                    {% endif %}
+                  </a>
+                  <h5 class="mt-2">{{ section.title }}</h5>
+                  <p class="text-muted">{{ section.date_created|date:"d F Y" }}</p>
+                </div>
+                {% endfor %}
+              </div>
             </div>
-        </aside>
-    </div>
-</div>
+
+            <div class="carousel-item">
+              <div class="row justify-content-center text-center">
+                {% for section in sections|slice:"3:6" %}
+                <div class="col-12 col-md-4 mb-4">
+                  <a href="{% url 'podcast_detail' section.slug %}" class="d-block">
+                    {% if section.cover_image %}
+                      <img src="{{ section.cover_image.url }}" alt="{{ section.title }}" class="img-fluid rounded-circle mx-auto d-block" style="width:150px; height:150px; object-fit:cover;">
+                    {% else %}
+                      <img src="{% static 'img/default-podcast.png' %}" alt="{{ section.title }}" class="img-fluid rounded-circle mx-auto d-block" style="width:150px; height:150px; object-fit:cover;">
+                    {% endif %}
+                  </a>
+                  <h5 class="mt-2">{{ section.title }}</h5>
+                  <p class="text-muted">{{ section.date_created|date:"d F Y" }}</p>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+          <!-- Controles -->
+          <button class="carousel-control-prev" type="button" data-bs-target="#sectionCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#sectionCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Siguiente</span>
+          </button>
+        </div>
+      </div>
+
+      {# ====== Bloque de anuncios SOLO en móvil (después del carrusel) ====== #}
+      <div class="d-md-none my-3">
+        <div>
+          {% include 'base/announcement_component.html' with announcements=right_ads %}
+        </div>
+      </div>
+    </section>
+
+    <!-- Anuncios Derecha (solo md y arriba) -->
+    <aside class="col-2 d-none d-md-flex flex-column align-items-center">
+      <div class="sticky-top">
+        {% include 'base/announcement_component.html' with announcements=right_ads %}
+      </div>
+    </aside>
+  </div>
+</main>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const mainCoverImage = document.getElementById('mainCoverImage');
-    const mainTitle = document.getElementById('mainTitle');
-    const mainDescription = document.getElementById('mainDescription');
-    const mainAudio = document.getElementById('mainAudio');
-    const mainAudioSource = document.getElementById('mainAudioSource');
+  const mainCoverImage = document.getElementById('mainCoverImage');
+  const mainTitle = document.getElementById('mainTitle');
+  const mainDescription = document.getElementById('mainDescription');
+  const mainAudio = document.getElementById('mainAudio');
+  const mainAudioSource = document.getElementById('mainAudioSource');
 
-    const podcastItems = document.querySelectorAll('.podcast2-item');
+  const podcastItems = document.querySelectorAll('.podcast2-item');
 
-    podcastItems.forEach(item => {
-        item.addEventListener('click', function() {
-            const newTitle = this.getAttribute('data-title');
-            const newDescription = this.getAttribute('data-description');
-            const newAudio = this.getAttribute('data-audio');
-            const newImage = this.getAttribute('data-image');
-            const slug = this.getAttribute('data-slug');
+  podcastItems.forEach(item => {
+    item.addEventListener('click', function() {
+      const newTitle = this.getAttribute('data-title');
+      const newDescription = this.getAttribute('data-description');
+      const newAudio = this.getAttribute('data-audio');
+      const newImage = this.getAttribute('data-image');
+      const slug = this.getAttribute('data-slug');
 
-            // Transición de la portada
-            mainCoverImage.style.opacity = 0;
-            setTimeout(() => {
-                mainCoverImage.src = newImage;
-                mainCoverImage.style.opacity = 1;
-            }, 300);
+      if (mainCoverImage) {
+        mainCoverImage.style.opacity = 0;
+        setTimeout(() => {
+          mainCoverImage.src = newImage;
+          mainCoverImage.style.opacity = 1;
+        }, 300);
+      }
 
-            mainTitle.textContent = newTitle;
-            if (mainDescription) {
-                mainDescription.textContent = newDescription;
-            }
-            mainAudioSource.src = newAudio;
-            mainAudio.load();
-            mainAudio.play();
-            setTimeout(() => {
-                window.location.href = "/podcast/" + slug + "/";
-            }, 500);
-        });
+      if (mainTitle) mainTitle.textContent = newTitle;
+      if (mainDescription) mainDescription.textContent = newDescription;
+
+      if (mainAudio && mainAudioSource) {
+        mainAudioSource.src = newAudio;
+        mainAudio.load();
+        mainAudio.play();
+      }
+
+      setTimeout(() => {
+        window.location.href = "/podcast/" + slug + "/";
+      }, 500);
     });
+  });
 });
 </script>
-{% endblock %}  
+{% endblock %}

@@ -6,44 +6,60 @@
 {% endblock %}
 
 {% block main %}
-<div class="container mt-5">
+<main class="container-fluid mt-4" aria-labelledby="quienes-title">
   <div class="row">
-    <!-- Columna de Anuncios Izquierda-->
-    <aside class="col-2 d-none d-md-flex flex-column justify-content-start align-items-center">
+    {# Anuncios Izquierda (solo md y arriba) #}
+    <aside class="col-2 d-none d-md-flex flex-column align-items-center">
       <div class="sticky-top">
         {% include 'base/announcement_component.html' with announcements=left_ads %}
       </div>
     </aside>
 
+      {# ===== Arriba del contenido: SOLO móviles y tablets (< md) ===== #}
+      <div class="d-md-none my-3">
+        {% include 'base/announcement_component.html' with announcements=left_ads %}
+      </div>
+    {# Contenido principal #}
+    <section class="col-12 col-lg-8">
+      <header class="text-center mb-3">
+        <h1 id="quienes-title" class="fw-bold mb-1">¿Quiénes somos?</h1>
+        <p class="text-muted mb-0">
+          Conoce nuestra historia, misión y equipo.
+        </p>
+      </header>
 
 
-    <div class="col-12 col-lg-8">
-      <div class="content-box p-4">
-        <h2 class="fw-bold text-center">¿Quiénes somos?</h2>
-        <hr class="mx-auto hr-custom">
+      <div class="content-box p-4 bg-white border rounded shadow-sm">
+        <hr class="mx-auto" style="max-width: 120px;">
         <p>
           Contacto Total es una marca reconocida en el Valle del Sol que, desde noviembre de 2005, ha informado, entretenido y servido a la comunidad hispana de Arizona. Actualmente, es el programa número uno de la radio en español, transmitiendo de lunes a viernes a las 11 de la mañana por la frecuencia 1190 AM.
         </p>
         <p>
-          Además del programa radial, Contacto Total ha expandido su presencia a medios impresos con "Contacto Total, La Revista que Habla", una publicación interactiva que circula dos veces al mes y está disponible en línea.
+          Además del programa radial, Contacto Total ha expandido su presencia a medios impresos con “Contacto Total, La Revista que Habla”, una publicación interactiva que circula dos veces al mes y está disponible en línea.
         </p>
         <p>
           El equipo de trabajo está conformado por profesionales de los medios al servicio de la comunidad, incluyendo a Diana Gualdrón como Directora de la revista, Sandra Carmona como Productora General y Gabriel Villalobos como Productor y Editor.
         </p>
         <p>
-          La prioridad de Contacto Total es la información local, ofreciendo secciones reconocidas como <strong>"Pare oreja y apunte"</strong>, <strong>"De su ronco pecho"</strong>, <strong>"A chambear"</strong>, <strong>"Suelte la lengua"</strong> y <strong>"¡No manches!"</strong>.
+          La prioridad de Contacto Total es la información local, ofreciendo secciones reconocidas como
+          <strong>“Pare oreja y apunte”</strong>, <strong>“De su ronco pecho”</strong>,
+          <strong>“A chambear”</strong>, <strong>“Suelte la lengua”</strong> y
+          <strong>“¡No manches!”</strong>.
         </p>
       </div>
-    </div>
 
-    <!-- Columna de Anuncios Derecha  -->
-    <aside class="col-2 d-none d-md-flex flex-column justify-content-start align-items-center">
+      {# ===== Debajo del contenido: SOLO móviles y tablets (< md) ===== #}
+      <div class="d-md-none my-3">
+        {% include 'base/announcement_component.html' with announcements=right_ads %}
+      </div>
+    </section>
+
+    {# Anuncios Derecha (solo md y arriba) #}
+    <aside class="col-2 d-none d-md-flex flex-column align-items-center">
       <div class="sticky-top">
         {% include 'base/announcement_component.html' with announcements=right_ads %}
       </div>
     </aside>
-
-
   </div>
-</div>
+</main>
 {% endblock %}

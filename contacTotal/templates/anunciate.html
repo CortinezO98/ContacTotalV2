@@ -6,65 +6,85 @@
 {% endblock %}
 
 {% block main %}
-<div class="container-fluid min-vh-100 d-flex align-items-center py-2 bg-light">
-  <div class="container">
-    <div class="row justify-content-center align-items-start g-4">
-      
-      <!-- Anuncios izquierda -->
-      <aside class="col-lg-2 d-none d-lg-block">
-        <div class="sticky-top pt-4">
+<main class="container-fluid min-vh-100 py-2 bg-light" aria-labelledby="anunciate-title">
+  <div class="row justify-content-center align-items-start g-4">
+
+    <!-- Anuncios Izquierda (solo md y arriba) -->
+    <aside class="col-2 d-none d-md-flex flex-column align-items-center">
+      <div class="sticky-top pt-4">
+        {% include 'base/announcement_component.html' with announcements=left_ads %}
+      </div>
+    </aside>
+
+      {# ====== Bloque de anuncios SOLO en móvil (antes del formulario) ====== #}
+      <div class="d-md-none my-3">
+        <div class="mb-3">
           {% include 'base/announcement_component.html' with announcements=left_ads %}
         </div>
-      </aside>
-      
-      <!-- Formulario principal -->
-      <div class="col-12 col-lg-8">
-        <div class="card shadow-sm border-0 p-4">
-          <h2 class="fw-bold text-center mb-3">Anúnciate con nosotros<span class="text-danger d-block">/Advertise with us</span></h2>
-          <p class="text-center mb-4">En Contacto Total Media te ofrecemos diferentes opciones publicitarias. Ponte en contacto hoy mismo para empezar a trabajar con nosotros y anunciar tu marca a través de nuestra plataforma multimedia.</p>
-          
-          <form method="POST">
-            {% csrf_token %}
-            <div class="mb-3">
-              <label for="nombre" class="form-label">Nombre / Name*</label>
-              <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Tu nombre completo" required>
-            </div>
-            <div class="mb-3">
-              <label for="cargo" class="form-label">Cargo / Título del puesto*</label>
-              <input type="text" class="form-control" id="cargo" name="cargo" placeholder="Tu cargo" required>
-            </div>
-            <div class="mb-3">
-              <label for="empresa" class="form-label">Nombre de la compañía / Company Name*</label>
-              <input type="text" class="form-control" id="empresa" name="empresa" placeholder="Ej: Mi Empresa S.A." required>
-            </div>
-            <div class="mb-3">
-              <label for="telefono" class="form-label">Teléfono / Phone Number*</label>
-              <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="Tu número de teléfono" required>
-            </div>
-            <div class="mb-3">
-              <label for="email" class="form-label">Correo electrónico / Email*</label>
-              <input type="email" class="form-control" id="email" name="email" placeholder="Tu email" required>
-            </div>
-            <div class="mb-3">
-              <label for="comentarios" class="form-label">Comentarios adicionales / Additional comments</label>
-              <textarea class="form-control" id="comentarios" name="comentarios" placeholder="Opcional" rows="3"></textarea>
-            </div>
-            <div class="text-center mt-4">
-              <button type="submit" class="btn btn-sm btn-outline-danger px-5" id="btnEnviar">Enviar</button>
-            </div>
-          </form>
-        </div>
       </div>
-      
-      <!-- Anuncios derecha -->
-      <aside class="col-lg-2 d-none d-lg-block">
-        <div class="sticky-top pt-4">
+    <!-- Contenido principal -->
+    <section class="col-12 col-lg-8">
+      <h2 id="anunciate-title" class="fw-bold text-center mb-3">
+        Anúnciate con nosotros
+        <span class="text-danger d-block">/ Advertise with us</span>
+      </h2>
+      <p class="text-center mb-4">
+        En Contacto Total Media te ofrecemos diferentes opciones publicitarias. 
+        Ponte en contacto hoy mismo para empezar a trabajar con nosotros y anunciar tu marca 
+        a través de nuestra plataforma multimedia.
+      </p>
+
+
+      <div class="card shadow-sm border-0 p-4">
+        <form method="POST">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre / Name*</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Tu nombre completo" required>
+          </div>
+          <div class="mb-3">
+            <label for="cargo" class="form-label">Cargo / Título del puesto*</label>
+            <input type="text" class="form-control" id="cargo" name="cargo" placeholder="Tu cargo" required>
+          </div>
+          <div class="mb-3">
+            <label for="empresa" class="form-label">Nombre de la compañía / Company Name*</label>
+            <input type="text" class="form-control" id="empresa" name="empresa" placeholder="Ej: Mi Empresa S.A." required>
+          </div>
+          <div class="mb-3">
+            <label for="telefono" class="form-label">Teléfono / Phone Number*</label>
+            <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="Tu número de teléfono" required>
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Correo electrónico / Email*</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Tu email" required>
+          </div>
+          <div class="mb-3">
+            <label for="comentarios" class="form-label">Comentarios adicionales / Additional comments</label>
+            <textarea class="form-control" id="comentarios" name="comentarios" placeholder="Opcional" rows="3"></textarea>
+          </div>
+          <div class="text-center mt-4">
+            <button type="submit" class="btn btn-sm btn-outline-danger px-5" id="btnEnviar">Enviar</button>
+          </div>
+        </form>
+      </div>
+
+      {# ====== Bloque de anuncios SOLO en móvil (después del formulario) ====== #}
+      <div class="d-md-none my-3">
+        <div>
           {% include 'base/announcement_component.html' with announcements=right_ads %}
         </div>
-      </aside>
-    </div>
+      </div>
+    </section>
+
+    <!-- Anuncios Derecha (solo md y arriba) -->
+    <aside class="col-2 d-none d-md-flex flex-column align-items-center">
+      <div class="sticky-top pt-4">
+        {% include 'base/announcement_component.html' with announcements=right_ads %}
+      </div>
+    </aside>
+
   </div>
-</div>
+</main>
 {% endblock %}
 
 {% block extra_scripts %}
@@ -78,10 +98,9 @@
       btn.innerHTML = 'Enviando...';
     });
   }
-  
+
   {% if status %}
   document.addEventListener("DOMContentLoaded", function () {
-    console.log("Mostrando SweetAlert con status: {{ status }}");
     Swal.fire({
       title: '{{ swal_title|escapejs }}',
       text: '{{ msg|escapejs }}',

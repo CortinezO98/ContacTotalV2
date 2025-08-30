@@ -15,6 +15,12 @@
       </div>
     </aside>
 
+      {# ====== Bloque de anuncios SOLO en móvil ====== #}
+      <div class="d-md-none my-3">
+        <div class="mb-3">
+          {% include 'base/announcement_component.html' with announcements=left_ads %}
+        </div>
+      </div>
     <!-- Contenido principal -->
     <section class="col-12 col-lg-8">
       <header class="text-center mb-3">
@@ -25,11 +31,6 @@
         <p class="text-muted mb-0">Horarios mostrados según tu zona: <strong>{{ base_tz_label }}</strong>.</p>
       </header>
 
-      {# ====== Bloque de anuncios SOLO en móvil ====== #}
-      <div class="d-flex d-md-none justify-content-center my-3">
-        {% include 'base/announcement_component.html' with announcements=right_ads %}
-      </div>
-      {# ============================================= #}
 
       <!-- Parrilla SIN columna de horas -->
       <div class="schedule border rounded shadow-sm" style="--rows: {{ rows }};">
@@ -72,6 +73,11 @@
           </div>
         </div>
         <p id="schedule-help" class="visually-hidden">Usa desplazamiento horizontal para ver todos los días en pantallas pequeñas.</p>
+      </div>
+      <div class="d-md-none my-3">
+        <div>
+          {% include 'base/announcement_component.html' with announcements=right_ads %}
+        </div>
       </div>
       <!-- /Parrilla -->
     </section>
