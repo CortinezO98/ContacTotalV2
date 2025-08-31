@@ -666,7 +666,7 @@ TIMEZONE_CHOICES = [
     ('America/Mexico_City', 'México'),
     ('America/Bogota',      'Bogotá'),
     ('America/Argentina/Buenos_Aires', 'Argentina'),
-    ('America/New_York',    'EEUU'),
+    ('America/New_York',    'EEUU(New York)'),
     ('America/Phoenix',     'EEUU (Arizona)'),
 ]
 
