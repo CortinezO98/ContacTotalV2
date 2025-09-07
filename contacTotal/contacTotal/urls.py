@@ -27,6 +27,7 @@ urlpatterns = [
     path('programas/', programas, name="programas"),
     path('podcast/', podcast, name="podcast"),
     path('quienesSomos/', quienesSomos, name="quienesSomos"),
+    path('equipo/', equipo, name='equipo'),
     path('programacion/', programacion, name="programacion"),
     path('contacto/', contacto, name="contacto"),
     path('podcast/<slug:slug>/', podcast_detail, name='podcast_detail'),

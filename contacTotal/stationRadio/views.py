@@ -707,3 +707,19 @@ def anunciate(request):
 
     return render(request, 'anunciate.html', context)
 
+def equipo(request):
+    """Vista para mostrar el equipo de trabajo"""
+    left_ads  = get_announcements('left',  'equipo', 2)
+    right_ads = get_announcements('right', 'equipo', 2)
+    mobile_top_ads    = get_announcements('inline', 'equipo', 2)
+    mobile_bottom_ads = get_announcements('bottom', 'equipo', 2)
+
+    context = {
+        'left_ads': left_ads, 
+        'right_ads': right_ads,
+        'mobile_top_ads': mobile_top_ads,
+        'mobile_bottom_ads': mobile_bottom_ads,
+        'logo_type': 'equipo'
+    }
+    return render(request, 'equipo.html', context)
+
