@@ -1,0 +1,313 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block header %}
+  {% include 'base/headerCompact.html' %}
+{% endblock %}
+
+{% block main %}
+<main class="container-fluid mt-4" aria-labelledby="equipo-title">
+  <div class="row">
+    {# Anuncios Izquierda (solo md y arriba) #}
+    <aside class="col-2 d-none d-md-flex flex-column align-items-center">
+      <div class="sticky-top">
+        {% include 'base/announcement_component.html' with announcements=left_ads %}
+      </div>
+    </aside>
+
+    {# ===== Arriba del contenido: SOLO móviles y tablets (< md) ===== #}
+    <div class="d-md-none my-3">
+      {% include 'base/announcement_component.html' with announcements=left_ads %}
+    </div>
+
+    {# Contenido principal #}
+    <section class="col-12 col-lg-8">
+      <header class="text-center mb-5">
+        <h1 id="equipo-title" class="fw-bold mb-2">Nuestro Equipo</h1>
+        <p class="text-muted mb-0">
+          Conoce a las personas que hacen posible Contacto Total Media
+        </p>
+      </header>
+
+      {# Gabriel Villalobos #}
+      <article class="team-member-card mb-5 p-4 bg-white border rounded-3 shadow-sm">
+        <div class="row align-items-center">
+          <div class="col-12 col-md-4 order-md-2 text-center mb-3 mb-md-0">
+            <img src="{% static 'images/team/Gabo.webp' %}" 
+                 alt="Gabriel Villalobos" 
+                 class="team-photo img-fluid rounded-3 shadow">
+          </div>
+          <div class="col-12 col-md-8 order-md-1">
+            <h3 class="fw-bold text-danger mb-2">Gabriel Villalobos</h3>
+            <h5 class="text-primary mb-3">Director Creativo CT Media / Director y presentador Contacto Total Radio</h5>
+            <p class="mb-2">Gabriel Villalobos es un periodista colombiano, con más de cuatro décadas de experiencia en los medios de comunicación. Se desempeñó como reportero, editor, productor, jefe de redacción y presentador de televisión.</p>
+            <p class="mb-2">Ha sido subdirector de deportes del Canal RCN, corresponsal de Telemundo y TV Chile, profesor universitario de periodismo en la Universidad Central de Colombia y Productor Ejecutivo en Univisión (Sacramento).</p>
+            <p class="mb-2">En marzo de 2002, se trasladó con su esposa, Diana Gualdrón, a Estados Unidos, buscando nuevas oportunidades personales y profesionales.</p>
+            <p class="mb-2">Por 20 años ha sido el director y presentador de Contacto Total, un programa radial diseñado como un espacio periodístico, informativo, entretenido, con servicios para la comunidad y un enfoque social genuino. Gabriel se ha destacado por su estilo cercano y auténtico y su poder de repentización. Además cuenta con un gran sentido de profesionalismo e integridad que se traducen en credibilidad. Una de sus banderas es decir siempre la verdad… <em>“duelale al que le duela, sufra el que sufra”</em></p>
+            <p class="mb-2">Villalobos es un verdadero líder de la radio en español no solo en Arizona sino en el resto del mundo.</p>
+            <p class="mb-0">Adicionalmente, además de producir y presentar Contacto Total radio, es director de contenido de Contacto Total Media y editor general de la revista Contacto Total.</p>
+          </div>
+        </div>
+      </article>
+
+      {# Diana Gualdrón #}
+      <article class="team-member-card mb-5 p-4 bg-white border rounded-3 shadow-sm">
+        <div class="row align-items-center">
+          <div class="col-12 col-md-4 order-md-1 text-center mb-3 mb-md-0">
+            <img src="{% static 'images/team/diana-gualdron.jpg' %}" 
+                 alt="Diana Gualdrón López" 
+                 class="team-photo img-fluid rounded-3 shadow">
+          </div>
+          <div class="col-12 col-md-8 order-md-2">
+            <h3 class="fw-bold text-danger mb-2">Diana Gualdrón López</h3>
+            <h5 class="text-primary mb-3">Directora de la revista Contacto Total y productora ejecutiva del programa radial</h5>
+            <p class="mb-2">Nacida en Bogotá Colombia, Diana Gualdrón, es licenciada en Comunicación social y periodismo por la Universidad Central de Colombia. Inició su carrera en prensa escrita y posteriormente trabajó en radio y televisión, especialmente enfocada en el mundo del entretenimiento.</p>
+            <p class="mb-2">Es actualmente productora de Contacto Total Radio y directora general de Contacto Total, la revista que habla.</p>
+            <p class="mb-0">Se toma muy en serio su profesión y su compromiso con la audiencia del programa y con los lectores de la revista: <em>"Contacto Total es la mejor manera de conectar con la comunidad y atender sus necesidades. Me encanta tener la oportunidad de transmitir positivismo a todos nuestros seguidores"</em></p>
+          </div>
+        </div>
+      </article>
+
+      {# Carlos Aguilar #}
+      <article class="team-member-card mb-5 p-4 bg-white border rounded-3 shadow-sm">
+        <div class="row align-items-center">
+          <div class="col-12 col-md-4 order-md-2 text-center mb-3 mb-md-0">
+            <img src="{% static 'images/team/Carlos.webp' %}" 
+                 alt="Carlos Aguilar" 
+                 class="team-photo img-fluid rounded-3 shadow">
+          </div>
+          <div class="col-12 col-md-8 order-md-1">
+            <h3 class="fw-bold text-danger mb-2">Carlos Aguilar</h3>
+            <h5 class="text-primary mb-3">Diseñador Contacto Total, la revista que habla</h5>
+            <p class="mb-2">Profesional en Diseño Gráfico de la Universidad Nacional de Colombia con más de 25 años de experiencia. En Colombia, realizó trabajos para la Universidad Nacional de Colombia, Artesanías de Colombia, la Cinemateca Distrital de Bogotá, la Embajada de Francia en Colombia, Mercycorps y Publicar, entre otros.</p>
+            <p class="mb-2">Carlos trabajó como Director de Arte en Interlex Ad Agency en San Antonio, Texas; y luego como Asesor Independiente de diseño gráfico corporativo y editorial para clientes en varias ciudades de Estados Unidos.</p>
+            <p class="mb-0">Su experiencia en investigación, desarrollo, producción y evaluación de proyectos de comunicación gráfica han sido reconocidos en diferentes ocasiones. Ha sido galardonado con los Telly Award (2004-2005), Davey Award (2005) y Addy Awards (2007).</p>
+          </div>
+        </div>
+      </article>
+
+      {# Luis Miguel Calderón #}
+      <article class="team-member-card mb-5 p-4 bg-white border rounded-3 shadow-sm">
+        <div class="row align-items-center">
+          <div class="col-12 col-md-4 order-md-1 text-center mb-3 mb-md-0">
+            <img src="{% static 'images/team/Luis.webp' %}" 
+                 alt="Luis Miguel Calderón Ferreira" 
+                 class="team-photo img-fluid rounded-3 shadow">
+          </div>
+          <div class="col-12 col-md-8 order-md-2">
+            <h3 class="fw-bold text-danger mb-2">Luis Miguel Calderón Ferreira</h3>
+            <h5 class="text-primary mb-3">Desarrollador Fullstack</h5>
+            <p class="mb-2">Como profesional en ingeniería de sistemas le apasiona hacer que las cosas funcionen: <em>"Sí, el backend es mi zona de confort"</em></p>
+            <p class="mb-2">Actualmente está trabajando al ciento por ciento en redes, infraestructura. Y como él mismo dice: <em>"Es todo eso que no se ve de un proyecto, pero sin lo cual nada andaría."</em></p>
+            <p class="mb-2">Luis Miguel considera que aprender nunca se termina, así que siempre estará leyendo un libro o tomando un curso.</p>
+            <p class="mb-0 fst-italic">"Vivo en Bogotá, Colombia, donde el frío pica, pero el talento sobra. Me gusta armar soluciones como quien arma un rompecabezas: con paciencia y ganas. Y aunque me encanta la tecnología, lo que más me mueve es poder ayudar con lo que sé y compartir mi conocimiento. ¡Ah, y si hay un café de por medio, mejor!"</p>
+          </div>
+        </div>
+      </article>
+
+      {# José Jorge Cortinez #}
+      <article class="team-member-card mb-5 p-4 bg-white border rounded-3 shadow-sm">
+        <div class="row align-items-center">
+          <div class="col-12 col-md-4 order-md-2 text-center mb-3 mb-md-0">
+            <img src="{% static 'images/team/Jose.webp' %}" 
+                 alt="José Jorge Cortinez Osorio" 
+                 class="team-photo img-fluid rounded-3 shadow">
+          </div>
+          <div class="col-12 col-md-8 order-md-1">
+            <h3 class="fw-bold text-danger mb-2">José Jorge Cortinez Osorio</h3>
+            <h5 class="text-primary mb-3">Desarrollador Fullstack</h5>
+            <p class="mb-2">Es ingeniero electrónico egresado de la Universidad del Magdalena y especialista en Ingeniería de Software egresado de la Universidad Distrital Francisco José de Caldas.</p>
+            <p class="mb-2">Oriundo de Galeras, Sucre en Colombia, reside actualmente en Bogotá, Colombia, donde ha fortalecido su trayectoria profesional en el ámbito tecnológico.</p>
+            <p class="mb-0 fst-italic">"Me apasiona la innovación y el desarrollo de proyectos digitales que transforman ideas en experiencias reales. Esta plataforma es una muestra de esa pasión: un espacio moderno que une comunicación, información y tecnología para inspirar y conectar a las personas"</p>
+          </div>
+        </div>
+      </article>
+
+      {# Henry Acuña #}
+      <article class="team-member-card mb-5 p-4 bg-white border rounded-3 shadow-sm">
+        <div class="row align-items-center">
+          <div class="col-12 col-md-4 order-md-1 text-center mb-3 mb-md-0">
+            <img src="{% static 'images/team/Henry.webp' %}" 
+                 alt="Henry Acuña" 
+                 class="team-photo img-fluid rounded-3 shadow">
+          </div>
+          <div class="col-12 col-md-8 order-md-2">
+            <h3 class="fw-bold text-danger mb-2">Henry Acuña</h3>
+            <h5 class="text-primary mb-3">Diseñador Web</h5>
+            <p class="mb-0">Profesional en comercio internacional, con un máster en marketing digital internacional, diseñador gráfico, fotógrafo y filmmaker, con más de 5 años de experiencia en la creación y ejecución de estrategias de marketing digital y tradicional, así como diseño de material gráfico, visual para diversas plataformas.</p>
+          </div>
+        </div>
+      </article>
+
+      {# Daniel Felipe Arroyabe #}
+      <article class="team-member-card mb-5 p-4 bg-white border rounded-3 shadow-sm">
+        <div class="row align-items-center">
+          <div class="col-12 col-md-4 order-md-2 text-center mb-3 mb-md-0">
+            <img src="{% static 'images/team/Daniel.webp' %}" 
+                 alt="Daniel Felipe Arroyabe Bautista" 
+                 class="team-photo img-fluid rounded-3 shadow">
+          </div>
+          <div class="col-12 col-md-8 order-md-1">
+            <h3 class="fw-bold text-danger mb-2">Daniel Felipe Arroyabe Bautista</h3>
+            <h5 class="text-primary mb-3">Desarrollador Jr Frontend</h5>
+            <p class="mb-2">Es Técnico en instalación de redes y mantenimiento en equipos de cómputo. Actualmente cursa cuarto semestre en Ingeniería de Software.</p>
+            <p class="mb-0 fst-italic">"Nací y vivo en la ciudad de Bogotá, Colombia, donde he desarrollado mis estudios y he adquirido experiencia tanto en el área tecnológica como en el trabajo en equipo. Me apasiona el aprendizaje constante, la resolución de problemas y la creación de soluciones innovadoras mediante el desarrollo de software. Mi objetivo es seguir fortaleciendo mis conocimientos para crecer profesionalmente y aportar con mis habilidades al sector tecnológico"</p>
+          </div>
+        </div>
+      </article>
+
+      {# Victor Raúl Sánchez #}
+      <article class="team-member-card mb-5 p-4 bg-white border rounded-3 shadow-sm">
+        <div class="row align-items-center">
+          <div class="col-12 col-md-4 order-md-1 text-center mb-3 mb-md-0">
+            <img src="{% static 'images/team/Victor.webp' %}" 
+                 alt="Victor Raúl Sánchez" 
+                 class="team-photo img-fluid rounded-3 shadow">
+          </div>
+          <div class="col-12 col-md-8 order-md-2">
+            <h3 class="fw-bold text-danger mb-2">Victor Raúl Sánchez</h3>
+            <h5 class="text-primary mb-3">Experto en transmisión redes sociales</h5>
+            <p class="mb-2">Actualmente es editor de videos y también se dedica a ayudar en la configuración de software para servicios de streaming.</p>
+            <p class="mb-0 fst-italic">"Me apasiona todo lo relacionado con la producción audiovisual y la tecnología, siempre estoy buscando aprender cosas nuevas y mejorar mis habilidades. Vivo en Bogotá, Colombia, y disfruto mucho trabajar en proyectos creativos que mezclan lo técnico con lo artístico"</p>
+          </div>
+        </div>
+      </article>
+
+      {# Nicolas Gutiérrez #}
+      <article class="team-member-card mb-5 p-4 bg-white border rounded-3 shadow-sm">
+        <div class="row align-items-center">
+          <div class="col-12 col-md-4 order-md-2 text-center mb-3 mb-md-0">
+            <img src="{% static 'images/team/Nicolas.webp' %}" 
+                 alt="Nicolas Gutiérrez" 
+                 class="team-photo img-fluid rounded-3 shadow">
+          </div>
+          <div class="col-12 col-md-8 order-md-1">
+            <h3 class="fw-bold text-danger mb-2">Nicolas Gutiérrez</h3>
+            <h5 class="text-primary mb-3">Community Manager</h5>
+            <p class="mb-2">Es un joven colombiano con formación en Administración de Empresas y tecnología en gestión empresarial con énfasis en marketing, finanzas y en proyectos de investigación. Desde hace más de tres años se desempeña como el creador de contenido para redes de Contacto Total, la revista que habla.</p>
+            <p class="mb-0">Entre sus aficiones destacan el amor por el cine, el fútbol y la música. Es una persona muy empática basada en valores y principios que generan un impacto positivo en quienes lo conocen.</p>
+          </div>
+        </div>
+      </article>
+
+      {# Zulma Linzuain #}
+      <article class="team-member-card mb-5 p-4 bg-white border rounded-3 shadow-sm">
+        <div class="row align-items-center">
+          <div class="col-12 col-md-4 order-md-1 text-center mb-3 mb-md-0">
+            <img src="{% static 'images/team/zulma-linzuain.jpg' %}" 
+                 alt="Zulma Linzuain" 
+                 class="team-photo img-fluid rounded-3 shadow">
+          </div>
+          <div class="col-12 col-md-8 order-md-2">
+            <h3 class="fw-bold text-danger mb-2">Zulma Linzuain</h3>
+            <h5 class="text-primary mb-3">Ejecutiva de Ventas</h5>
+            <p class="mb-2">Zulma Linzuain es nuestra dedicada ejecutiva de ventas, encargada de desarrollar y mantener relaciones comerciales estratégicas para Contacto Total Media.</p>
+            <p class="mb-2">Con amplia experiencia en el sector comercial, se especializa en identificar oportunidades de negocio y crear soluciones publicitarias personalizadas que generen valor tanto para nuestros clientes como para nuestra audiencia.</p>
+            <p class="mb-0">Su enfoque profesional y su compromiso con la excelencia en el servicio al cliente la convierten en una pieza fundamental del equipo comercial de Contacto Total.</p>
+          </div>
+        </div>
+      </article>
+
+      {# ===== Debajo del contenido: SOLO móviles y tablets (< md) ===== #}
+      <div class="d-md-none my-3">
+        {% include 'base/announcement_component.html' with announcements=right_ads %}
+      </div>
+    </section>
+
+    {# Anuncios Derecha (solo md y arriba) #}
+    <aside class="col-2 d-none d-md-flex flex-column align-items-center">
+      <div class="sticky-top">
+        {% include 'base/announcement_component.html' with announcements=right_ads %}
+      </div>
+    </aside>
+  </div>
+</main>
+
+<style>
+.team-member-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.team-member-card:nth-child(even) {
+  animation-delay: 0.1s;
+}
+
+.team-member-card:nth-child(odd) {
+  animation-delay: 0.2s;
+}
+
+.team-member-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+.team-photo {
+  max-width: 280px;
+  width: 100%;
+  height: auto;
+  /* aspect-ratio: 1; */
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.team-member-card:hover .team-photo {
+  transform: scale(1.02);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .team-photo {
+    max-width: 200px;
+  }
+  
+  .team-member-card {
+    margin-bottom: 2rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .team-photo {
+    max-width: 150px;
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Activar las animaciones cuando las tarjetas entren en el viewport
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, index) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.style.animationPlayState = 'running';
+        }, index * 100);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  });
+
+  document.querySelectorAll('.team-member-card').forEach(card => {
+    card.style.animationPlayState = 'paused';
+    observer.observe(card);
+  });
+});
+</script>
+
+{% endblock %}
