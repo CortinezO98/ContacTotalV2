@@ -6,6 +6,7 @@ django-dirtyfields==1.9.7
 django-import-export==4.3.9
 mutagen==1.47.0
 pillow==11.3.0
+python-dotenv==1.1.1
 pytz==2024.2
 sqlparse==0.5.3
 tablib==3.8.0
