@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from .models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from urllib.parse import urlencode
 from django.core.mail import EmailMessage, BadHeaderError
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
@@ -174,21 +175,28 @@ def revista(request):
         page_obj = paginator.get_page(1)
     except EmptyPage:
         page_obj = paginator.get_page(paginator.num_pages)
-    
+
+    elided_range = paginator.get_elided_page_range(
+        number=page_obj.number, on_each_side=1, on_ends=1
+    )
+    qs = request.GET.copy()
+    qs.pop('page', None)
+    preserved_query = urlencode(qs, doseq=True)
+
     left_ads  = get_announcements('left',  'revista', 2)
     right_ads = get_announcements('right', 'revista', 2)
     mobile_top_ads    = get_announcements('inline', 'revista', 2)
     mobile_bottom_ads = get_announcements('bottom', 'revista', 2)
 
-    
     context = {
         'page_obj': page_obj,
+        'elided_range': elided_range,         
+        'preserved_query': preserved_query,    
         'left_ads': left_ads, 'right_ads': right_ads,
         'mobile_top_ads': mobile_top_ads,
         'mobile_bottom_ads': mobile_bottom_ads,
         'logo_type': 'revista'
     }
-    
     return render(request, 'revista.html', context)
 
 

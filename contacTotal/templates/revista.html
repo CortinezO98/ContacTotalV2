@@ -53,30 +53,64 @@
       <!-- Paginación -->
       <div class="d-flex justify-content-center mt-4">
         <nav aria-label="Paginación de ediciones">
-          <ul class="pagination">
+          <ul class="pagination pagination-sm flex-wrap gap-1">
+
+            {# Primero #}
+            {% if page_obj.number != 1 %}
+              <li class="page-item">
+                <a class="page-link" href="?page=1{% if preserved_query %}&{{ preserved_query }}{% endif %}">Primero</a>
+              </li>
+            {% else %}
+              <li class="page-item disabled"><span class="page-link">Primero</span></li>
+            {% endif %}
+
+            {# Anterior #}
             {% if page_obj.has_previous %}
               <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+                <a class="page-link" rel="prev"
+                  href="?page={{ page_obj.previous_page_number }}{% if preserved_query %}&{{ preserved_query }}{% endif %}">
+                  Anterior
+                </a>
               </li>
             {% else %}
               <li class="page-item disabled"><span class="page-link">Anterior</span></li>
             {% endif %}
 
-            {% for num in page_obj.paginator.page_range %}
-              {% if page_obj.number == num %}
+            {% for num in elided_range %}
+              {% if num == '…' %}
+                <li class="page-item disabled"><span class="page-link">…</span></li>
+              {% elif num == page_obj.number %}
                 <li class="page-item active" aria-current="page"><span class="page-link">{{ num }}</span></li>
               {% else %}
-                <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ num }}{% if preserved_query %}&{{ preserved_query }}{% endif %}">{{ num }}</a>
+                </li>
               {% endif %}
             {% endfor %}
 
+            {# Siguiente #}
             {% if page_obj.has_next %}
               <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+                <a class="page-link" rel="next"
+                  href="?page={{ page_obj.next_page_number }}{% if preserved_query %}&{{ preserved_query }}{% endif %}">
+                  Siguiente
+                </a>
               </li>
             {% else %}
               <li class="page-item disabled"><span class="page-link">Siguiente</span></li>
             {% endif %}
+
+            {# Último #}
+            {% if page_obj.number != page_obj.paginator.num_pages %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if preserved_query %}&{{ preserved_query }}{% endif %}">
+                  Último
+                </a>
+              </li>
+            {% else %}
+              <li class="page-item disabled"><span class="page-link">Último</span></li>
+            {% endif %}
+
           </ul>
         </nav>
       </div>

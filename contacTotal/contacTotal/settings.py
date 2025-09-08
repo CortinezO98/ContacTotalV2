@@ -10,20 +10,31 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+from dotenv import load_dotenv
 from pathlib import Path
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv(BASE_DIR / ".env", override=False)
+
 
 # Seguridad y modo
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "solo-para-dev-no-produccion")
 DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() == "true"
 
 # Hosts y CSRF
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "").split(",") if not DEBUG else ["*"]
-CSRF_TRUSTED_ORIGINS = [o.strip() for o in os.getenv("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(",") if o.strip()]
+if DEBUG:
+    ALLOWED_HOSTS = ["localhost", "127.0.0.1", "[::1]"]
+    CSRF_TRUSTED_ORIGINS = [
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+        "http://[::1]:8000",
+    ]
+else:
+    ALLOWED_HOSTS = [h for h in os.getenv("DJANGO_ALLOWED_HOSTS", "").split(",") if h]
+    CSRF_TRUSTED_ORIGINS = [o.strip() for o in os.getenv("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(",") if o.strip()]
 
 
 
@@ -77,26 +88,36 @@ WSGI_APPLICATION = 'contacTotal.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-_DB_ENGINE = os.getenv("DB_ENGINE", "").strip()
-if _DB_ENGINE:
-    DATABASES = {
-        "default": {
-            "ENGINE": _DB_ENGINE,  
-            "NAME": os.getenv("DB_NAME", ""),
-            "USER": os.getenv("DB_USER", ""),
-            "PASSWORD": os.getenv("DB_PASSWORD", ""),
-            "HOST": os.getenv("DB_HOST", "127.0.0.1"),
-            "PORT": os.getenv("DB_PORT", "3306"),
-            "OPTIONS": {"charset": "utf8mb4"} if "mysql" in _DB_ENGINE else {},
-        }
-    }
-else:
+
+if DEBUG:
+    # <<< LOCAL: SIEMPRE SQLITE >>>
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
+else:
+    _DB_ENGINE = os.getenv("DB_ENGINE", "").strip()
+    if _DB_ENGINE:
+        DATABASES = {
+            "default": {
+                "ENGINE": _DB_ENGINE, 
+                "NAME": os.getenv("DB_NAME", ""),
+                "USER": os.getenv("DB_USER", ""),
+                "PASSWORD": os.getenv("DB_PASSWORD", ""),
+                "HOST": os.getenv("DB_HOST", "127.0.0.1"),
+                "PORT": os.getenv("DB_PORT", "3306"),
+                "OPTIONS": {"charset": "utf8mb4"} if "mysql" in _DB_ENGINE else {},
+            }
+        }
+    else:
+        DATABASES = {
+            "default": {
+                "ENGINE": "django.db.backends.sqlite3",
+                "NAME": BASE_DIR / "db.sqlite3",
+            }
+        }
 
 
 # Password validation
@@ -169,3 +190,5 @@ if not DEBUG:
     SECURE_HSTS_SECONDS = int(os.getenv("DJANGO_HSTS_SECONDS", "31536000"))
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
+else:
+    SECURE_SSL_REDIRECT = False
