@@ -65,9 +65,9 @@ def IndexView(request):
         latest_audio = None
 
 
-    now = datetime.now(pytz.timezone('America/Bogota'))
+    now = datetime.now(pytz.timezone('America/Phoenix'))
     current_time = now.time()
-    now = datetime.now(pytz.timezone('America/Bogota'))
+    now = datetime.now(pytz.timezone('America/Phoenix'))
     current_day = now.weekday()
     current_time = now.time()
 
@@ -91,7 +91,7 @@ def IndexView(request):
     ).order_by('end_time').first()
     
     show_twitch = twitch_schedule is not None or main_video is None
-    twitch_channel = twitch_schedule.twitch_channel if twitch_schedule else 'contactototal'
+    twitch_channel = twitch_schedule.twitch_channel if twitch_schedule else 'contactototalmedia'
 
     current_ms = (current_time.hour * 3600 + current_time.minute * 60 + current_time.second) * 1000
     next_change_ms = None
