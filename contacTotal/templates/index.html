@@ -6,7 +6,7 @@
   <div class="row">
 
     {# ===== LATERAL IZQUIERDO (solo md+) ===== #}
-    <aside class="col-2 d-none d-md-flex flex-column align-items-center">
+    <aside class="col-2 d-none d-lg-flex flex-column align-items-center">
       <div class="sticky-top pt-3">
         {% if banners_left %}
           {% include 'base/banner_component.html' with banners=banners_left %}
@@ -18,7 +18,7 @@
     <section class="col-12 col-lg-8 main-content">
 
       {# ===== BLOQUE MÓVIL (antes del contenido) -> usa banners_left ===== #}
-      <div class="d-block d-md-none my-3 banner-mobile">
+      <div class="d-block d-lg-none my-3 banner-mobile">
         {% if banners_left %}
           {% include 'base/banner_component.html' with banners=banners_left %}
         {% endif %}
@@ -274,7 +274,6 @@
               </div>
             </div>
           </div>
-
         </div>
       </div>
 
@@ -288,7 +287,7 @@
       </div>
 
       {# ===== BLOQUE MÓVIL (después del contenido) -> usa banners_right ===== #}
-      <div class="d-block d-md-none my-3 banner-mobile">
+      <div class="d-block d-lg-none my-3 banner-mobile">
         {% if banners_right %}
           {% include 'base/banner_component.html' with banners=banners_right %}
         {% endif %}
@@ -297,7 +296,7 @@
     </section>
 
     {# ===== LATERAL DERECHO (solo md+) ===== #}
-    <aside class="col-2 d-none d-md-flex flex-column align-items-center">
+    <aside class="col-2 d-none d-lg-flex flex-column align-items-center">
       <div class="sticky-top pt-3">
         {% if banners_right %}
           {% include 'base/banner_component.html' with banners=banners_right %}

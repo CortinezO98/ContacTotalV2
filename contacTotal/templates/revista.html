@@ -9,20 +9,20 @@
 <main class="container-fluid min-vh-100 bg-light p-3" aria-labelledby="revista-title">
   <div class="row">
     <!-- Anuncios Izquierda (solo md y arriba) -->
-    <aside class="col-2 d-none d-md-flex flex-column align-items-center">
+    <aside class="col-2 d-none d-lg-flex flex-column align-items-center">
       <div class="sticky-top">
         {% include 'base/announcement_component.html' with announcements=left_ads %}
       </div>
     </aside>
 
       {# ====== Bloque de anuncios SOLO en móvil (antes del grid) ====== #}
-      <div class="d-md-none my-3">
+      <div class="d-lg-none my-3">
         <div class="mb-3">
           {% include 'base/announcement_component.html' with announcements=left_ads %}
         </div>
       </div>
     <!-- Contenido Principal -->
-    <section class="col-12 col-md-8">
+    <section class="col-12 col-lg-8">
       <h1 id="revista-title" class="text-center mb-4">Ediciones Anteriores</h1>
 
 
@@ -115,7 +115,7 @@
         </nav>
       </div>
       {# ====== Bloque de anuncios SOLO en móvil (después del grid) ====== #}
-      <div class="d-md-none my-3">
+      <div class="d-lg-none my-3">
         <div>
           {% include 'base/announcement_component.html' with announcements=right_ads %}
         </div>
@@ -123,7 +123,7 @@
     </section>
 
     <!-- Anuncios Derecha (solo md y arriba) -->
-    <aside class="col-2 d-none d-md-flex flex-column align-items-center">
+    <aside class="col-2 d-none d-lg-flex flex-column align-items-center">
       <div class="sticky-top">
         {% include 'base/announcement_component.html' with announcements=right_ads %}
       </div>

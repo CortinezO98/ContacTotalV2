@@ -10,14 +10,14 @@
   <div class="row justify-content-center align-items-start g-4">
 
     <!-- Anuncios Izquierda (solo md y arriba) -->
-    <aside class="col-2 d-none d-md-flex flex-column align-items-center">
+    <aside class="col-2 d-none d-lg-flex flex-column align-items-center">
       <div class="sticky-top pt-4">
         {% include 'base/announcement_component.html' with announcements=left_ads %}
       </div>
     </aside>
 
       {# ====== Bloque de anuncios SOLO en móvil (antes del formulario) ====== #}
-      <div class="d-md-none my-3">
+      <div class="d-lg-none my-3">
         <div class="mb-3">
           {% include 'base/announcement_component.html' with announcements=left_ads %}
         </div>
@@ -67,7 +67,7 @@
       </div>
 
       {# ====== Bloque de anuncios SOLO en móvil (después del formulario) ====== #}
-      <div class="d-md-none my-3">
+      <div class="d-lg-none my-3">
         <div>
           {% include 'base/announcement_component.html' with announcements=right_ads %}
         </div>
@@ -75,7 +75,7 @@
     </section>
 
     <!-- Anuncios Derecha (solo md y arriba) -->
-    <aside class="col-2 d-none d-md-flex flex-column align-items-center">
+    <aside class="col-2 d-none d-lg-flex flex-column align-items-center">
       <div class="sticky-top pt-4">
         {% include 'base/announcement_component.html' with announcements=right_ads %}
       </div>
