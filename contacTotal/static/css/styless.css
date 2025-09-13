@@ -34,6 +34,20 @@ body {
   left: 0;
 }
 
+@media (min-width: 1200px) {
+  #fullscreen-header { min-height: 100vh; }
+}
+
+@media (max-width: 1199.98px) {
+  #fullscreen-header { min-height: auto !important; padding-bottom: 1rem; }
+  #fullscreen-header main { margin-bottom: 0; }
+}
+
+@media (orientation: portrait) and (min-width: 768px) and (max-width: 1024px) {
+  #fullscreen-header { min-height: auto !important; }
+}
+
+
 .compact-header {
   display: none;
   position: fixed;
