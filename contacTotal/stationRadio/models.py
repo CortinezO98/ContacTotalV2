@@ -144,7 +144,6 @@ class Announcement(models.Model):
         ('bottom', 'Final del contenido'),
     ]
 
-    # --- Identificación / ubicación visual ---
     title = models.CharField(max_length=200, blank=True, null=True)
     position = models.CharField(
         max_length=10,
@@ -154,7 +153,6 @@ class Announcement(models.Model):
         db_index=True,
     )
 
-    # --- Creatividades (prioridad: custom_script > imágenes por breakpoint > fallback image) ---
     custom_script = models.TextField(
         blank=True, null=True,
         help_text="HTML/script del anuncio (tiene prioridad sobre la imagen)"
@@ -164,14 +162,10 @@ class Announcement(models.Model):
     image_tablet  = models.ImageField(upload_to='announcements/tablet/',     blank=True, null=True)
     image_mobile  = models.ImageField(upload_to='announcements/mobile/',     blank=True, null=True)
     link          = models.URLField(blank=True, null=True, help_text="Link a donde redirige el anuncio")
-
-    # --- Visibilidad por tiempo/estado ---
     active       = models.BooleanField(default=True, db_index=True)
     date_created = models.DateTimeField(auto_now_add=True)
     starts_at    = models.DateTimeField(blank=True, null=True)
     ends_at      = models.DateTimeField(blank=True, null=True)
-
-    # --- NUEVO: Independizar por vista ---
     show_in_all = models.BooleanField(
         default=True,
         help_text="Si está activo, el anuncio se muestra en todas las vistas."
@@ -530,7 +524,7 @@ class MainNews(models.Model):
             return self.image.url
         return None
 
-    def _str_(self):
+    def __str__(self):
         return self.title
 
 # Anuncios
@@ -539,7 +533,7 @@ class Anuncio(models.Model):
     titulo = models.CharField(max_length=255, blank=True, null=True, help_text="Opcional: Título o descripción breve del anuncio.")
     link = models.URLField(blank=True, null=True,help_text="A dónde redirige el anuncio al hacer clic sobre la imagen")
     
-    def _str_(self):
+    def __str__(self):
         return self.titulo or "Anuncio"
 
 
