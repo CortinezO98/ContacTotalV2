@@ -272,7 +272,7 @@ def articulo_detail(request, slug):
 #PROGRAMAS/RADIO
 
 def programas(request):
-    query = request.GET.get('q', '')
+    query = (request.GET.get('q') or '').strip()
     if query:
         programas_list = Programa.objects.filter(titulo__icontains=query).order_by('-id')
     else:

@@ -570,19 +570,13 @@ class Banner(models.Model):
 
 # Vista Programa
 class Programa(DirtyFieldsMixin, models.Model):
-    titulo = models.CharField(max_length=200, blank=True, null=True)
+    titulo = models.CharField(max_length=200, blank=True, null=True, db_index=True)
     host = models.CharField(max_length=200, blank=True, null=True)
     duracion = models.CharField(max_length=10, blank=True, null=True, help_text="Ejemplo: 4:47")
     nombre_archivo = models.CharField(max_length=255, blank=True, null=True)
     peso_archivo = models.CharField(max_length=20, blank=True, null=True, help_text="Tamaño del audio (ej: 3.5 MB)")
     url_reproducir = models.URLField(blank=True, null=True, help_text="URL externa de reproducción (opcional)")
-    audio = models.FileField(
-        upload_to='programas/audios/',
-        blank=True,
-        null=True,
-        validators=[FileExtensionValidator(allowed_extensions=['mp3', 'wav', 'ogg', 'm4a'])],
-        help_text="Sube un archivo de audio (.mp3, .wav, .ogg, .m4a)"
-    )
+    audio = models.FileField( upload_to='programas/audios/', blank=True, null=True, validators=[FileExtensionValidator(allowed_extensions=['mp3', 'wav', 'ogg', 'm4a'])], help_text="Sube un archivo de audio (.mp3, .wav, .ogg, .m4a)")
     fecha_creacion = models.DateField(auto_now_add=True)
 
     def __str__(self):
