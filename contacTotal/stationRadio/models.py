@@ -19,7 +19,7 @@ class PodcastSection(models.Model):
     description = models.TextField(blank=True, null=True)
     cover_image = models.ImageField(upload_to='podcasts_covers/', blank=True, null=True)
     date_created = models.DateField(auto_now_add=True)
-    slug = models.SlugField(unique=True, blank=True, editable=False)
+    slug = models.SlugField(unique=True, blank=True, editable=False, max_length=100)
     featured = models.BooleanField(default=False)
 
     class Meta:
@@ -27,9 +27,34 @@ class PodcastSection(models.Model):
         verbose_name_plural = 'Secciones de Podcast'
         ordering = ['-date_created']
 
+    # def save(self, *args, **kwargs):
+    #     if not self.slug:
+    #         self.slug = slugify(self.title)
+    #     super(PodcastSection, self).save(*args, **kwargs)
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            try:
+                # Tomar solo los primeros 80 caracteres del título
+                truncated_title = self.title[:80] if len(self.title) > 80 else self.title
+                base_slug = slugify(truncated_title)
+                
+                # Si el slug está vacío (título con solo caracteres especiales)
+                if not base_slug:
+                    base_slug = f"podcast-seccion-{self.pk or 'nueva'}"
+                
+                # Verificar unicidad
+                slug = base_slug
+                counter = 1
+                while PodcastSection.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                    slug = f"{base_slug}-{counter}"
+                    counter += 1
+                
+                self.slug = slug[:100]  # Asegurar que no exceda max_length
+                
+            except Exception as e:
+                # Fallback slug en caso de error
+                self.slug = f"podcast-seccion-{timezone.now().strftime('%Y%m%d-%H%M%S')}"
+        
         super(PodcastSection, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -480,14 +505,39 @@ class CarouselNews(models.Model):
     image = models.ImageField(upload_to='carousel_news/')
     pie_de_foto       = models.CharField("Pie de foto",max_length=255,blank=True,help_text="Texto descriptivo o pie de foto de la imagen")
     credit = models.CharField("Crédito de la imagen",max_length=255,blank=True,help_text="Autor o fuente de la imagen")
-    slug = models.SlugField(unique=True, blank=True, editable=False)
+    slug = models.SlugField(unique=True, blank=True, editable=False, max_length=100)
 
+    # def save(self, *args, **kwargs):
+    #     if not self.slug:
+    #         self.slug = slugify(self.title)
+    #     super().save(*args, **kwargs)
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            try:
+                # Tomar solo los primeros 80 caracteres del título
+                truncated_title = self.title[:80] if len(self.title) > 80 else self.title
+                base_slug = slugify(truncated_title)
+                
+                # Si el slug está vacío (título con solo caracteres especiales)
+                if not base_slug:
+                    base_slug = f"noticia-{self.pk or 'nueva'}"
+                
+                # Verificar unicidad
+                slug = base_slug
+                counter = 1
+                while CarouselNews.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                    slug = f"{base_slug}-{counter}"
+                    counter += 1
+                
+                self.slug = slug[:100]  # Asegurar que no exceda max_length
+                
+            except Exception as e:
+                # Fallback slug en caso de error
+                self.slug = f"noticia-{timezone.now().strftime('%Y%m%d-%H%M%S')}"
+        
         super().save(*args, **kwargs)
 
-    def _str_(self):
+    def __str__(self):  # Corregido: doble underscore
         return self.title
 
 
@@ -502,11 +552,33 @@ class MainNews(models.Model):
     author = models.CharField(max_length=255)
     publication_date = models.DateField()
     short_description = models.TextField(help_text="Descripción corta de la noticia")
-    slug = models.SlugField(unique=True, blank=True, editable=False)
+    slug = models.SlugField(unique=True, blank=True, editable=False, max_length=100)
 
+    # def save(self, *args, **kwargs):
+    #     if not self.slug:
+    #         self.slug = slugify(self.title)
+    #     super().save(*args, **kwargs)
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            try:
+                # Tomar solo los primeros 80 caracteres del título
+                truncated_title = self.title[:80] if len(self.title) > 80 else self.title
+                base_slug = slugify(truncated_title)
+                
+                if not base_slug:
+                    base_slug = f"noticia-principal-{self.pk or 'nueva'}"
+                
+                slug = base_slug
+                counter = 1
+                while MainNews.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                    slug = f"{base_slug}-{counter}"
+                    counter += 1
+                
+                self.slug = slug[:100]
+                
+            except Exception as e:
+                self.slug = f"noticia-principal-{timezone.now().strftime('%Y%m%d-%H%M%S')}"
+        
         super().save(*args, **kwargs)
 
     def media_source(self):
