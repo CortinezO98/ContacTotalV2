@@ -111,7 +111,13 @@
               <h3>{{ main_news.title }}</h3>
               {% if main_news.video or main_news.video_link %}
               <div class="video-container">
-                <iframe src="{{ main_news.media_source }}" title="Video principal" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe src="{{ main_news.media_source }}{% if '?' in main_news.media_source %}&{% else %}?{% endif %}enablejsapi=1" 
+                        title="Video principal" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        allowfullscreen
+                        referrerpolicy="strict-origin-when-cross-origin">
+                </iframe>
               </div>
               {% elif main_news.image %}
               <img src="{{ main_news.image.url }}" alt="Imagen principal" class="img-fluid">

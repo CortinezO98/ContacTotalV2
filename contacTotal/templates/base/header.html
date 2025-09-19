@@ -96,10 +96,11 @@
                             </video>
                         {% elif main_video.video_link %}
                             <!-- URL de YouTube embebida -->
-                            <iframe src="{{ main_video.video_link }}{% if '?' in main_video.video_link %}&{% else %}?{% endif %}autoplay=1&mute=1" 
+                            <iframe src="{{ main_video.video_link }}{% if '?' in main_video.video_link %}&{% else %}?{% endif %}autoplay=1&mute=1&enablejsapi=1" 
                                     title="Video principal" 
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                                    allowfullscreen>
+                                    allowfullscreen
+                                    referrerpolicy="strict-origin-when-cross-origin">
                             </iframe>
                         {% endif %}
                     {% endif %}
