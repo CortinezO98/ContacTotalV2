@@ -110,12 +110,55 @@
     const text  = body.innerText.trim();
     let utter = null, state = 'stopped';
 
+    // Función para obtener la mejor voz en español
+    function getBestSpanishVoice() {
+      const voices = speechSynthesis.getVoices();
+      
+      // Prioridad de búsqueda de voces en español
+      const spanishPriority = [
+        'es-ES', // Español de España
+        'es-MX', // Español de México
+        'es-AR', // Español de Argentina
+        'es-CO', // Español de Colombia
+        'es-CL', // Español de Chile
+        'es-PE', // Español de Perú
+        'es-VE', // Español de Venezuela
+        'es-US', // Español de Estados Unidos
+        'es'     // Español genérico
+      ];
+
+      // Buscar voz por prioridad de idioma
+      for (const lang of spanishPriority) {
+        const voice = voices.find(v => 
+          v.lang && (v.lang === lang || v.lang.startsWith(lang + '-'))
+        );
+        if (voice) {
+          console.log(`Voz seleccionada: ${voice.name} (${voice.lang})`);
+          return voice;
+        }
+      }
+
+      // Si no encuentra voces específicas, buscar cualquier voz que contenga 'es'
+      const fallbackVoice = voices.find(v => 
+        v.lang && v.lang.toLowerCase().includes('es')
+      );
+      
+      if (fallbackVoice) {
+        console.log(`Voz fallback: ${fallbackVoice.name} (${fallbackVoice.lang})`);
+        return fallbackVoice;
+      }
+
+      // Última opción: usar la primera voz disponible
+      console.log('No se encontró voz en español, usando voz por defecto');
+      return voices[0] || null;
+    }
+
     function updateButton() {
       if (state === 'stopped') {
         btn.innerHTML = '<i class="bi bi-volume-up-fill"></i> Escuchar Noticia';
       } else if (state === 'playing') {
         btn.innerHTML = '<i class="bi bi-pause-fill"></i> Pausar';
-      } else {
+      } else if (state === 'paused') {
         btn.innerHTML = '<i class="bi bi-play-fill"></i> Reanudar';
       }
     }
@@ -123,21 +166,71 @@
     btn.addEventListener('click', () => {
       if (!utter) {
         utter = new SpeechSynthesisUtterance(text);
-        utter.rate = 1; utter.pitch = 1;
-        const voices = speechSynthesis.getVoices();
-        utter.voice = voices.find(v => v.lang && v.lang.startsWith('es')) || voices[0];
-        utter.onend = () => { state = 'stopped'; updateButton(); utter = null; };
+        utter.rate = 1; 
+        utter.pitch = 1;
+        utter.lang = 'es-ES'; // Establecer idioma explícitamente
+        
+        // Esperar a que las voces estén cargadas
+        if (speechSynthesis.getVoices().length === 0) {
+          speechSynthesis.addEventListener('voiceschanged', () => {
+            utter.voice = getBestSpanishVoice();
+          });
+        } else {
+          utter.voice = getBestSpanishVoice();
+        }
+        
+        utter.onend = () => { 
+          state = 'stopped'; 
+          updateButton(); 
+          utter = null; 
+        };
+        
         speechSynthesis.speak(utter);
         state = 'playing';
       } else if (state === 'playing') {
         speechSynthesis.pause();
         state = 'paused';
-      } else {
-        speechSynthesis.resume();
+      } else if (state === 'paused') {
+        // Crear nueva utterance en lugar de reanudar
+        speechSynthesis.cancel();
+        utter = new SpeechSynthesisUtterance(text);
+        utter.rate = 1; 
+        utter.pitch = 1;
+        utter.lang = 'es-ES';
+        utter.voice = getBestSpanishVoice();
+        utter.onend = () => { 
+          state = 'stopped'; 
+          updateButton(); 
+          utter = null; 
+        };
+        speechSynthesis.speak(utter);
         state = 'playing';
       }
       updateButton();
     });
+
+    // Cargar voces al inicializar
+    if (speechSynthesis.getVoices().length === 0) {
+      speechSynthesis.addEventListener('voiceschanged', () => {
+        console.log('Voces disponibles:', speechSynthesis.getVoices().map(v => `${v.name} (${v.lang})`));
+      });
+    }
+
+    // Detener TTS cuando el usuario sale de la página
+    window.addEventListener('beforeunload', () => {
+      speechSynthesis.cancel();
+    });
+
+    // Detener TTS cuando el usuario cambia de pestaña
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && state !== 'stopped') {
+        speechSynthesis.cancel();
+        state = 'stopped';
+        utter = null;
+        updateButton();
+      }
+    });
   });
 </script>
+
 {% endblock %}
