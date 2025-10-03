@@ -122,9 +122,9 @@
               {% elif main_news.image %}
               <img src="{{ main_news.image.url }}" alt="Imagen principal" class="img-fluid">
               {% endif %}
+              <p>{{ main_news.author }} | {{ main_news.publication_date|date:"d F Y" }}</p>
+              <p>{{ main_news.short_description|truncatewords:30 }}</p>
             </a>
-            <p>{{ main_news.author }} | {{ main_news.publication_date|date:"d F Y" }}</p>
-            <p>{{ main_news.short_description|truncatewords:30 }}</p>
           </div>
           {% endif %}
         </div>
