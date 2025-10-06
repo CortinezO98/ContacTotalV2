@@ -20,7 +20,6 @@ from itertools import chain
 
 
 def IndexView(request):
-    latest_edicion = EdicionRevista.objects.all().order_by('-fecha_publicacion', '-id').first()
     main_video = MainVideo.objects.first()
     anuncios = Anuncio.objects.all()
     carousel_news_qs = CarouselNews.objects.all().order_by('-publication_date')[:6]
@@ -113,7 +112,6 @@ def IndexView(request):
                           next_end_schedule.end_time.second) * 1000
     
     context = {
-        'latest_edicion': latest_edicion,
         'main_video': main_video,
         'anuncios': anuncios,
         'carousel_news': carousel_news,
@@ -166,7 +164,7 @@ def noticia_detalle(request, slug):
 
 #REVISTA
 def revista(request):
-    ediciones_list = EdicionRevista.objects.all().order_by('-fecha_publicacion', '-id')
+    ediciones_list = (EdicionRevista.objects.filter(status='published').order_by('-fecha_publicacion', '-id'))
     paginator = Paginator(ediciones_list, 12)
     page_number = request.GET.get('page', 1)
     try:
@@ -203,11 +201,11 @@ def revista(request):
 #DETALLE REVISTA
 def revista_detail(request, slug):
     """Detalle de una edición con su artículo principal y secundarios"""
-    edicion     = get_object_or_404(EdicionRevista, slug=slug)
+    edicion = get_object_or_404(EdicionRevista, slug=slug, status='published')
     if edicion.is_pdf_only():
         return redirect(edicion.pdf.url)
 
-    articulos   = edicion.articulos.all()
+    articulos   = edicion.articulos.filter(status='published')
     principal   = articulos.filter(es_principal=True).first()
     secundarios = articulos.filter(es_principal=False)
 
@@ -234,7 +232,7 @@ def revista_detail(request, slug):
 
 #ARTICULO
 def articulo_detail(request, slug):
-    articulo = get_object_or_404(Articulo, slug=slug)
+    articulo = get_object_or_404(Articulo,slug=slug,status='published',edicion__status='published')
     parrafos = articulo.contenido.split('\n\n') 
     imagenes = list(articulo.imagenes.all().order_by('orden'))
     contenido_mezclado = []

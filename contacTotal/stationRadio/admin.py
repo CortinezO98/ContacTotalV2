@@ -92,7 +92,11 @@ class PodcastVideoAdmin(admin.ModelAdmin):
 
 @admin.action(description="📢 Marcar como Publicado")
 def make_published(modeladmin, request, queryset):
-    queryset.update(status='published')
+    for obj in queryset:
+        if obj.status != 'published':
+            obj.status = 'published'
+            obj.save() 
+
 
 
 @admin.action(description="🚫 Marcar como Borrador")

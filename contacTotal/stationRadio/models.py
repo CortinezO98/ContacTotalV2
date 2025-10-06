@@ -285,6 +285,14 @@ class EdicionRevista(TimeStampedModel):
                 slug = f"{base_slug}-{num}"
                 num += 1
             self.slug = slug
+        old_status = None
+        if self.pk:
+            old_status = (
+                EdicionRevista.objects.filter(pk=self.pk).values_list('status', flat=True).first()
+            )
+        if self.status == 'published' and (old_status != 'published'):
+            self.fecha_publicacion = timezone.now().date()
+            
         super().save(*args, **kwargs)
 
     def is_pdf_only(self):
