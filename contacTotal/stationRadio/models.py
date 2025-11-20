@@ -588,7 +588,8 @@ class MainNews(models.Model):
                 self.slug = f"noticia-principal-{timezone.now().strftime('%Y%m%d-%H%M%S')}"
         
         super().save(*args, **kwargs)
-
+        
+    @property
     def media_source(self):
         """
         Devuelve la fuente del medio:

@@ -38,12 +38,19 @@
         <!-- Video o imagen -->
         {% if news_item.video or news_item.video_link %}
           <div class="ratio ratio-16x9 mb-4">
-            <iframe src="{{ news_item.media_source }}" title="Video de la noticia" allowfullscreen></iframe>
+            <iframe
+              src="{{ news_item.media_source }}{% if '?' in news_item.media_source %}&{% else %}?{% endif %}enablejsapi=1"
+              title="Video de la noticia"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+              referrerpolicy="strict-origin-when-cross-origin">
+            </iframe>
           </div>
         {% elif news_item.image %}
           <div class="text-center mb-4">
             <img src="{{ news_item.image.url }}" alt="Imagen de la noticia" class="img-fluid rounded"
-                 style="max-height: 500px; object-fit: cover;">
+                style="max-height: 500px; object-fit: cover;">
           </div>
 
           {% if news_item.pie_de_foto or news_item.credit %}
@@ -53,6 +60,7 @@
             </p>
           {% endif %}
         {% endif %}
+
 
         <button id="tts-control" class="btn btn-outline-primary btn-sm mb-2">
           <i class="bi bi-volume-up-fill"></i> Escuchar Noticia
