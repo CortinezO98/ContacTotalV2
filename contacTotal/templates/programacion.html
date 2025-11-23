@@ -6,88 +6,101 @@
 {% endblock %}
 
 {% block main %}
-<div class="container-fluid mt-4" aria-labelledby="programacion-title">
-  <div class="row">
-    <!-- Anuncios Izquierda (solo md y arriba) -->
-    <aside class="col-2 d-none d-lg-flex flex-column align-items-center">
-      <div class="sticky-top">
-        {% include 'base/announcement_component.html' with announcements=left_ads %}
+
+<!-- Contenedor que neutraliza el display:flex del main global -->
+<div style="width: 100%; display: block;">
+  <div class="container-fluid mt-4" aria-labelledby="programacion-title">
+    <div class="row">
+
+      <!-- Anuncios Izquierda (solo md y arriba) -->
+      <aside class="col-2 d-none d-lg-flex flex-column align-items-center">
+        <div class="sticky-top">
+          {% include 'base/announcement_component.html' with announcements=left_ads %}
+        </div>
+      </aside>
+
+      <!-- Bloque móvil anuncios -->
+      <div class="d-lg-none my-3">
+        <div class="mb-3">
+          {% include 'base/announcement_component.html' with announcements=left_ads %}
+        </div>
       </div>
-    </aside>
 
-      {# ====== Bloque de anuncios SOLO en móvil ====== #}
-    <div class="d-lg-none my-3">
-      <div class="mb-3">
-        {% include 'base/announcement_component.html' with announcements=left_ads %}
-      </div>
-    </div>
-    <!-- Contenido principal -->
-    <section class="col-12 col-lg-8">
-      <header class="text-center mb-3">
-        <h1 id="programacion-title" class="fw-bold mb-1">Programación</h1>
-        <p class="text-muted mb-1">
-          En esta sección encontrarás la programación de nuestra radio, los últimos episodios de nuestro podcast, las noticias más relevantes y, cuando haya novedades, todo lo nuevo al instante.
-        </p>
-        <p class="text-muted mb-0">Horarios mostrados según tu zona: <strong>{{ base_tz_label }}</strong>.</p>
-      </header>
+      <!-- Contenido principal -->
+      <section class="col-12 col-lg-8">
+        <header class="text-center mb-3">
+          <h1 id="programacion-title" class="fw-bold mb-1">Programación</h1>
+          <p class="text-muted mb-1">
+            En esta sección encontrarás la programación de nuestra radio, los últimos episodios de nuestro podcast, las noticias más relevantes y, cuando haya novedades, todo lo nuevo al instante.
+          </p>
+          <p class="text-muted mb-0">Horarios mostrados según tu zona: <strong>{{ base_tz_label }}</strong>.</p>
+        </header>
 
+        <!-- Parrilla -->
+        <div class="schedule border rounded shadow-sm" style="--rows: {{ rows }};">
+          <div class="schedule__scroll" tabindex="0" aria-describedby="schedule-help">
 
-      <!-- Parrilla SIN columna de horas -->
-      <div class="schedule border rounded shadow-sm" style="--rows: {{ rows }};">
-        <div class="schedule__scroll" tabindex="0" aria-describedby="schedule-help">
+            <!-- Encabezados -->
+            <div class="schedule__header">
+              {% for col in columns %}
+                <div class="schedule__dayHead {% if col.is_today %}is-today{% endif %}">
+                  {{ col.label }}
+                </div>
+              {% endfor %}
+            </div>
 
-          <!-- Encabezados (solo días) -->
-          <div class="schedule__header">
-            {% for col in columns %}
-              <div class="schedule__dayHead {% if col.is_today %}is-today{% endif %}">{{ col.label }}</div>
-            {% endfor %}
+            <!-- Grilla -->
+            <div class="schedule__grid">
+              {% for col in columns %}
+                <div class="schedule__dayCol {% if col.is_today %}is-today{% endif %}"
+                     style="--lanes: {{ col.lanes }};">
+                     
+                  {% if col.is_today and show_now_line %}
+                    <div class="schedule__nowLine" style="top: {{ now_top_pct }}%;"></div>
+                  {% endif %}
+
+                  {% for ev in col.events %}
+                    <article class="schedule__event"
+                             style="grid-row: {{ ev.row_start }} / {{ ev.row_end }}; grid-column: {{ ev.lane|add:1 }};">
+                      {% if ev.image_url %}
+                        <div class="schedule__eventBg" style="background-image:url('{{ ev.image_url }}');"></div>
+                      {% endif %}
+                      <div class="schedule__eventBody">
+                        <h3 class="schedule__eventTitle">{{ ev.title }}</h3>
+                        <p class="schedule__eventTime mb-0">
+                          {% if ev.start_label and ev.end_label %}
+                            {{ ev.start_label }} – {{ ev.end_label }}
+                          {% else %}Horario no disponible{% endif %}
+                        </p>
+                      </div>
+                    </article>
+                  {% endfor %}
+                </div>
+              {% endfor %}
+            </div>
           </div>
+          <p id="schedule-help" class="visually-hidden">
+            Usa desplazamiento horizontal para ver todos los días en pantallas pequeñas.
+          </p>
+        </div>
 
-          <!-- Grilla: 7 columnas (días); cada día es un GRID por filas de 30min -->
-          <div class="schedule__grid">
-            {% for col in columns %}
-              <div class="schedule__dayCol {% if col.is_today %}is-today{% endif %}"
-                   style="--lanes: {{ col.lanes }};">
-                {% if col.is_today and show_now_line %}
-                  <div class="schedule__nowLine" style="top: {{ now_top_pct }}%;"></div>
-                {% endif %}
-
-                {% for ev in col.events %}
-                  <article class="schedule__event"
-                           style="grid-row: {{ ev.row_start }} / {{ ev.row_end }}; grid-column: {{ ev.lane|add:1 }};">
-                    {% if ev.image_url %}
-                      <div class="schedule__eventBg" style="background-image:url('{{ ev.image_url }}');"></div>
-                    {% endif %}
-                    <div class="schedule__eventBody">
-                      <h3 class="schedule__eventTitle">{{ ev.title }}</h3>
-                      <p class="schedule__eventTime mb-0">
-                        {% if ev.start_label and ev.end_label %}
-                          {{ ev.start_label }} – {{ ev.end_label }}
-                        {% else %}Horario no disponible{% endif %}
-                      </p>
-                    </div>
-                  </article>
-                {% empty %}{% endfor %}
-              </div>
-            {% endfor %}
+        <!-- Anuncios móvil -->
+        <div class="d-lg-none my-3">
+          <div>
+            {% include 'base/announcement_component.html' with announcements=right_ads %}
           </div>
         </div>
-        <p id="schedule-help" class="visually-hidden">Usa desplazamiento horizontal para ver todos los días en pantallas pequeñas.</p>
-      </div>
-      <div class="d-lg-none my-3">
-        <div>
+
+      </section>
+
+      <!-- Anuncios derecha -->
+      <aside class="col-2 d-none d-lg-flex flex-column align-items-center">
+        <div class="sticky-top">
           {% include 'base/announcement_component.html' with announcements=right_ads %}
         </div>
-      </div>
-      <!-- /Parrilla -->
-    </section>
+      </aside>
 
-    <!-- Anuncios Derecha (solo md y arriba) -->
-    <aside class="col-2 d-none d-lg-flex flex-column align-items-center">
-      <div class="sticky-top">
-        {% include 'base/announcement_component.html' with announcements=right_ads %}
-      </div>
-    </aside>
+    </div>
   </div>
 </div>
 

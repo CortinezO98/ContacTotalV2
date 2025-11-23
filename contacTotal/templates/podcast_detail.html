@@ -152,24 +152,23 @@
         
         <div class="row g-3">
           {% for video in videos %}
-            <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
-              <div class="card h-100 shadow-sm">
-                <div class="ratio ratio-16x9">
-                  {% if video.video_link %}
-                    <iframe
-                      src="{{ video.video_link }}{% if '?' in video.video_link %}&{% else %}?{% endif %}autoplay=1&mute=1&enablejsapi=1"
-                      title="Video podcast - {{ video.title }}"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      allowfullscreen
-                      referrerpolicy="strict-origin-when-cross-origin">
-                    </iframe>
-                  {% else %}
-                    <img src="{% static 'img/default-podcast.png' %}" class="img-fluid" alt="{{ video.title }}">
-                  {% endif %}
-                </div>
-                <div class="card-body p-2">
-                  <h6 class="card-title mb-0 text-truncate">{{ video.title }}</h6>
-                </div>
+            {# Mantengo TU diseño original: una tarjeta por fila (sin col-*) #}
+            <div class="card h-100 shadow-sm">
+              <div class="ratio ratio-16x9">
+                {% if video.video_link %}
+                  <iframe
+                    src="{{ video.video_link }}{% if '?' in video.video_link %}&{% else %}?{% endif %}autoplay=1&mute=1&enablejsapi=1"
+                    title="Video podcast - {{ video.title }}"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen
+                    referrerpolicy="strict-origin-when-cross-origin">
+                  </iframe>
+                {% else %}
+                  <img src="{% static 'img/default-podcast.png' %}" class="img-fluid" alt="{{ video.title }}">
+                {% endif %}
+              </div>
+              <div class="card-body p-2">
+                <h6 class="card-title mb-0 text-truncate">{{ video.title }}</h6>
               </div>
             </div>
           {% empty %}
