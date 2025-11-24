@@ -103,6 +103,38 @@
 
                     {% endfor %}
                   </div>
+
+                  {# Paginación Audios #}
+                  <nav aria-label="Paginación audios" class="mt-4">
+                    <ul class="pagination justify-content-center mb-0">
+                      <li class="page-item{% if not audios.has_previous %} disabled{% endif %}">
+                        {% if audios.has_previous %}
+                          <a class="page-link" href="?audio_page={{ audios.previous_page_number }}&video_page={{ video_page }}">
+                            Anterior
+                          </a>
+                        {% else %}
+                          <span class="page-link">Anterior</span>
+                        {% endif %}
+                      </li>
+                      {% for num in audios.paginator.page_range %}
+                        <li class="page-item{% if audios.number == num %} active{% endif %}">
+                          <a class="page-link" href="?audio_page={{ num }}&video_page={{ video_page }}">
+                            {{ num }}
+                          </a>
+                        </li>
+                      {% endfor %}
+                      <li class="page-item{% if not audios.has_next %} disabled{% endif %}">
+                        {% if audios.has_next %}
+                          <a class="page-link" href="?audio_page={{ audios.next_page_number }}&video_page={{ video_page }}">
+                            Siguiente
+                          </a>
+                        {% else %}
+                          <span class="page-link">Siguiente</span>
+                        {% endif %}
+                      </li>
+                    </ul>
+                  </nav>
+
                 {% else %}
                   <p class="text-muted">No hay episodios disponibles.</p>
                 {% endif %}
@@ -149,8 +181,43 @@
 
               </div>
             </div>
+          {% empty %}
+            <div class="col-12">
+              <p class="text-muted">No hay videos disponibles.</p>
+            </div>
           {% endfor %}
         </div>
+
+        {# Paginación Videos #}
+        <nav aria-label="Paginación videos" class="mt-4">
+          <ul class="pagination justify-content-center mb-0">
+            <li class="page-item{% if not videos.has_previous %} disabled{% endif %}">
+              {% if videos.has_previous %}
+                <a class="page-link" href="?video_page={{ videos.previous_page_number }}&audio_page={{ audio_page }}">
+                  Anterior
+                </a>
+              {% else %}
+                <span class="page-link">Anterior</span>
+              {% endif %}
+            </li>
+            {% for num in videos.paginator.page_range %}
+              <li class="page-item{% if videos.number == num %} active{% endif %}">
+                <a class="page-link" href="?video_page={{ num }}&audio_page={{ audio_page }}">
+                  {{ num }}
+                </a>
+              </li>
+            {% endfor %}
+            <li class="page-item{% if not videos.has_next %} disabled{% endif %}">
+              {% if videos.has_next %}
+                <a class="page-link" href="?video_page={{ videos.next_page_number }}&audio_page={{ audio_page }}">
+                  Siguiente
+                </a>
+              {% else %}
+                <span class="page-link">Siguiente</span>
+              {% endif %}
+            </li>
+          </ul>
+        </nav>
 
         {# ANUNCIOS FIN (DESKTOP) #}
         {% if bottom_ads %}
