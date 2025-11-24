@@ -10,151 +10,125 @@
 <div class="container-xl mt-5 bg-light px-3" aria-labelledby="podcast-title">
   <div class="row">
 
-    {# Anuncios izquierda (solo md+) #}
-    <aside class="col-md-2 d-none d-md-block">
+    {# ANUNCIOS IZQUIERDA — SOLO EN ≥992px (iPad Pro / Desktop) #}
+    <aside class="col-lg-2 d-none d-lg-block">
       <div class="sticky-top">
         {% include 'base/announcement_component.html' with announcements=left_ads %}
       </div>
     </aside>
 
-    {# Contenido principal #}
-    <section class="col-12 col-md-8">
+    {# CONTENIDO PRINCIPAL #}
+    <section class="col-12 col-lg-8">
       <div class="bg-white p-4 rounded shadow-sm">
         
-        {# Encabezado de Podcast #}
+        {# ENCABEZADO #}
         <div class="row align-items-center mb-5">
-          {# Imagen primero en móviles, después en lg #}
+
+          {# Imagen #}
           <div class="col-12 col-lg-4 order-1 order-lg-2 text-center text-lg-end mb-4 mb-lg-0">
             {% if section.cover_image %}
               <img src="{{ section.cover_image.url }}" alt="{{ section.title }}" class="img-fluid"
                    style="width:150px; height:150px; object-fit:cover;">
             {% else %}
-              <img src="{% static 'img/default-podcast.png' %}" alt="{{ section.title }}" class="img-fluid"
+              <img src="{% static 'img/default-podcast.png' %}" class="img-fluid"
                    style="width:150px; height:150px; object-fit:cover;">
             {% endif %}
           </div>
-        
-          {# Descripción después en móviles, antes en lg #}
+
+          {# Descripción #}
           <div class="col-12 col-lg-8 order-2 order-lg-1">
             <h1 id="podcast-title" class="fw-bold">{{ section.title }}</h1>
             <p class="text-muted" style="text-align: justify;">{{ section.description }}</p>
           </div>
+
         </div>
 
-        {# ===== Bloque de anuncios SOLO en móvil (antes del contenido) ===== #}
-        <div class="d-md-none my-3">
-          <div class="mb-3">
-            {% include 'base/announcement_component.html' with announcements=left_ads %}
-          </div>
+        {# ANUNCIOS SOLO MÓVIL/TABLET ( < 992px ) #}
+        <div class="d-lg-none my-3">
+          {% include 'base/announcement_component.html' with announcements=left_ads %}
         </div>
 
-        {# Plataformas y Episodios #}
+        {# BLOQUE PLATAFORMAS + AUDIOS #}
         <div class="row gx-4 mb-5">
-          {# Plataformas: siempre visible #}
+
+          {# PLATAFORMAS #}
           <aside class="col-12 col-lg-4 mb-4 mb-lg-0">
             <div class="card shadow-sm mb-4">
               <div class="card-body">
                 <h5 class="card-title">Sigue a este podcast en:</h5>
                 <div class="d-grid gap-3">
                   <a href="https://open.spotify.com/" target="_blank" class="btn btn-outline-secondary text-start">
-                    <img src="{% static 'img/spotify.png' %}" alt="Spotify" class="me-2" style="width:30px;">
-                    Spotify
+                    <img src="{% static 'img/spotify.png' %}" class="me-2" style="width:30px;"> Spotify
                   </a>
-                  <a href="https://podcasts.apple.com/" target="_blank" class="btn btn-outline-secondary text-start">
-                    <img src="{% static 'img/apple.png' %}" alt="Apple Podcasts" class="me-2" style="width:30px;">
-                    Apple Podcasts
+                  <a href="https://podcasts.apple.com/" class="btn btn-outline-secondary text-start" target="_blank">
+                    <img src="{% static 'img/apple.png' %}" class="me-2" style="width:30px;"> Apple Podcasts
                   </a>
-                  <a href="https://podcasts.google.com/" target="_blank" class="btn btn-outline-secondary text-start">
-                    <img src="{% static 'img/youtube.png' %}" alt="YouTube Podcasts" class="me-2" style="width:32px;">
-                    YouTube
+                  <a href="https://podcasts.google.com/" class="btn btn-outline-secondary text-start" target="_blank">
+                    <img src="{% static 'img/youtube.png' %}" class="me-2" style="width:32px;"> YouTube
                   </a>
-                  <a href="https://music.amazon.com/podcasts" target="_blank" class="btn btn-outline-secondary text-start">
-                    <img src="{% static 'img/amazon.png' %}" alt="Amazon Music" class="me-2" style="width:50px;">
-                    Amazon Music
+                  <a href="https://music.amazon.com/podcasts" class="btn btn-outline-secondary text-start" target="_blank">
+                    <img src="{% static 'img/amazon.png' %}" class="me-2" style="width:50px;"> Amazon Music
                   </a>
                 </div>
               </div>
             </div>
           </aside>
 
-          {# Episodios de Audio #}
+          {# AUDIOS #}
           <div class="col-12 col-lg-8">
             <div class="card shadow-sm h-100">
               <div class="card-body">
+
                 <h5 class="mb-3">Episodios de Audio</h5>
 
                 {% if audios %}
-                  <div class="list-group audio-list" style="max-height:400px; overflow-y:auto;">
+                  <div class="list-group audio-list">
                     {% for audio in audios %}
-                      <div class="list-group-item d-flex flex-column flex-md-row align-items-start align-items-md-center gap-3">
-                        <audio controls class="flex-shrink-0 w-100 w-md-auto" style="max-width:300px;">
+
+                      <div class="list-group-item audio-item d-flex gap-3">
+
+                        <audio controls class="audio-player">
                           <source src="{{ audio.audio_file.url }}" type="audio/mpeg">
                           Tu navegador no soporta audio.
                         </audio>
+
                         <div class="flex-grow-1">
-                          <div class="fw-semibold text-truncate">{{ audio.title }}</div>
+                          <div class="audio-title">{{ audio.title }}</div>
                           {% if audio.duration %}
                             <small class="text-secondary">{{ audio.duration }}</small>
                           {% endif %}
                         </div>
+
                       </div>
+
                     {% endfor %}
                   </div>
-
-                  {# Paginación Audios #}
-                  <nav aria-label="Paginación audios" class="mt-4">
-                    <ul class="pagination justify-content-center mb-0">
-                      <li class="page-item{% if not audios.has_previous %} disabled{% endif %}">
-                        {% if audios.has_previous %}
-                          <a class="page-link" href="?audio_page={{ audios.previous_page_number }}&video_page={{ video_page }}">
-                            Anterior
-                          </a>
-                        {% else %}
-                          <span class="page-link">Anterior</span>
-                        {% endif %}
-                      </li>
-                      {% for num in audios.paginator.page_range %}
-                        <li class="page-item{% if audios.number == num %} active{% endif %}">
-                          <a class="page-link" href="?audio_page={{ num }}&video_page={{ video_page }}">
-                            {{ num }}
-                          </a>
-                        </li>
-                      {% endfor %}
-                      <li class="page-item{% if not audios.has_next %} disabled{% endif %}">
-                        {% if audios.has_next %}
-                          <a class="page-link" href="?audio_page={{ audios.next_page_number }}&video_page={{ video_page }}">
-                            Siguiente
-                          </a>
-                        {% else %}
-                          <span class="page-link">Siguiente</span>
-                        {% endif %}
-                      </li>
-                    </ul>
-                  </nav>
                 {% else %}
                   <p class="text-muted">No hay episodios disponibles.</p>
                 {% endif %}
+
               </div>
             </div>
           </div>
+
         </div>
 
-        {# Anuncio inline (solo md+) #}
+        {# ANUNCIOS INLINE (DESKTOP/TABLET) #}
         {% if inline_ads %}
           <div class="my-4 d-none d-md-block">
             {% include 'base/announcement_component.html' with announcements=inline_ads %}
           </div>
         {% endif %}
 
-        {# Sección de Videos #}
+        {# VIDEOS #}
         <hr class="my-5">
         <h3 class="mb-4">{{ section.title }} – Video</h3>
-        
+
         <div class="row g-3">
           {% for video in videos %}
-            {# Mantengo el comportamiento actual: cards a ancho completo dentro del row #}
             <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
               <div class="card h-100 shadow-sm">
+
                 <div class="ratio ratio-16x9">
                   {% if video.video_link %}
                     <iframe
@@ -165,71 +139,36 @@
                       referrerpolicy="strict-origin-when-cross-origin">
                     </iframe>
                   {% else %}
-                    <img src="{% static 'img/default-podcast.png' %}" class="img-fluid" alt="{{ video.title }}">
+                    <img src="{% static 'img/default-podcast.png' %}" class="img-fluid">
                   {% endif %}
                 </div>
+
                 <div class="card-body p-2">
                   <h6 class="card-title mb-0 text-truncate">{{ video.title }}</h6>
                 </div>
+
               </div>
-            </div>
-          {% empty %}
-            <div class="col-12">
-              <p class="text-muted">No hay videos disponibles.</p>
             </div>
           {% endfor %}
         </div>
 
-        {# Paginación Videos #}
-        <nav aria-label="Paginación videos" class="mt-4">
-          <ul class="pagination justify-content-center mb-0">
-            <li class="page-item{% if not videos.has_previous %} disabled{% endif %}">
-              {% if videos.has_previous %}
-                <a class="page-link" href="?video_page={{ videos.previous_page_number }}&audio_page={{ audio_page }}">
-                  Anterior
-                </a>
-              {% else %}
-                <span class="page-link">Anterior</span>
-              {% endif %}
-            </li>
-            {% for num in videos.paginator.page_range %}
-              <li class="page-item{% if videos.number == num %} active{% endif %}">
-                <a class="page-link" href="?video_page={{ num }}&audio_page={{ audio_page }}">
-                  {{ num }}
-                </a>
-              </li>
-            {% endfor %}
-            <li class="page-item{% if not videos.has_next %} disabled{% endif %}">
-              {% if videos.has_next %}
-                <a class="page-link" href="?video_page={{ videos.next_page_number }}&audio_page={{ audio_page }}">
-                  Siguiente
-                </a>
-              {% else %}
-                <span class="page-link">Siguiente</span>
-              {% endif %}
-            </li>
-          </ul>
-        </nav>
-
-        {# Anuncio al final (solo md+) #}
+        {# ANUNCIOS FIN (DESKTOP) #}
         {% if bottom_ads %}
-          <div class="mt-5 text-center d-none d-md-block">
+          <div class="mt-5 text-center d-none d-lg-block">
             {% include 'base/announcement_component.html' with announcements=bottom_ads %}
           </div>
         {% endif %}
 
-        {# Bloque de anuncios SOLO en móvil (después del contenido) #}
-        <div class="d-md-none my-3">
-          <div>
-            {% include 'base/announcement_component.html' with announcements=right_ads %}
-          </div>
+        {# ANUNCIOS SOLO MÓVIL/TABLET #}
+        <div class="d-lg-none my-3">
+          {% include 'base/announcement_component.html' with announcements=right_ads %}
         </div>
 
       </div>
     </section>
 
-    {# Anuncios derecha (solo md+) #}
-    <aside class="col-md-2 d-none d-md-block">
+    {# ANUNCIOS DERECHA — SOLO ≥992px #}
+    <aside class="col-lg-2 d-none d-lg-block">
       <div class="sticky-top">
         {% include 'base/announcement_component.html' with announcements=right_ads %}
       </div>
@@ -240,6 +179,7 @@
 
 <style>
 
+/************ FIX GLOBAL DEL MAIN ************/
 main.flex-fill {
   display: block !important;
   max-width: 100% !important;
@@ -247,19 +187,54 @@ main.flex-fill {
   padding: 0 !important;
 }
 
-/* LISTA de audios en móvil: que no se corte el scroll vertical */
-@media (max-width: 767.98px) {
-  .audio-list {
-    max-height: none !important;
-    overflow-y: visible !important;
+/************ AUDIOS ************/
+/* Player siempre con buen ancho */
+.audio-player {
+  width: 260px;
+  max-width: 100%;
+}
+
+/* Títulos largos siempre legibles */
+.audio-title {
+  font-weight: 600;
+  white-space: normal !important;
+  word-break: break-word;
+  line-height: 1.2;
+}
+
+/************ iPad mini / iPad Air (768–991px) ************/
+@media (min-width: 768px) and (max-width: 991.98px) {
+
+  /* Anuncios se vuelven de estilo móvil */
+  .d-md-block {
+    display: none !important;
+  }
+
+  /* Audio items: player arriba y texto abajo */
+  .audio-item {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  .audio-player {
+    width: 100% !important;
   }
 }
 
-/* Evitar que los títulos largos se desborden del contenedor */
-.audio-list .fw-semibold.text-truncate {
-  white-space: normal !important;
-  word-break: break-word;
+/************ iPad Pro (1024–1199px) ************/
+@media (min-width: 1024px) and (max-width: 1199.98px) {
+
+  /* Para evitar columna estrecha: player arriba y texto debajo */
+  .audio-item {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  .audio-player {
+    width: 100% !important;
+  }
 }
+
 </style>
 
 {% endblock %}
