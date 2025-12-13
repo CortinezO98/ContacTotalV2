@@ -1,6 +1,19 @@
 {% extends 'base/base.html' %}
 {% load static %}
 
+{% block title %}{{ section.title }} - Podcast - Contacto Total{% endblock %}
+
+{% block description %}{{ section.description|truncatewords:30 }}{% endblock %}
+
+{% block og_type %}website{% endblock %}
+{% block og_title %}{{ section.title }} - Podcast{% endblock %}
+{% block og_description %}{{ section.description|truncatewords:30 }}{% endblock %}
+{% block og_image %}{% if section.cover_image %}{{ request.scheme }}://{{ request.get_host }}{{ section.cover_image.url }}{% else %}{{ request.scheme }}://{{ request.get_host }}{% static 'img/default-podcast.png' %}{% endif %}{% endblock %}
+
+{% block twitter_title %}{{ section.title }} - Podcast{% endblock %}
+{% block twitter_description %}{{ section.description|truncatewords:30 }}{% endblock %}
+{% block twitter_image %}{% if section.cover_image %}{{ request.scheme }}://{{ request.get_host }}{{ section.cover_image.url }}{% else %}{{ request.scheme }}://{{ request.get_host }}{% static 'img/default-podcast.png' %}{% endif %}{% endblock %}
+
 {% block header %}
 {% include 'base/headerCompact.html' %}
 {% endblock %}

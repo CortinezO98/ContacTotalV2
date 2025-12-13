@@ -1,6 +1,18 @@
 {% extends 'base/base.html' %}
 {% load static %}
 
+{% block title %}{{ edicion.titulo }} - Contacto Total{% endblock %}
+{% block description %}{{ edicion.descripcion|truncatewords:30 }}{% endblock %}
+
+{% block og_type %}article{% endblock %}
+{% block og_title %}{{ edicion.titulo }}{% endblock %}
+{% block og_description %}{{ edicion.descripcion|truncatewords:30 }}{% endblock %}
+{% block og_image %}{{ request.scheme }}://{{ request.get_host }}{{ edicion.imagen.url }}{% endblock %}
+
+{% block twitter_title %}{{ edicion.titulo }}{% endblock %}
+{% block twitter_description %}{{ edicion.descripcion|truncatewords:30 }}{% endblock %}
+{% block twitter_image %}{{ request.scheme }}://{{ request.get_host }}{{ edicion.imagen.url }}{% endblock %}
+
 {% block header %}
 {% include 'base/headerCompact.html' %}
 {% endblock %}

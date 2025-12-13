@@ -1,6 +1,19 @@
 {% extends 'base/base.html' %}
 {% load static %}
 
+{% block title %}{{ news_item.title }} - Contacto Total{% endblock %}
+
+{% block description %}{% if news_item.short_description %}{{ news_item.short_description|truncatewords:30 }}{% else %}{{ news_item.description|truncatewords:30 }}{% endif %}{% endblock %}
+
+{% block og_type %}article{% endblock %}
+{% block og_title %}{{ news_item.title }}{% endblock %}
+{% block og_description %}{% if news_item.short_description %}{{ news_item.short_description|truncatewords:30 }}{% else %}{{ news_item.description|truncatewords:30 }}{% endif %}{% endblock %}
+{% block og_image %}{% if news_item.image %}{{ request.scheme }}://{{ request.get_host }}{{ news_item.image.url }}{% else %}{{ request.scheme }}://{{ request.get_host }}{% static 'img/logomedia.png' %}{% endif %}{% endblock %}
+
+{% block twitter_title %}{{ news_item.title }}{% endblock %}
+{% block twitter_description %}{% if news_item.short_description %}{{ news_item.short_description|truncatewords:30 }}{% else %}{{ news_item.description|truncatewords:30 }}{% endif %}{% endblock %}
+{% block twitter_image %}{% if news_item.image %}{{ request.scheme }}://{{ request.get_host }}{{ news_item.image.url }}{% else %}{{ request.scheme }}://{{ request.get_host }}{% static 'img/logomedia.png' %}{% endif %}{% endblock %}
+
 {% block header %}
   {% include 'base/headerCompact.html' %}
 {% endblock %}

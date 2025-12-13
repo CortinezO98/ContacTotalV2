@@ -2,6 +2,19 @@
 {% load static %}
 {% load myfilters %}
 
+{% block title %}{{ articulo.titulo }} - Contacto Total{% endblock %}
+
+{% block description %}{{ articulo.descripcion_corta }}{% endblock %}
+
+{% block og_type %}article{% endblock %}
+{% block og_title %}{{ articulo.titulo }}{% endblock %}
+{% block og_description %}{{ articulo.descripcion_corta }}{% endblock %}
+{% block og_image %}{{ request.scheme }}://{{ request.get_host }}{{ articulo.portada.url }}{% endblock %}
+
+{% block twitter_title %}{{ articulo.titulo }}{% endblock %}
+{% block twitter_description %}{{ articulo.descripcion_corta }}{% endblock %}
+{% block twitter_image %}{{ request.scheme }}://{{ request.get_host }}{{ articulo.portada.url }}{% endblock %}
+
 {% block header %}
   {% include 'base/headerCompact.html' %}
 {% endblock %}
